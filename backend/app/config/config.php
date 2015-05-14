@@ -3,11 +3,10 @@
 return new \Phalcon\Config(array(
 	'database' => array(
 		'adapter'  => 'Mysql',
-
-		'host'     => 'db.hx9999.com',
-		'username' => 'hx9999.com',
-		'password' => 'hx9999.com',
-		'name'     => 'hx9999',
+		'host'     => '192.168.6.1',
+		'username' => 'inf',
+		'password' => 'inf',
+		'name'     => 'inf',
 
 	),
 	'application' => array(
