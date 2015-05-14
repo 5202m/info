@@ -76,7 +76,35 @@ try {
 		$session->start();
 		return $session;
 	});
-
+//objToArray
+    $di->set('objToArray', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('objToArray')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}objToArray.php";
+        }
+        $obj = new objToArray();
+        return $obj;
+    });
+    
+    //arrayToObj
+    $di->set('arrayToObj', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('arrayToObj')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}arrayToObj.php";
+        }
+        $obj = new arrayToObj();
+        return $obj;
+    });
+    
+    
+    $di->set('tree', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('tree')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}tree.php";
+        }
+        $obj = new Tree();
+        return $obj;
+    });
 	/**
 	 * Handle the request
 	 */
