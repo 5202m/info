@@ -9,6 +9,12 @@ class TemplateController extends ControllerBase
 	public function formAction(){
 		
 	}
+	public function listAction(){
+		
+	}
+	public function editAction(){
+		
+	}
 
 }
 ?>

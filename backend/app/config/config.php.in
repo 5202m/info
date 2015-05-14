@@ -6,7 +6,7 @@ return new \Phalcon\Config(array(
 		'host'     => '{{host}}',
 		'username' => '{{username}}',
 		'password' => '{{password}}',
-		'name'     => '{{name}}',
+		'dbname'     => '{{name}}',
 
 	),
 	'application' => array(
