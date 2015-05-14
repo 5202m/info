@@ -7,7 +7,6 @@ return new \Phalcon\Config(array(
 		'username' => '{{username}}',
 		'password' => '{{password}}',
 		'dbname'     => '{{name}}',
-
 	),
 	'application' => array(
 		'controllersDir' => __DIR__ . '/../../app/controllers/',
