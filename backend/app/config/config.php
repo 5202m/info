@@ -6,7 +6,7 @@ return new \Phalcon\Config(array(
 		'host'     => '192.168.6.1',
 		'username' => 'inf',
 		'password' => 'inf',
-		'name'     => 'inf',
+		'dbname'     => 'inf',
 
 	),
 	'application' => array(
