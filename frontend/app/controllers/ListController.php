@@ -12,6 +12,7 @@ class ListController extends ControllerBase
     public function pageAction(){
     	
     }
-
+    public function purgeAction(){
+    }
 }
 

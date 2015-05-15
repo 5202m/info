@@ -12,6 +12,7 @@ class DetailController extends ControllerBase
     public function pageAction(){
     	 
     }
-
+    public function purgeAction(){
+    }
 }
 

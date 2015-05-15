@@ -11,6 +11,6 @@ class CategoryController extends ControllerBase
 	public function pageAction(){
 		 
 	}
-	
-
+	public function purgeAction(){
+	}
 }
