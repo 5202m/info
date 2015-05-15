@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL);
-
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Events\Manager as EventsManager;
 try {
     
 
@@ -17,7 +18,8 @@ try {
 	$loader->registerDirs(
 		array(
 			$config->application->controllersDir,
-			$config->application->modelsDir
+			$config->application->modelsDir,
+                        $config->application->formsDir
 		)
 	)->register();
 
@@ -25,6 +27,18 @@ try {
 	 * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
 	 */
 	$di = new \Phalcon\DI\FactoryDefault();
+        
+        $di->set('dispatcher', function() use ($di) {
+
+                $eventsManager = new EventsManager;
+
+                
+
+                $dispatcher = new Dispatcher;
+                $dispatcher->setEventsManager($eventsManager);
+
+                return $dispatcher;
+        });
 
 	/**
 	 * The URL component is used to generate all kind of urls in the application

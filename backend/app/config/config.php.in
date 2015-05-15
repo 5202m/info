@@ -15,6 +15,7 @@ return new \Phalcon\Config(array(
 		'viewsDir'       => __DIR__ . '/../../app/views/',
 		'pluginsDir'     => __DIR__ . '/../../app/plugins/',
 		'libraryDir'     => __DIR__ . '/../../app/library/',
+                'formsDir'       => __DIR__ . '/../../app/forms/',
 		'baseUri'        => '/mvc/single-factory-default/',
 	),
 	'models' => array(
