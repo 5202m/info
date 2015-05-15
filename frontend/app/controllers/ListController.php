@@ -1,6 +1,6 @@
 <?php
 
-class TestController extends ControllerBase
+class ListController extends ControllerBase
 {
 
     public function indexAction()
