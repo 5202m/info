@@ -9,15 +9,37 @@ class CategoryController extends ControllerBase
         //print_r($category);
 	}
 	public function htmlAction($division_id){
-		$categorys = Category::find("division_id = $division_id");
-		foreach ($categorys as $category){
-			printf("%s, %s", $category->id, $category->name);
-		}
+		
+		$conditions = "division_id = :division_id: AND status = :status:";
+		
+		$parameters = array(
+				"division_id" => $division_id,
+				'status' => "Enabled"
+		);
+		$categorys = Category::find(array(
+				$conditions,
+    			"bind" => $parameters
+		));
+// 		foreach ($categorys as $category){
+// 			printf("%s, %s", $category->id, $category->name);
+// 		}
+		$this->view->setVar('categorys',$categorys);
 	}
 	public function jsonAction($division_id){
 		$result = array();
 		$this->view->disable();
-		$categorys = Category::find("division_id = $division_id");
+		
+		$conditions = "division_id = :division_id: AND status = :status:";
+		
+		$parameters = array(
+				"division_id" => $division_id,
+				'status' => "Enabled"
+		);
+		$categorys = Category::find(array(
+				$conditions,
+				"bind" => $parameters
+		));
+		
 		foreach ($categorys as $category){
 			$result[$category->id]=$category->name;
 		}
