@@ -1,4 +1,6 @@
 <?php
+use Phalcon\Mvc\View, 
+	Phalcon\Mvc\Controller;
 
 class ListController extends ControllerBase
 {
@@ -29,6 +31,27 @@ class ListController extends ControllerBase
     
     	$this->view->setVar('articles',$articles);
     }
+    public function rssAction($template_id,$category_id, $limit, $offset){
+    
+    	if($limit > 100){
+    		$limit = 100;
+    	}
+    	$conditions = "category_id = :category_id: AND language = :language: AND status = :status:";
+    
+    	$parameters = array(
+    			'category_id' => $category_id,
+    			'language' => 'cn',
+    			'status' => 'Display'
+    	);
+    	$articles = Article::find(array(
+    			$conditions,
+    			"bind" => $parameters,
+    			'limit' => $limit
+    	));
+    
+    	$this->view->setVar('articles',$articles);
+    	$this->view->disableLevel(View::LEVEL_MAIN_LAYOUT);
+    }
     public function jsonAction($template_id,$category_id, $article_id){
     
     	$this->view->disable();
@@ -58,6 +81,7 @@ class ListController extends ControllerBase
     	$response->setContent(json_encode($result));
     	return $response;
     }
+    
     public function pageAction(){
     	
     }
