@@ -25,32 +25,32 @@ class CategoryController extends ControllerBase
     //处理添加分类
     public function addHandleAction(){
         if (!$this->request->isPost()) {
-            return $this->forward("category/index");
+            return $this->response->redirect("index");
         }
         $form = new CategoryForm();
         
         $category = new Category();
         $category->name = $this->request->getPost('name');
         $category->division_id = '3';
-        $category->status = 'Disabled'; 
+        $category->status = $this->request->getPost('status'); 
         $category->path = '/';
         $category->ctime = date("Y-m-d H:i:s",  time());
         $category->parent_id = $this->request->getPost('parent_id');
-      
+        $category->description = $this->request->getPost('description');
         if (!$form->isValid($_POST)) {
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            return $this->forward('category/addCategory');
+            return $this->response->redirect('addCategory');
         }
         if ($category->save() == false) {
             foreach ($category->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            return $this->forward('category/addCategory');
+            return $this->response->redirect('addCategory');
         }
         $form->clear();
-        return $this->forward("category/index");
+        return $this->response->redirect("index");
     }
 }
 
