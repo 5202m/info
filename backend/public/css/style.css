@@ -1944,7 +1944,9 @@ fieldset[disabled] .btn-link:focus {
   -moz-border-radius-topright: 0px;
   -moz-border-radius-bottomright: 0px;
 }
-
+.pagination ul > li {vertical-align: bottom;}
+.pagination .page_text {display:inline-block;line-height:20px;vertical-align: baseline;}
+.pagination .pagesize {width:50px;display:inline-block;line-height:20px;vertical-align: baseline;}
 /* Tabs
 =================================================================== */
 

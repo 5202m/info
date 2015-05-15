@@ -4,14 +4,16 @@ class ArticleController extends ControllerBase
 
     public function indexAction()
     {
-    	$currentPage = $this->request->getQuery('page', 'int');
-    	$pageSize = $this->request->getQuery('pagesize', 'int');
-    	$appendix['page'] = $currentPage;
+		$this->listAction(1, 10);
+    }
+    
+	public function listAction($page,$pageSize){
+    	$appendix['page'] = $page;
     	$appendix['pageSize'] = $pageSize == 0 ? 10 : $pageSize;
 		$pages = Article::getList($appendix);
-		$page = $pages->getPaginate();
-		$this->view->page = $page;
-		//print_r($page->items);exit;
-    }
-
+		$page = (array)$pages->getPaginate();
+		$page['pageSize'] = $appendix['pageSize'];//把每页显示的条数放到数组里传递到view上去
+		$page = (object)$page;
+		$this->view->page = $page;	
+	}
 }
