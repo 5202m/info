@@ -379,14 +379,14 @@ function template_functions(){
 		}
 	});
 
-	/* ---------- Datable ---------- */
-	$('.datatable').dataTable({
+	/* ---------- Datable ---------- 不需要使用这个js分页的效果，暂时注释掉*/
+	/*$('.datatable').dataTable({
 			"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
 			"sPaginationType": "bootstrap",
 			"oLanguage": {
 			"sLengthMenu": "_MENU_ records per page"
 			}
-		} );
+		} );*/
 	$('.btn-close').click(function(e){
 		e.preventDefault();
 		$(this).parent().parent().parent().fadeOut();
@@ -1987,8 +1987,8 @@ function growlLikeNotifications() {
 }
 
 
-/* ---------- Additional functions for data table ---------- */
-$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+/* ---------- Additional functions for data table ---------- 不需要使用JS分页的效果，暂时注释掉*/
+/*$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 {
 	return {
 		"iStart":         oSettings._iDisplayStart,
@@ -1999,8 +1999,8 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 		"iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
 		"iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
 	};
-}
-$.extend( $.fn.dataTableExt.oPagination, {
+}*/
+/*$.extend( $.fn.dataTableExt.oPagination, {
 	"bootstrap": {
 		"fnInit": function( oSettings, nPaging, fnDraw ) {
 			var oLang = oSettings.oLanguage.oPaginate;
@@ -2074,7 +2074,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 			}
 		}
 	}
-});
+});*/
 
 /* ---------- Page width functions ---------- */
 

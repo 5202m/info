@@ -1,7 +1,23 @@
 <?php
-use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 
 class Article extends \Phalcon\Mvc\Model
 {
+	public function initialize()
+	{
+		
+	}
 	
+	static function getList($appendix = array())
+	{
+		$paginator = new \Phalcon\Paginator\Adapter\Model(
+				array(
+						"data" => Article::find(),
+						"limit"=> $appendix['pageSize'],
+						"page" => $appendix['page']
+				)
+		);
+		
+		return $paginator;
+	}
 }
+?>

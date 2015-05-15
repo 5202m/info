@@ -11,8 +11,9 @@ class Users extends \Phalcon\Mvc\Model
 	{
 		$this->hasMany('id', 'Users_info', 'id');
 	}
-	public function getList()
+	static function getList()
 	{
+		return 'test';
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 				array(
 						"data" => Users::find(),
