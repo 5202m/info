@@ -18,7 +18,14 @@ class TemplateController extends ControllerBase
 		$this->view->page = $page;
 	}
 	public function editAction(){
-		
+		if($this->request->isPost()){
+			$params = $this->request->getPost();
+			
+			Template::insert($params);
+			
+		}else{
+			
+		}
 		
 		 
 		$params = array();
