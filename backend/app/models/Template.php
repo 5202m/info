@@ -1,55 +1,38 @@
 <?php 
 class Template extends \Phalcon\Mvc\Model
 {
-	static public function initialize()
+	public function initialize()
 	{
+		$this->skipAttributes(array('ctime'));
 	}
 	static function insert($params = null){
-		$t = new Template;
-		$t->id = 0;
+		
+		$temp = new Template;
 		if(is_array($params)){
 			foreach($params as $k=>$v){
-				$t->$k = $v;
+				$temp->$k = $v;
 			}
 		}
-		if($t->save()){
-			return $t->id;
+		if($temp->save()){
+			return $temp->id;
+		}else{
+			return $temp->getMessages();
 		}
-		
-		return false;
-		
 	}
-	static function getList($where , $appendix = null ){
-		
-		/**
-		$builder = $this->modelsManager->createBuilder()
-		->columns('id, name')
-		->from('Robots')
-		->orderBy('name');
-		
-		$paginator = new Paginator(array(
-				"builder" => $builder,
-				"limit"=> 10,
-				"page" => 1
-		));
-		**/
-		
-		
+	static function getList($modelsManager , $where , $appendix = null ){
 		$num = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 10;
 		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
-		$data =  new \Phalcon\Paginator\Adapter\Model(
-				array(
-						"data" => Template::find(array($where , 'limit'=>$num,'offset'=>($page-1)*$num)),
-						"count"=> Template::count(),
-						"limit"=> $num,
-						"page" => $page
-				)
-		);
-		return $data;
-		//var_dump($data);
-		//exit();
+		$builder = $modelsManager->createBuilder()
+					->columns('template.*,category.name cname')
+					->from('template')
+					->leftjoin('category','category.id = template.category_id');
 		
+		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			    "builder" => $builder,
+			    "limit"=> $num,
+				"page" => $page
+			));
 		
 	}
 	static function defaultObject(){

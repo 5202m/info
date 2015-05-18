@@ -19,19 +19,6 @@
 					</div>
 					<div class="box-content">
 						<div class="row-fluid">
-							<!--div class="span6">
-								<div id="DataTables_Table_0_length" class="dataTables_length">
-									<label>
-									<select name="DataTables_Table_0_length" size="1" aria-controls="DataTables_Table_0">
-									<option value="10" selected="selected">10</option>
-									<option value="25">25</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-									</select> 
-									records per page
-									</label>
-								</div>
-							</div-->
 							<div class="span6">
 								<div class="dataTables_filter" id="DataTables_Table_0_filter">
 									<label>Search: <input type="text" aria-controls="DataTables_Table_0"></label>
@@ -90,12 +77,14 @@
 									  <li class="next"><a href="/article/list/<?php echo $page->next;?>/<?php echo $page->pageSize;?>">Next → </a></li>
 									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">Last</a></li>
 								  </ul>
+								  <span class="page_text">每页行数:</span>
 								  <select name="pagesize" size="1" class="pagesize" onchange="location.href='/article/1/'+this.value;">
 									<option value="10"<?php if($page->pageSize==10):?> selected="selected"<?php endif;?>>10</option>
 									<option value="25"<?php if($page->pageSize==25):?> selected="selected"<?php endif;?>>25</option>
 									<option value="50"<?php if($page->pageSize==50):?> selected="selected"<?php endif;?>>50</option>
 									<option value="100"<?php if($page->pageSize==100):?> selected="selected"<?php endif;?>>100</option>
 								</select> 
+								<span class="page_text"> 条</span>
 							  </div>
 						  </div>
 					  </div>           

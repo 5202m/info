@@ -9,11 +9,18 @@
 					<a href="#">编辑模板</a>
 				</li>
 			</ul>
-			
+			<?php if(isset($message_info)) :?>
+			<div class="alert alert-<?php echo isset($message_info['success']) ? 'success' : 'error'?>">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<?php foreach($message_info as $k=>$v):?>
+			<?php echo $v ?><br />
+			<?php endforeach ;?>
+			</div>
+			<?php endif ;?>
 			<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon edit"></i><span class="break"></span>编辑模板</h2>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span><?php echo $info->id > 0 ?  '编辑模板' : '新赠模板'?></h2>
 						<div class="box-icon">
 							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -59,11 +66,11 @@
 							  </div>
 							</div>
 							
-							<div class="control-group">
+							<div class="control-group hide">
 							  <label class="control-label" for="typeahead">模板引擎</label>
 							  <div class="controls">
 								  <?php 
-								  echo \Phalcon\Tag::selectStatic("engine", array('PHP' => 'PHP', 'Smarty' => 'Smarty','Volt'=>'Volt',"value"=>$info->engine));
+								  echo \Phalcon\Tag::selectStatic(array("engine", array('PHP' => 'PHP', 'Smarty' => 'Smarty','Volt'=>'Volt'),"value"=>$info->engine));
 								  ?>
 								  
 							  </div>
@@ -75,7 +82,7 @@
 							  <label class="control-label" for="typeahead">模板状态</label>
 							  <div class="controls">
 								  <?php 
-								  echo \Phalcon\Tag::selectStatic("status", array('Y' => '启用', 'N' => '关闭',"value"=>$info->status));
+								  echo \Phalcon\Tag::selectStatic(array("status", array('Enabled' => '启用', 'Disabled' => '关闭'),"value"=>$info->status));
 								  ?>
 								</div>
 							</div>
