@@ -58,6 +58,8 @@ class TemplateController extends ControllerBase
 		
 		//exit();
 	}
-
+	public function previewAction(){
+		
+	}
 }
 ?>

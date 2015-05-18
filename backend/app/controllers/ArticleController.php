@@ -16,4 +16,7 @@ class ArticleController extends ControllerBase
 		$page = (object)$page;
 		$this->view->page = $page;	
 	}
+	public function moveAction($from, $to){
+		
+	}
 }
