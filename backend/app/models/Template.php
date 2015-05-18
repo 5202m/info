@@ -3,21 +3,24 @@ class Template extends \Phalcon\Mvc\Model
 {
 	static public function initialize()
 	{
+		//$this->skipAttributesOnCreate(array('ctime'));
+		//$this->skipAttributesOnUpdate(array('ctime'));
+		
 	}
 	static function insert($params = null){
-		$t = new Template;
-		$t->id = 0;
+		
+		$temp = new Template;
+		$temp->skipAttributes(array('ctime'));
 		if(is_array($params)){
 			foreach($params as $k=>$v){
-				$t->$k = $v;
+				$temp->$k = $v;
 			}
 		}
-		if($t->save()){
-			return $t->id;
+		if($temp->save()){
+			return $temp->id;
+		}else{
+			return $temp->getMessages();
 		}
-		
-		return false;
-		
 	}
 	static function getList($where , $appendix = null ){
 		

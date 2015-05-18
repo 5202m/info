@@ -18,45 +18,26 @@ class TemplateController extends ControllerBase
 		$this->view->page = $page;
 	}
 	public function editAction($id = 0){
+		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
-			
-			
-			
-			
-			Template::insert($params);
-			
-			
-			
-			
-			
-		}else{
-			
-			$info = Template::findFirst("id={$id}");
-			if($info === false){
-				$this->view->info = Template::defaultObject();
+			$last_id = Template::insert($params);
+			if(is_numeric($last_id)){
+				$this->view->message_info = array('success'=>'修改成功');
+				$id = $last_id;
 			}else{
-				$this->view->info = $info;
+				$this->view->message_info = $last_id;
 			}
-			
+		}
+		if($id>0){
+			$info = Template::findFirst("id={$id}");
+		}
+		if(isset($info) && $info){
+			$this->view->info = $info;
+		}else{
+			$this->view->info = Template::defaultObject();
 		}
 		
-		 
-		$params = array();
-		$params['id'] = 3;
-		$params['category_id'] = 1;
-		$params['name'] = 'test';
-		$params['decription'] = 'test1decription';
-		$params['content'] = 'test.content';
-		$params['status'] = 'N';
-		$params['engine'] = 'PHP';
-		//$params['ctime'] = '2015-5-15 15:35:29';
-		//$params['mtime'] = '2015-5-15 15:35:20';
-		
-
-		//var_dump(Template::insert($params));
-		
-		//exit();
 	}
 	public function previewAction(){
 		
