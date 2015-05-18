@@ -23,7 +23,7 @@ class TemplateController extends ControllerBase
 			$params = $this->request->getPost();
 			$last_id = Template::insert($params);
 			if(is_numeric($last_id)){
-				$this->view->message_info = array('success'=>'修改成功');
+				$this->view->message_info = array('success'=>$id ? '修改成功' : '添加成功');
 				$id = $last_id;
 			}else{
 				$this->view->message_info = $last_id;

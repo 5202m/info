@@ -1,16 +1,13 @@
 <?php 
 class Template extends \Phalcon\Mvc\Model
 {
-	static public function initialize()
+	public function initialize()
 	{
-		//$this->skipAttributesOnCreate(array('ctime'));
-		//$this->skipAttributesOnUpdate(array('ctime'));
-		
+		$this->skipAttributes(array('ctime'));
 	}
 	static function insert($params = null){
 		
 		$temp = new Template;
-		$temp->skipAttributes(array('ctime'));
 		if(is_array($params)){
 			foreach($params as $k=>$v){
 				$temp->$k = $v;
@@ -50,9 +47,6 @@ class Template extends \Phalcon\Mvc\Model
 				)
 		);
 		return $data;
-		//var_dump($data);
-		//exit();
-		
 		
 	}
 	static function defaultObject(){
