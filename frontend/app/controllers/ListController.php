@@ -5,43 +5,96 @@ use Phalcon\Mvc\View,
 class ListController extends ControllerBase
 {
 
+	public $basedir = '/www/hx9999.com/inf.hx9999.com';
+	
     public function indexAction()
     {
-// 	echo "hello";
-// 	var_dump(array(1, 2, 3, 4));
-// 	var_export(new stdclass());	
+
     }
-    public function htmlAction($template_id,$category_id, $limit, $offset){
+    public function htmlAction($template_id,$category_id, $limit = 50, $offset = 0){
     
+    	$template_id = intval($template_id);
+    	$category_id = intval($category_id);
+    	
+    	if(empty($category_id) || empty($template_id)){
+    		echo '404';
+    	}
+    	
     	if($limit > 100){
     		$limit = 100;
     	}
-    	$conditions = "category_id = :category_id: AND language = :language: AND status = :status:";
+    	
+    	$this->view->disable();
+    	
+    	$template_file = $this->basedir."/template/list/".$template_id.".phtml";
+    	$categroy_file = $this->basedir."/static/list/html/$template_id/$category_id.html";
+    	
+    	if(!is_file($template_file)){
+    	
+    		$template = Template::findFirst(array(
+    				"category_id = :category_id: AND id = :template_id: AND status = :status:",
+    				"bind" => array(
+    						'category_id' => $category_id,
+    						'template_id' => $template_id,
+    						'status' => 'Enabled'
+    				)
+    		));
+    			
+    		if($template){
+    			if(!is_dir(dirname($template_file))){
+    				mkdir(dirname($template_file), 0755, TRUE);
+    			}
+    			file_put_contents($template_file , $template->content);
+    		}
+    	}
+    	
+    	$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:";
     
     	$parameters = array(
     			'category_id' => $category_id,
+    			'division_category_id' => $category_id,
     			'language' => 'cn',
-    			'status' => 'Display'
+    			'visibility' => 'Visible'
     	);
     	$articles = Article::find(array(
     			$conditions,
     			"bind" => $parameters,
     			'limit' => $limit
     	));
-    
-    	$this->view->setVar('articles',$articles);
+//     	print_r($articles);
+
+    	$view = new \Phalcon\Mvc\View();
+    	$view->setViewsDir($this->basedir.'/template');
+    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+    	$view->setVar('articles',$articles);
+    	$view->setVar('template_id',$template_id);
+    	$view->setVar('category_id',$category_id);
+    	
+    	$view->start();
+    	$view->render("list","$template_id");
+    	$view->finish();
+    	
+    	$content =  $view->getContent();
+    	
+    	if(!is_dir(dirname($categroy_file))){
+    		mkdir(dirname($categroy_file), 0755, TRUE);
+    	}
+    	file_put_contents($categroy_file, $content);
+    	
+    	print($content);
+    	
     }
     public function rssAction($template_id,$category_id, $limit, $offset){
     
     	if($limit > 100){
     		$limit = 100;
     	}
-    	$conditions = "category_id = :category_id: AND language = :language: AND status = :status:";
+    	$conditions = "category_id = :category_id: AND language = :language: AND visibility = :visibility:";
     
     	$parameters = array(
     			'category_id' => $category_id,
     			'language' => 'cn',
-    			'status' => 'Display'
+    			'visibility' => 'Visible'
     	);
     	$articles = Article::find(array(
     			$conditions,
@@ -56,12 +109,12 @@ class ListController extends ControllerBase
     
     	$this->view->disable();
     
-    	$conditions = "category_id = :category_id: AND language = :language: AND status = :status:";
+    	$conditions = "category_id = :category_id: AND language = :language: AND visibility = :visibility:";
     
     	$parameters = array(
     			'category_id' => $category_id,
     			'language' => 'cn',
-    			'status' => 'Display'
+    			'visibility' => 'Visible'
     	);
     	$articles = Article::find(array(
     			$conditions,

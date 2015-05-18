@@ -23,21 +23,24 @@ class CategoryController extends ControllerBase
 		$template_file = $this->basedir."/template/category/".$template_id.".phtml";
 		$categroy_file = $this->basedir."/static/category/html/$template_id/$parent_id.html";
 		
-		$template = Template::findFirst(array(
-				"category_id = :category_id: AND id = :template_id: AND status = :status:",
-				"bind" => array(
-						'category_id' => $parent_id,
-						'template_id' => $template_id,
-						'status' => 'Enabled'
-				)
-		));
+		if(!is_file($template_file)){
 		
-		if($template){
-			if(!is_dir(dirname($template_file))){
-				mkdir(dirname($template_file), 0755, TRUE);
+			$template = Template::findFirst(array(
+					"category_id = :category_id: AND id = :template_id: AND status = :status:",
+					"bind" => array(
+							'category_id' => $parent_id,
+							'template_id' => $template_id,
+							'status' => 'Enabled'
+					)
+			));
+			
+			if($template){
+				if(!is_dir(dirname($template_file))){
+					mkdir(dirname($template_file), 0755, TRUE);
+				}
+				file_put_contents($template_file , $template->content);
 			}
-			file_put_contents($template_file , $template->content);
-		}		
+		}
 		
 		$conditions = 'parent_id = :parent_id: AND visibility = :visibility:';
 		
@@ -108,8 +111,12 @@ class CategoryController extends ControllerBase
 		$template_id = intval($template_id);
 		$parent_id = intval($parent_id);
 		
-		$categroy_dir = $this->basedir."/static/category/html/$template_id/*";
-		
-		array_map('unlink', glob($categroy_dir));
+		if($parent_id > 0){
+			$categroy_path = $this->basedir."/static/category/html/$template_id/$parent_id.html";
+		}else{
+			$categroy_path = $this->basedir."/static/category/html/$template_id/*";
+		}
+
+		array_map('unlink', glob($categroy_path));
 	}
 }
