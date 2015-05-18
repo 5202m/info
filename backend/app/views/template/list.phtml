@@ -44,22 +44,22 @@
 						  <tbody>
 						  <?php foreach ($page->items as $item):?>
 							<tr>
-								<td><?php echo $item->id;?></td>
-								<td class="center"><?php echo $item->category_id;?></td>
-								<td class="center"><?php echo $item->name;?></td>
-								<td><?php echo $item->decription;?></td>
-								<td><?php echo $item->status;?></td>
-								<td><?php echo $item->engine;?></td>
-								<td><?php echo $item->ctime;?></td>
-								<td><?php echo $item->mtime;?></td>
+								<td><?php echo $item->template->id;?></td>
+								<td class="center"><?php echo $item->cname;?></td>
+								<td class="center"><?php echo $item->template->name;?></td>
+								<td><?php echo $item->template->decription;?></td>
+								<td><?php echo $item->template->status;?></td>
+								<td><?php echo $item->template->engine;?></td>
+								<td><?php echo $item->template->ctime;?></td>
+								<td><?php echo $item->template->mtime;?></td>
 								<td class="center">
-									<a class="btn btn-success" href="/template/preview/<?php echo $item->id ?>">
+									<a class="btn btn-success" href="/template/preview/<?php echo $item->template->id ?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
-									<a class="btn btn-info" href="/template/edit/<?php echo $item->id ?>">
+									<a class="btn btn-info" href="/template/edit/<?php echo $item->template->id ?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
-									<a class="btn btn-danger" href="/template/delete/<?php echo $item->id ?>">
+									<a class="btn btn-danger" href="/template/delete/<?php echo $item->template->id ?>">
 										<i class="halflings-icon white trash"></i> 
 									</a>
 								</td>
@@ -72,10 +72,10 @@
 							  <div class="dataTables_paginate paging_bootstrap pagination">
 						  	  	  <span class="page_text">共有 <?php echo $page->total_items;?> 条记录, 每页显示 <?php echo $page->pageSize;?> 条, 当前<?php echo $page->current;?>/<?php echo $page->total_pages;?> 页:</span>
 								  <ul>
-								  	  <li class="prev"><a href="/article">First</a></li>
-									  <li class="prev"><a href="/article/list/<?php echo $page->before;?>/<?php echo $page->pageSize;?>">← Previous</a></li>
-									  <li class="next"><a href="/article/list/<?php echo $page->next;?>/<?php echo $page->pageSize;?>">Next → </a></li>
-									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">Last</a></li>
+								  	  <li class="prev"><a href="/template">First</a></li>
+									  <li class="prev"><a href="/template/list/<?php echo $page->before;?>/<?php echo $page->pageSize;?>">← Previous</a></li>
+									  <li class="next"><a href="/template/list/<?php echo $page->next;?>/<?php echo $page->pageSize;?>">Next → </a></li>
+									  <li class=""><a href="/template/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">Last</a></li>
 								  </ul>
 								  <select name="pagesize" size="1" class="pagesize" onchange="location.href='/article/1/'+this.value;">
 									<option value="10"<?php if($page->pageSize==10):?> selected="selected"<?php endif;?>>10</option>
