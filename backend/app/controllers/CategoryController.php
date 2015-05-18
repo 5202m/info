@@ -8,11 +8,21 @@ class CategoryController extends ControllerBase
         $this->view->setVar('pages',$category);
     }
     //编辑分类页面
-    public function editAction(){
-        
+    public function editCategoryAction(){
+        $category = Category::find(
+            "division_id = 3"
+        );
+        $this->view->setVar('pages',$category);
     }
     //添加分类页面
     public function addCategoryAction(){
+        $category = Category::find(
+            "division_id = 3"
+        );
+        $this->view->setVar('pages',$category);
+    }
+    //查看分类
+    public function showCategoryAction(){
         $category = Category::find(
             "division_id = 3"
         );
