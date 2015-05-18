@@ -52,13 +52,13 @@
 								<td><?php echo $item->ctime;?></td>
 								<td><?php echo $item->mtime;?></td>
 								<td class="center">
-									<a class="btn btn-success" href="#">
+									<a class="btn btn-success" href="/template/view/<?php echo $item->id ?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
-									<a class="btn btn-info" href="#">
+									<a class="btn btn-info" href="/template/edit/<?php echo $item->id ?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
-									<a class="btn btn-danger" href="#">
+									<a class="btn btn-danger" href="/template/delete/<?php echo $item->id ?>">
 										<i class="halflings-icon white trash"></i> 
 									</a>
 								</td>

@@ -17,13 +17,27 @@ class TemplateController extends ControllerBase
 		$page->pageSize = $appendix['pageSize'];
 		$this->view->page = $page;
 	}
-	public function editAction(){
+	public function editAction($id = 0){
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			
+			
+			
+			
 			Template::insert($params);
 			
+			
+			
+			
+			
 		}else{
+			
+			$info = Template::findFirst("id={$id}");
+			if($info === false){
+				$this->view->info = Template::defaultObject();
+			}else{
+				$this->view->info = $info;
+			}
 			
 		}
 		
