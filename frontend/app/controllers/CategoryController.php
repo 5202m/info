@@ -11,6 +11,8 @@ class CategoryController extends ControllerBase
         //print_r($category);
 	}
 	public function htmlAction($template_id, $parent_id){
+		$template_id = intval($template_id);
+		$parent_id = intval($parent_id);
 		
 		if(empty($parent_id) || empty($template_id)){
 			echo '404';
@@ -75,6 +77,8 @@ class CategoryController extends ControllerBase
 		$result = array();
 		$this->view->disable();
 		
+		$parent_id = intval($parent_id);
+		
 		$conditions = 'parent_id = :parent_id: AND visibility = :visibility:';
 		
 		$parameters = array(
@@ -100,7 +104,12 @@ class CategoryController extends ControllerBase
 		 
 	}
 	public function purgeAction($template_id, $parent_id = 0){
-		$categroy_dir = $this->basedir."/static/category/html/$template_id/";
-		delete($categroy_dir);
+		
+		$template_id = intval($template_id);
+		$parent_id = intval($parent_id);
+		
+		$categroy_dir = $this->basedir."/static/category/html/$template_id/*";
+		
+		array_map('unlink', glob($categroy_dir));
 	}
 }
