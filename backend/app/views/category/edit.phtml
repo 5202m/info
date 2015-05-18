@@ -2,7 +2,7 @@
 			<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon edit"></i><span class="break"></span>添加分类</h2>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span>编辑分类</h2>
 						<div class="box-icon">
 							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -10,14 +10,15 @@
 						</div>
 					</div>
 					<div class="box-content">
-                                            <form class="form-horizontal" method="post" action="/category/addHandle">
+                                            <form class="form-horizontal" method="post" action="/category/editHandle">
 							<fieldset>
 							  <div class="control-group">
 								<label class="control-label" for="focusedInput">分类名称</label>
 								<div class="controls">
-                                                                    <input class="input-xlarge focused" id="focusedInput" name="name" type="text" value="">
+                                                                    <input class="input-xlarge focused" id="focusedInput" name="name" type="text" value="<?php echo $cates->name;?>">
 								</div>
 							  </div>
+                                                            <input type="hidden" name="id" value="<?php echo $cates->id;?>" />
 <!--							  <div class="control-group">
 								<label class="control-label">Uneditable input</label>
 								<div class="controls">
@@ -68,8 +69,8 @@
                                                                                 $cates_arr = $this->objToArray->ohYeah($pages);
                                                                                 $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
                                                                                 foreach ($items as $vs){?>
-                                                                                <option value="<?php echo $vs['id'];?>">
-                                                                                    <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
+                                                                        <option <?php echo ($cates->id==$vs['id']?'selected="selected"':'');?> value="<?php echo $vs['id'];?>">
+                                                                                    <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                                                     <?php echo $vs['name'];?>
                                                                                 </option>
                                                                         <?php }?>
@@ -81,8 +82,8 @@
 								<div class="controls">
                                                                     <select id="selectError3" name="visibility">
                                                                         
-                                                                                <option value="Visible">Visible</option>
-                                                                                <option value="Hidden">Hidden</option>
+                                                                        <option <?php echo ($cates->visibility=='Visible'?'selected="selected"':'');?> value="Visible">Visible</option>
+                                                                        <option <?php echo ($cates->visibility=='Hidden'?'selected="selected"':'');?> value="Hidden">Hidden</option>
                                                                         
 								  </select>
 								</div>
@@ -90,7 +91,7 @@
                                                           <div class="control-group">
 								<label class="control-label" for="selectError3">分类描述</label>
 								<div class="controls">
-                                                                    <textarea name="description"></textarea>
+                                                                    <textarea name="description"><?php echo $cates->description;?></textarea>
 								</div>
 							  </div>
 <!--							  <div class="control-group">
@@ -174,7 +175,7 @@
 								</div>
 							  </div>-->
 							  <div class="form-actions">
-								<button type="submit" class="btn btn-primary">添加</button>
+								<button type="submit" class="btn btn-primary">修改</button>
 								<button class="btn">取消</button>
 							  </div>
 							</fieldset>

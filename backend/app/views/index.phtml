@@ -339,7 +339,16 @@
 				<div class="nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
 						<li><a href="/"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>	
-						<li><a href="/category/index"><i class="icon-envelope"></i><span class="hidden-tablet"> 分类管理</span></a></li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-open"></i><span class="hidden-tablet"> 分类管理</span></a>
+							<ul>
+								<li><a class="submenu" href="/category/index"><i class="icon-list-alt"></i><span class="hidden-tablet"> 分类列表</span></a></li>
+								<li><a class="submenu" href="/category/add"><i class="icon-edit"></i><span class="hidden-tablet"> 添加分类</span></a></li>
+								<!-- 
+								<li><a class="submenu" href="/template/edit"><i class="icon-edit"></i><span class="hidden-tablet"> 模板预览</span></a></li>
+								 -->
+							</ul>
+						</li>
 						<!--  
 						<li><a href="tasks.html"><i class="icon-tasks"></i><span class="hidden-tablet"> Tasks</span></a></li>
 						<li><a href="ui.html"><i class="icon-eye-open"></i><span class="hidden-tablet"> UI Features</span></a></li>
@@ -379,8 +388,18 @@
 								 -->
 							</ul>
 						</li>
+						
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> 模板预览 </span><span class="label label-important"> 3 </span></a>
+							<ul>
+								<li><a class="submenu" href="submenu.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> 分类页预览 </span></a></li>
+								<li><a class="submenu" href="submenu2.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> 列表页预览 </span></a></li>
+								<li><a class="submenu" href="submenu3.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> 内容页预览</span></a></li>
+							</ul>	
+						</li>
+						<li><a href="calendar.html"><i class="icon-calendar"></i><span class="hidden-tablet"> 缓存管理 </span></a></li>
 						<!-- 
-						<li><a href="calendar.html"><i class="icon-calendar"></i><span class="hidden-tablet"> Calendar</span></a></li>
+						
 						<li><a href="file-manager.html"><i class="icon-folder-open"></i><span class="hidden-tablet"> File Manager</span></a></li>
 						<li><a href="icon.html"><i class="icon-star"></i><span class="hidden-tablet"> Icons</span></a></li>
 						<li><a href="login.html"><i class="icon-lock"></i><span class="hidden-tablet"> Login Page</span></a></li>

@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Logger;
 try {
     
 
@@ -61,13 +62,35 @@ try {
 	/**
 	 * Database connection is created based in the parameters defined in the configuration file
 	 */
+    
 	$di->set('db', function() use ($config) {
-		return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-			"host" => $config->database->host,
-			"username" => $config->database->username,
-			"password" => $config->database->password,
-			"dbname" => $config->database->dbname
-		));
+                $eventsManager = new EventsManager();
+
+                $logger = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+
+                //Listen all the database events
+                $eventsManager->attach('db', function($event, $connection) use ($logger) {
+                    if ($event->getType() == 'beforeQuery') {
+                        $logger->log($connection->getSQLStatement(), Logger::INFO);
+                    }
+                });
+                $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+                    "host" => $config->database->host,
+                    "username" => $config->database->username,
+                    "password" => $config->database->password,
+                    "dbname" => $config->database->dbname
+                ));
+
+                //Assign the eventsManager to the db adapter instance
+                $connection->setEventsManager($eventsManager);
+
+                return $connection;
+//		return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+//			"host" => $config->database->host,
+//			"username" => $config->database->username,
+//			"password" => $config->database->password,
+//			"dbname" => $config->database->dbname
+//		));
 	});
 
 	/**
