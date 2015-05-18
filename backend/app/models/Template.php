@@ -35,9 +35,11 @@ class Template extends \Phalcon\Mvc\Model
 			));
 		
 	}
-	static function defaultObject(){
-		$obj = new stdClass;
+	static function defaultObject($returnArr = false){
+		
 		$columns = array('id'=>0,'category_id','name','decription','content','status','engine');
+		if($returnArr === true ) return $columns;
+		$obj = new stdClass;
 		foreach($columns as $k=>$v){
 			if(is_string($k)){
 				$obj->{$k} = $v;

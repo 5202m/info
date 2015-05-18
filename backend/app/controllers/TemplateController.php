@@ -40,5 +40,17 @@ class TemplateController extends ControllerBase
 	public function previewAction(){
 		
 	}
+	public function deleteAction($id = 0){
+		if($id){
+			$template = new Template();
+			if($template->find($id)){
+				$template->id = $id;
+				if($template->delete()){
+					return $this->response->redirect("/template/list");
+				}
+			}
+			
+		}
+	}
 }
 ?>
