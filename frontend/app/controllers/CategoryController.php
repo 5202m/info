@@ -8,13 +8,13 @@ class CategoryController extends ControllerBase
         
         //print_r($category);
 	}
-	public function htmlAction($division_id){
+	public function htmlAction($parent_id){
 		
-		$conditions = "division_id = :division_id: AND status = :status:";
+		$conditions = 'parent_id = :parent_id: AND visibility = :visibility:';
 		
 		$parameters = array(
-				"division_id" => $division_id,
-				'status' => "Enabled"
+				'parent_id' => $parent_id,
+				'visibility' => 'Visible'
 		);
 		$categorys = Category::find(array(
 				$conditions,
@@ -24,16 +24,44 @@ class CategoryController extends ControllerBase
 // 			printf("%s, %s", $category->id, $category->name);
 // 		}
 		$this->view->setVar('categorys',$categorys);
+		
+		$this->view->disable();
+		
+		$basedir = '/www/hx9999.com/inf.hx9999.com';
+		$template_dir = $basedir."/template";
+		$categroy_html_dir = $basedir."/static/category/html";
+		
+		$view = new \Phalcon\Mvc\View();
+		$view->setViewsDir($template_dir);
+		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+		$view->setVar('categorys',$categorys);
+		$view->start();
+		$view->render("category","index");
+		$view->finish();
+		
+		$content =  $view->getContent();
+		
+// 		if(){
+			
+// 		}
+		
+		if(!is_dir($categroy_html_dir)){
+			mkdir($categroy_html_dir, 0755, TRUE);
+		}
+		file_put_contents($categroy_html_dir."/".$parent_id.".html", $content);
+		print(time());
+		print($content);
+		
 	}
 	public function jsonAction($division_id){
 		$result = array();
 		$this->view->disable();
 		
-		$conditions = "division_id = :division_id: AND status = :status:";
+		$conditions = 'parent_id = :parent_id: AND visibility = :visibility:';
 		
 		$parameters = array(
-				"division_id" => $division_id,
-				'status' => "Enabled"
+				'parent_id' => $parent_id,
+				'visibility' => 'Visible'
 		);
 		$categorys = Category::find(array(
 				$conditions,
