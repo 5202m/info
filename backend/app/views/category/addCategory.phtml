@@ -69,7 +69,7 @@
                                                                                 $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
                                                                                 foreach ($items as $vs){?>
                                                                                 <option value="<?php echo $vs['id'];?>">
-                                                                                    <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
+                                                                                    <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                                                     <?php echo $vs['name'];?>
                                                                                 </option>
                                                                         <?php }?>
