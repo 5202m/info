@@ -81,7 +81,15 @@ try {
 			return new \Phalcon\Mvc\Model\Metadata\Memory();
 		}
 	});
-
+	
+	/**
+	 * If the configuration specify the use of metadata adapter use it or use memory otherwise
+	 */
+	$di->set('modelsManager', function() {
+          return new Phalcon\Mvc\Model\Manager();
+     });
+	
+	
 	/**
 	 * Start the session the first time some component request the session service
 	 */
