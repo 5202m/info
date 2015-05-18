@@ -8,7 +8,7 @@ class CategoryController extends ControllerBase
         $this->view->setVar('pages',$category);
     }
     //编辑分类页面
-    public function editCategoryAction($id){
+    public function editAction($id){
         $cates = Category::findFirst(
             "id = '{$id}'"
         );
@@ -19,14 +19,14 @@ class CategoryController extends ControllerBase
         $this->view->setVar('cates',$cates);
     }
     //添加分类页面
-    public function addCategoryAction(){
+    public function addAction(){
         $category = Category::find(
             "division_id = 3"
         );
         $this->view->setVar('pages',$category);
     }
     //查看分类
-    public function showCategoryAction($id){
+    public function showAction($id){
         $category = Category::findFirst(
             "id = '{$id}'"
         );
@@ -54,13 +54,13 @@ class CategoryController extends ControllerBase
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            return $this->response->redirect('editCategory');
+            return $this->response->redirect('edit');
         }
         if ($category->save() == false) {
             foreach ($category->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            return $this->response->redirect('editCategory');
+            return $this->response->redirect('edit');
         }
         $form->clear();
         return $this->response->redirect("index");
@@ -86,14 +86,14 @@ class CategoryController extends ControllerBase
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            return $this->response->redirect('addCategory');
+            return $this->response->redirect('add');
         }
         
         if ($category->save() == false) {
             foreach ($category->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            return $this->response->redirect('addCategory');
+            return $this->response->redirect('add');
         }
         $form->clear();
         return $this->response->redirect("index");
