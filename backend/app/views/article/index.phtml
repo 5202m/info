@@ -31,7 +31,7 @@
 								  <th>标题</th>
 								  <th>所属分类</th>
 								  <th>作者</th>
-								  <th>图片</th>
+								  <!--th>图片</th-->
 								  <th>语言</th>
 								  <th>来源</th>
 								  <th>状态</th>
@@ -45,7 +45,7 @@
 								<td><?php echo $item->title;?></td>
 								<td class="center"><?php echo $item->category_id;?></td>
 								<td class="center"><?php echo $item->author;?></td>
-								<td><?php echo $item->image;?></td>
+								<!--td><?php echo $item->image;?></td-->
 								<td><?php echo $item->language;?></td>
 								<td><?php echo $item->from;?></td>
 								<td class="center">
@@ -70,19 +70,19 @@
 					  <div class="row-fluid">
 						  <div class="span12 center">
 							  <div class="dataTables_paginate paging_bootstrap pagination">
-						  	  	  <span class="page_text">共有 <?php echo $page->total_items;?> 条记录, 每页显示 <?php echo $page->pageSize;?> 条, 当前<?php echo $page->current;?>/<?php echo $page->total_pages;?> 页:</span>
+						  	  	  <span class="page_text">共有 <?php echo $page->total_items;?> 条记录, 每页显示 <?php echo $pageSize;?> 条, 当前<?php echo $page->current;?>/<?php echo $page->total_pages;?> 页:</span>
 								  <ul>
 								  	  <li class="prev"><a href="/article">First</a></li>
-									  <li class="prev"><a href="/article/list/<?php echo $page->before;?>/<?php echo $page->pageSize;?>">← Previous</a></li>
-									  <li class="next"><a href="/article/list/<?php echo $page->next;?>/<?php echo $page->pageSize;?>">Next → </a></li>
-									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">Last</a></li>
+									  <li class="prev"><a href="/article/list/<?php echo $page->before;?>/<?php echo $pageSize;?>">← Previous</a></li>
+									  <li class="next"><a href="/article/list/<?php echo $page->next;?>/<?php echo $pageSize;?>">Next → </a></li>
+									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $pageSize;?>">Last</a></li>
 								  </ul>
 								  <span class="page_text">每页行数:</span>
 								  <select name="pagesize" size="1" class="pagesize" onchange="location.href='/article/list/1/'+this.value;">
-									<option value="10"<?php if($page->pageSize==10):?> selected="selected"<?php endif;?>>10</option>
-									<option value="25"<?php if($page->pageSize==25):?> selected="selected"<?php endif;?>>25</option>
-									<option value="50"<?php if($page->pageSize==50):?> selected="selected"<?php endif;?>>50</option>
-									<option value="100"<?php if($page->pageSize==100):?> selected="selected"<?php endif;?>>100</option>
+									<option value="10"<?php if($pageSize==10):?> selected="selected"<?php endif;?>>10</option>
+									<option value="25"<?php if($pageSize==25):?> selected="selected"<?php endif;?>>25</option>
+									<option value="50"<?php if($pageSize==50):?> selected="selected"<?php endif;?>>50</option>
+									<option value="100"<?php if($pageSize==100):?> selected="selected"<?php endif;?>>100</option>
 								</select> 
 								<span class="page_text"> 条</span>
 							  </div>

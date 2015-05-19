@@ -5,6 +5,7 @@ class Article extends \Phalcon\Mvc\Model
 	public function initialize()
 	{
 		//$this->hasOne('id', 'Category', 'category_id');
+		$this->skipAttributes(array('from', 'status', 'ctime'));
 	}
 	
 	static function getList($appendix = array())
@@ -50,5 +51,6 @@ class Article extends \Phalcon\Mvc\Model
 		}
 		return null;
 	}
+	
 }
 ?>
