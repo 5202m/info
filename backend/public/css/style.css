@@ -1797,6 +1797,8 @@ fieldset[disabled] .btn-link:focus {
   text-decoration: none;
 }
 
+.btn-search {height:30px;line-height:15px;vertical-align:top;}
+
 /* Alert Boxes
 =================================================================== */
 .alert {

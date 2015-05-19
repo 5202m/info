@@ -19,9 +19,46 @@
 					</div>
 					<div class="box-content">
 						<div class="row-fluid">
-							<div class="span6">
-								<div class="dataTables_filter" id="DataTables_Table_0_filter">
-									<label>Search: <input type="text" aria-controls="DataTables_Table_0"></label>
+							<div class="">
+								<div class="" id="">
+									<label></label>
+									<form name="form1" action="/article/list" method="post">
+									标题: <input type="text" name="title" id="title">
+									语言：
+									<select name="language" id="language" style="width:auto;">
+										<option value="">全部</option>
+										<option value="cn">CN</option>
+										<option value="tw">TW</option>
+										<option value="en">EN</option>
+									</select>
+									事业部分类：
+									<select name="division_category_id" id="division_category_id" style="width:auto;">
+									  	<option value="">全部</option>
+										<?php
+					                    $cates_arr = $this->objToArray->ohYeah($divisionCategory);
+					                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+					                    foreach ($items as $vs) :
+					                        ?>
+										<option value="<?php echo $vs['id'];?>">
+										<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
+	    								<?php echo $vs['name']; ?>
+	    								</option>
+										<?php endforeach;?>
+									</select>
+									可见性：
+									<select name="visibility" id="visibility" style="width:auto;">
+										<option value="">全部</option>
+										<option value="Visible">显示</option>	
+										<option value="Hidden">隐藏</option>		
+									</select>
+									分享：
+									<select name="share" id="share" style="width:auto;">
+										<option value="">全部</option>
+										<option value="Y">是</option>	
+										<option value="N">否</option>		
+									</select>
+									<input type="submit" value="确定" class="btn btn-primary btn-search" />
+									</form>
 								</div>
 							</div>
 						</div>
@@ -31,10 +68,9 @@
 								  <th>标题</th>
 								  <th>所属分类</th>
 								  <th>作者</th>
-								  <th>图片</th>
 								  <th>语言</th>
-								  <th>来源</th>
-								  <th>状态</th>
+								  <th>分享</th>
+								  <th>可见性</th>
 								  <th>添加时间</th>
 								  <th>操作</th>
 							  </tr>
@@ -42,26 +78,25 @@
 						  <tbody>
 						  <?php foreach ($page->items as $item):?>
 							<tr>
-								<td><?php echo $item->title;?></td>
-								<td class="center"><?php echo $item->category_id;?></td>
-								<td class="center"><?php echo $item->author;?></td>
-								<td><?php echo $item->image;?></td>
-								<td><?php echo $item->language;?></td>
-								<td><?php echo $item->from;?></td>
+								<td><?php echo $item->article->title;?></td>
+								<td class="center"><?php echo $item->cname;?></td>
+								<td class="center"><?php echo $item->article->author;?></td>
+								<td><?php echo $item->article->language;?></td>
+								<td><?php echo $item->article->share;?></td>
 								<td class="center">
-									<span class="label label-success"><?php echo $item->status;?></span>
+									<span class="label label-success"><?php echo $item->article->visibility;?></span>
 								</td>
-								<td><?php echo $item->ctime;?></td>
+								<td><?php echo $item->article->ctime;?></td>
 								<td class="center">
-									<a class="btn btn-success" href="#">
+									<!--a class="btn btn-success" href="#">
 										<i class="halflings-icon white zoom-in"></i>  
-									</a>
-									<a class="btn btn-info" href="#">
+									</a-->
+									<a class="btn btn-info" href="/article/edit/<?php echo $item->article->id;?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
-									<a class="btn btn-danger" href="#">
+									<!--a class="btn btn-danger" href="#">
 										<i class="halflings-icon white trash"></i> 
-									</a>
+									</a-->
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -78,7 +113,7 @@
 									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">Last</a></li>
 								  </ul>
 								  <span class="page_text">每页行数:</span>
-								  <select name="pagesize" size="1" class="pagesize" onchange="location.href='/article/1/'+this.value;">
+								  <select name="pagesize" size="1" class="pagesize" onchange="location.href='/article/list/1/'+this.value;">
 									<option value="10"<?php if($page->pageSize==10):?> selected="selected"<?php endif;?>>10</option>
 									<option value="25"<?php if($page->pageSize==25):?> selected="selected"<?php endif;?>>25</option>
 									<option value="50"<?php if($page->pageSize==50):?> selected="selected"<?php endif;?>>50</option>
