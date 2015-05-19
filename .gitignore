@@ -2,3 +2,4 @@
 /.project
 /.settings
 /backend/app/logs
+/backend/app/logs/*.log
