@@ -3,20 +3,73 @@ class ArticleController extends ControllerBase
 {
 
     public function indexAction(){
+		/*$action = $this->request->getQuery('action');
+		if($action=='list'){
+			$this->removeSearchSession();
+		}*/
 		$this->listAction(1, 10);
     }
     
-	public function listAction($page,$pageSize){
-		
-		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
-		$where = array();
+	public function listAction($page=1, $pageSize=10){
+		$where = ' 1 ';
+		$condition = array();
+		if($this->request->isPost()){
+			$title = $this->request->getPost('title', 'trim');
+			$language = $this->request->getPost('language');
+			$division_category_id = $this->request->getPost('division_category_id');
+			$visibility = $this->request->getPost('visibility');
+			$share = $this->request->getPost('share');
+			$this->session->set('title', $title);
+			$this->session->set('language', $language);
+			$this->session->set('division_category_id', $division_category_id);
+			$this->session->set('share', $share);
+			$this->session->set('visibility', $visibility);
+		}
+		if($this->session->has("title")){
+			$title = $this->session->get('title');
+			$condition['title'] = $title;
+			if(!empty($title)){
+				$where .= " and article.`title` like '%{$title}%' ";
+			}
+		}
+		if($this->session->has("language")){
+			$language = $this->session->get('language');
+			$condition['language'] = $language;
+			if(!empty($language)){
+				$where .= " and article.`language` = '{$language}' ";
+			}
+		}
+		if($this->session->has("division_category_id")){
+			$division_category_id = $this->session->get('division_category_id');
+			$condition['division_category_id'] = $division_category_id;
+			if(!empty($division_category_id)){
+				$where .= " and article.`division_category_id` = '{$division_category_id}' ";
+			}
+		}
+		if($this->session->has("share")){
+			$share = $this->session->get('share');
+			$condition['share'] = $share;
+			if(!empty($share)){
+				$where .= " and article.`share` = '{$share}'";
+			}
+		}
+		if($this->session->has("visibility")){
+			$visibility = $this->session->get('visibility');
+			$condition['visibility'] = $visibility;
+			if(!empty($visibility)){
+				$where .= " and article.`visibility` = '{$visibility}' ";
+			}
+		}
+		if($condition){
+			$condition = $this->arrayToObj->tran($condition);
+		}
+		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
 		$list = Article::getList($this->modelsManager , $where , $appendix);
 		$page = $list->getPaginate();
-		
-		$divisionCategory = Category::find(
-            "division_id = 3"//该值应该是根据登录用户所在的事业部的id
-        );
+		//echo '<pre>';print_r($page);exit;
+		$divisionCategory = $this->getDivisionCategory();
         
+        $this->view->searchData = $condition;
         $this->view->divisionCategory = $divisionCategory;
 		$page->pageSize = $appendix['pageSize'];
 		$this->view->page = $page;
@@ -81,9 +134,7 @@ class ArticleController extends ControllerBase
                 $this->flash->error($message);
             }
 		}
-		$divisionCategory = Category::find(
-            "division_id = 3"//该值应该是根据登录用户所在的事业部的id
-        );
+		$divisionCategory = $this->getDivisionCategory();
         $this->view->divisionCategory = $divisionCategory;
 		$this->view->article = $article;
 		$this->view->images = $images;
@@ -140,9 +191,7 @@ class ArticleController extends ControllerBase
             }
 		}
 		
-		$divisionCategory = Category::find(
-            "division_id = 3"//该值应该是根据登录用户所在的事业部的id
-        );
+		$divisionCategory = $this->getDivisionCategory();
         $this->view->divisionCategory = $divisionCategory;
 	}
 	
@@ -189,5 +238,28 @@ class ArticleController extends ControllerBase
 			}
 		}
 		return $image;
+	}
+	
+	/**
+	 * 获取事业部分类
+	 * Enter description here ...
+	 */
+	private function getDivisionCategory(){
+		$divisionId = Division::getID();
+		return $divisionCategory = Category::find(
+            "division_id = {$divisionId}"
+        );
+	}
+	
+	/**
+	 * 移除提交的查询条件
+	 * Enter description here ...
+	 */
+	private function removeSearchSession(){
+		$this->session->remove("title");
+		$this->session->remove("language");
+		$this->session->remove("division_category_id");
+		$this->session->remove("share");
+		$this->session->remove("visibility");
 	}
 }

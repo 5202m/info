@@ -12,10 +12,12 @@ class Article extends \Phalcon\Mvc\Model
 		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
 		$builder = $modelsManager->createBuilder()
-					->columns('article.*,category.name cname')
-					->from('article')
-					->leftjoin('category','category.id = article.division_category_id');
-		
+					->columns("article.id as id,article.title as title,article.author as author,article.language as language,article.share as share,article.visibility as visibility,article.ctime as ctime,category.name as cname")
+					->from("article")
+					->leftjoin("category", "category.id = article.division_category_id")
+					->where($where)
+					->orderby($appendix['order']);
+		//echo '<pre>';print_r($builder);exit;
 		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			    "builder" => $builder,
 			    "limit"=> $num,
