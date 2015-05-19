@@ -2,39 +2,25 @@
 
 class Article extends \Phalcon\Mvc\Model
 {
-	public function initialize()
-	{
+	public function initialize(){
 		//$this->hasOne('id', 'Category', 'category_id');
 		$this->skipAttributes(array('from', 'status', 'ctime'));
 	}
 	
-	static function getList($appendix = array())
-	{
-		/*$manager = new \Phalcon\Mvc\Model\Manager;
+	static function getList($modelsManager , $where , $appendix = array()){
+		$num = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 10;
+		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
-		$builder = $manager->createBuilder()
-		->columns('*,')
-		->from('article')
-		->leftjoin('category', 'article.category_id = c.id','c');  
+		$builder = $modelsManager->createBuilder()
+					->columns('article.*,category.name cname')
+					->from('article')
+					->leftjoin('category','category.id = article.division_category_id');
 		
-		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
-			"builder" => $builder,
-			"limit"=> $appendix['pageSize'],
-			"page" => $appendix['page'],
-		)); */
-		
-		$paginator = new \Phalcon\Paginator\Adapter\Model(
-				array(
-						"data" => Article::find(array('fields'=>'*', 'limit'=>$appendix['pageSize'], 'offset'=>(($appendix['page']-1)*$appendix['pageSize']))),
-						"total_items" => Article::count(),//find(array('fields'=>'*','limit'=>$appendix['pageSize'])),
-						"limit"=> $appendix['pageSize'],
-						"page" => $appendix['page'],
-						//"pageSize" => 
-				)
-		);
-		/*echo '<pre>';
-		print_r($builder);exit;*/
-		return $paginator;
+		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			    "builder" => $builder,
+			    "limit"=> $num,
+				"page" => $page
+			));
 	}
 	
 	static function getOne($id){
