@@ -1,1 +1,58 @@
-fsdfsd
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="/">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li><a href="#">模板预览</a></li>
+				<li>
+			</ul>
+
+			<div class="row-fluid sortable">		
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon align-justify"></i><span class="break"></span>分页页预览</h2>
+						<div class="box-icon">
+							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+						</div>
+					</div>
+					<div class="box-content">
+						<div class="row-fluid">
+							 
+							<div class="span11">
+							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
+								<div class="dataTables_filter">
+								分类：<select name="category_id">
+								<option value="">--</option>
+							  <?php 
+                                   $cates_arr = $this->objToArray->ohYeah(Category::find());
+                                   $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+                                   foreach ($items as $vs) :?>
+                                        <option value="<?php echo $vs['id'];?>" 
+                                        <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
+                                             <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
+                                                 <?php echo $vs['name'];?>
+                                              </option>
+                                            <?php endforeach;?>
+                                </select>
+                                	
+                                	类型：<?php echo \Phalcon\Tag::selectStatic(array("type", array(''=>'--','Category' => '分类', 'List' => '列表','Detail'=>'内容页'),'class'=>'span2',"value"=>isset($where['type']) ? $where['type'] : ''));?>
+                                <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary')) ?>
+								</div>
+							</div>
+							<?php echo \Phalcon\Tag::endForm()?>
+							
+							
+						</div>
+						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+						 
+						  
+						</tbody>
+					  </table> 
+					            
+					</div>
+				</div><!--/span-->
+			
+			</div><!--/row-->

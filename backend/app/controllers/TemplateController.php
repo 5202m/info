@@ -10,6 +10,11 @@ class TemplateController extends ControllerBase
 	
 	public function listAction($page = 1 , $pageSize = 10){
 		$search_key = 'template_list_search';
+		$isClear = $this->request->getQuery('action');
+		if($isClear == 'list'){
+			$this->session->set($search_key,array());
+		}
+		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$this->session->set($search_key, $params);
