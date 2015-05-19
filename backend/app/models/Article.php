@@ -7,12 +7,18 @@ class Article extends \Phalcon\Mvc\Model
 		$this->skipAttributes(array('from', 'status', 'ctime'));
 	}
 	
+	/**
+	 * 获取文章列表数据
+	 * @param unknown_type $modelsManager
+	 * @param unknown_type $where
+	 * @param unknown_type $appendix
+	 */
 	static function getList($modelsManager , $where , $appendix = array()){
 		$num = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 10;
 		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
 		$builder = $modelsManager->createBuilder()
-					->columns("article.id as id,article.title as title,article.author as author,article.language as language,article.share as share,article.visibility as visibility,article.ctime as ctime,category.name as cname")
+					->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
 					->from("article")
 					->leftjoin("category", "category.id = article.division_category_id")
 					->where($where)
@@ -25,6 +31,10 @@ class Article extends \Phalcon\Mvc\Model
 			));
 	}
 	
+	/**
+	 * 获取单条文章数据
+	 * @param unknown_type $id
+	 */
 	static function getOne($id){
 		if($id){
 			$conditions = " id= :id: ";

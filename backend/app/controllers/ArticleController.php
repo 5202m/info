@@ -2,23 +2,31 @@
 class ArticleController extends ControllerBase
 {
 
+	/**
+	 * 默认页，显示文章列表
+	 */
     public function indexAction(){
-		/*$action = $this->request->getQuery('action');
+		$action = $this->request->getQuery('action');
 		if($action=='list'){
 			$this->removeSearchSession();
-		}*/
+		}
 		$this->listAction(1, 10);
     }
     
+    /**
+     * 文章列表
+     * @param $page
+     * @param $pageSize
+     */
 	public function listAction($page=1, $pageSize=10){
 		$where = ' 1 ';
 		$condition = array();
 		if($this->request->isPost()){
 			$title = $this->request->getPost('title', 'trim');
-			$language = $this->request->getPost('language');
+			$language = $this->request->getPost('language', 'trim');
 			$division_category_id = $this->request->getPost('division_category_id');
-			$visibility = $this->request->getPost('visibility');
-			$share = $this->request->getPost('share');
+			$visibility = $this->request->getPost('visibility', 'trim');
+			$share = $this->request->getPost('share', 'trim');
 			$this->session->set('title', $title);
 			$this->session->set('language', $language);
 			$this->session->set('division_category_id', $division_category_id);
@@ -29,35 +37,35 @@ class ArticleController extends ControllerBase
 			$title = $this->session->get('title');
 			$condition['title'] = $title;
 			if(!empty($title)){
-				$where .= " and article.`title` like '%{$title}%' ";
+				$where .= " and article.title like '%{$title}%' ";
 			}
 		}
 		if($this->session->has("language")){
 			$language = $this->session->get('language');
 			$condition['language'] = $language;
 			if(!empty($language)){
-				$where .= " and article.`language` = '{$language}' ";
+				$where .= " and article.language = '{$language}' ";
 			}
 		}
 		if($this->session->has("division_category_id")){
 			$division_category_id = $this->session->get('division_category_id');
 			$condition['division_category_id'] = $division_category_id;
 			if(!empty($division_category_id)){
-				$where .= " and article.`division_category_id` = '{$division_category_id}' ";
+				$where .= " and article.division_category_id = '{$division_category_id}' ";
 			}
 		}
 		if($this->session->has("share")){
 			$share = $this->session->get('share');
 			$condition['share'] = $share;
 			if(!empty($share)){
-				$where .= " and article.`share` = '{$share}'";
+				$where .= " and article.share = '{$share}'";
 			}
 		}
 		if($this->session->has("visibility")){
 			$visibility = $this->session->get('visibility');
 			$condition['visibility'] = $visibility;
 			if(!empty($visibility)){
-				$where .= " and article.`visibility` = '{$visibility}' ";
+				$where .= " and article.visibility = '{$visibility}' ";
 			}
 		}
 		if($condition){
