@@ -19,57 +19,20 @@ class ArticleController extends ControllerBase
      * @param $pageSize
      */
 	public function listAction($page=1, $pageSize=10){
-		$where = ' 1 ';
-		$condition = array();
+		$search_key = 'article_list_search';
 		if($this->request->isPost()){
-			$title = $this->request->getPost('title', 'trim');
-			$language = $this->request->getPost('language', 'trim');
-			$division_category_id = $this->request->getPost('division_category_id');
-			$visibility = $this->request->getPost('visibility', 'trim');
-			$share = $this->request->getPost('share', 'trim');
-			$this->session->set('title', $title);
-			$this->session->set('language', $language);
-			$this->session->set('division_category_id', $division_category_id);
-			$this->session->set('share', $share);
-			$this->session->set('visibility', $visibility);
+			$params = $this->request->getPost();
+			$this->session->set($search_key, $params);
 		}
-		if($this->session->has("title")){
-			$title = $this->session->get('title');
-			$condition['title'] = $title;
-			if(!empty($title)){
-				$where .= " and article.title like '%{$title}%' ";
+		$where = array();
+		if($this->session->has($search_key)){
+			$where = $this->session->get($search_key);
+			$this->view->where  = $where;
+			foreach($where as $k=>$v){
+				if(empty($v)){
+					unset($where[$k]);
+				}
 			}
-		}
-		if($this->session->has("language")){
-			$language = $this->session->get('language');
-			$condition['language'] = $language;
-			if(!empty($language)){
-				$where .= " and article.language = '{$language}' ";
-			}
-		}
-		if($this->session->has("division_category_id")){
-			$division_category_id = $this->session->get('division_category_id');
-			$condition['division_category_id'] = $division_category_id;
-			if(!empty($division_category_id)){
-				$where .= " and article.division_category_id = '{$division_category_id}' ";
-			}
-		}
-		if($this->session->has("share")){
-			$share = $this->session->get('share');
-			$condition['share'] = $share;
-			if(!empty($share)){
-				$where .= " and article.share = '{$share}'";
-			}
-		}
-		if($this->session->has("visibility")){
-			$visibility = $this->session->get('visibility');
-			$condition['visibility'] = $visibility;
-			if(!empty($visibility)){
-				$where .= " and article.visibility = '{$visibility}' ";
-			}
-		}
-		if($condition){
-			$condition = $this->arrayToObj->tran($condition);
 		}
 		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
 		$list = Article::getList($this->modelsManager , $where , $appendix);
@@ -77,7 +40,7 @@ class ArticleController extends ControllerBase
 		//echo '<pre>';print_r($page);exit;
 		$divisionCategory = $this->getDivisionCategory();
         
-        $this->view->searchData = $condition;
+        //$this->view->searchData = $condition;
         $this->view->divisionCategory = $divisionCategory;
 		$page->pageSize = $appendix['pageSize'];
 		$this->view->page = $page;

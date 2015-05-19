@@ -19,9 +19,20 @@ class Article extends \Phalcon\Mvc\Model
 		
 		$builder = $modelsManager->createBuilder()
 					->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
-					->from("article")
+					->from("article");
+		$strWhere = null;
+		if($where){
+			foreach($where as $k=>$v){
+				if($k=='title'){
+					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
+				}else{
+					$strWhere[]  =  "article.{$k} = '{$v}'";
+				}
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+		$builder =$builder->where($strWhere)
 					->leftjoin("category", "category.id = article.division_category_id")
-					->where($where)
 					->orderby($appendix['order']);
 		//echo '<pre>';print_r($builder);exit;
 		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
