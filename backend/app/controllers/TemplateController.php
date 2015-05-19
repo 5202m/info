@@ -58,7 +58,16 @@ class TemplateController extends ControllerBase
 		}
 		
 	}
-	public function previewAction(){
+	public function previewAction($type='category'){
+		
+		$preview_maps = array(
+			'category'=>'http://inf.hx9999.com/category/html/:template_id/:category_id.html',
+			'list'=>'http://inf.hx9999.com/list/html/:template_id/:category_id.html',
+			'detail'=>'http://inf.hx9999.com/detail/html/:template_id/:category_id/:article_id.html'
+		);
+		
+		$this->view->url = $preview_maps[$type];
+		$this->view->type = strtoupper($type);
 		
 	}
 	public function deleteAction($id = 0){

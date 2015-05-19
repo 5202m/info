@@ -24,7 +24,7 @@
 							<div class="span11">
 							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
 								<div class="dataTables_filter">
-								分类：<select name="category_id">
+								分类：<select name="category_id" id="category_id">
 								<option value="">--</option>
 							  <?php 
                                    $cates_arr = $this->objToArray->ohYeah(Category::find());
@@ -38,7 +38,16 @@
                                             <?php endforeach;?>
                                 </select>
                                 	
-                                	类型：<?php echo \Phalcon\Tag::selectStatic(array("type", array(''=>'--','Category' => '分类', 'List' => '列表','Detail'=>'内容页'),'class'=>'span2',"value"=>isset($where['type']) ? $where['type'] : ''));?>
+                                	模板：<?php 
+                                	
+                                	echo \Phalcon\Tag::selectStatic(array(
+                                			"template_id",
+                                			Template::find('status= \'Enabled\' AND type= \''.$type.'\''),
+                                			"using" => array("id", "name"),
+                                			"value"=>''
+                                	));
+                                	
+                                	?>
                                 <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary')) ?>
 								</div>
 							</div>
@@ -46,13 +55,53 @@
 							
 							
 						</div>
-						<table class="table table-striped table-bordered bootstrap-datatable datatable">
-						 
-						  
-						</tbody>
+						<div id="loading" class="loading">
+						
+						
+						</div>
+						
 					  </table> 
 					            
 					</div>
 				</div><!--/span-->
 			
 			</div><!--/row-->
+			
+			<script>
+			$(document).ready(function(){
+				$('.btn-primary').click(function(){
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					if(!template_id){
+						$('#myModal>.modal-body>p').html('请选择模板');
+						$('#myModal').modal('show');
+						return false;
+					}
+					if(!category_id){
+						$('#myModal>.modal-body>p').html('请选择分类');
+						$('#myModal').modal('show');
+						return false;
+					}
+					var url = "<?php echo $url ?>";
+					url = url.replace(':template_id',template_id)
+								.replace(':category_id',category_id);
+					/**
+					$.ajax({
+				        type: "POST",
+				        url: url,
+				        data: {},
+				        async:false,
+				        success: function(data){
+				        	$('#loading').html(data);
+				    	}
+				    });
+					**/
+					$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+					return false;
+				})
+				$('#template_id').change(function(){
+					$(".btn-primary").trigger("click");
+				});
+			});
+			
+			</script>
