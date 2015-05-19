@@ -26,8 +26,8 @@ class Template extends \Phalcon\Mvc\Model
 		$builder = $modelsManager->createBuilder()
 					->columns('template.*,category.name cname')
 					->from('template');
+		$strWhere = null;
 		if($where){
-			$strWhere = null;
 			foreach($where as $k=>$v){
 				if($k=='name'){
 					$strWhere[]  =  "template.{$k} LIKE  '%{$v}%'";
