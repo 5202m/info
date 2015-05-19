@@ -23,13 +23,13 @@
 								<div class="" id="">
 									<label></label>
 									<form name="form1" action="/article/list" method="post">
-									标题: <input type="text" name="title" id="title">
+									标题: <input type="text" name="title" id="title" value="<?php echo isset($where['title'])?$where['title']:'';?>">
 									语言：
 									<select name="language" id="language" style="width:auto;">
 										<option value="">全部</option>
-										<option value="cn">CN</option>
-										<option value="tw">TW</option>
-										<option value="en">EN</option>
+										<option value="cn"<?php if(isset($where['language']) && $where['language']=='cn'):?> selected="selected"<?php endif;?>>CN</option>
+										<option value="tw"<?php if(isset($where['language']) && $where['language']=='tw'):?> selected="selected"<?php endif;?>>TW</option>
+										<option value="en"<?php if(isset($where['language']) && $where['language']=='en'):?> selected="selected"<?php endif;?>>EN</option>
 									</select>
 									事业部分类：
 									<select name="division_category_id" id="division_category_id" style="width:auto;">
@@ -39,7 +39,7 @@
 					                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
 					                    foreach ($items as $vs) :
 					                        ?>
-										<option value="<?php echo $vs['id'];?>">
+										<option value="<?php echo $vs['id'];?>"<?php if(isset($where['division_category_id']) && $where['division_category_id']==$vs['id']):?> selected="selected"<?php endif;?>>
 										<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
 	    								<?php echo $vs['name']; ?>
 	    								</option>
@@ -48,14 +48,14 @@
 									可见性：
 									<select name="visibility" id="visibility" style="width:auto;">
 										<option value="">全部</option>
-										<option value="Visible">显示</option>	
-										<option value="Hidden">隐藏</option>		
+										<option value="Visible"<?php if(isset($where['visibility']) && $where['visibility']=='Visible'):?> selected="selected"<?php endif;?>>显示</option>	
+										<option value="Hidden"<?php if(isset($where['visibility']) && $where['visibility']=='Hidden'):?> selected="selected"<?php endif;?>>隐藏</option>		
 									</select>
 									分享：
 									<select name="share" id="share" style="width:auto;">
 										<option value="">全部</option>
-										<option value="Y">是</option>	
-										<option value="N">否</option>		
+										<option value="Y"<?php if(isset($where['share']) && $where['share']=='Y'):?> selected="selected"<?php endif;?>>是</option>	
+										<option value="N"<?php if(isset($where['share']) && $where['share']=='N'):?> selected="selected"<?php endif;?>>否</option>		
 									</select>
 									<input type="submit" value="确定" class="btn btn-primary btn-search" />
 									</form>

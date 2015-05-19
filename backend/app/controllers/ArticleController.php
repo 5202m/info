@@ -2,21 +2,45 @@
 class ArticleController extends ControllerBase
 {
 
+	/**
+	 * 默认页，显示文章列表
+	 */
     public function indexAction(){
+		$action = $this->request->getQuery('action');
+		if($action=='list'){
+			$this->removeSearchSession();
+		}
 		$this->listAction(1, 10);
     }
     
-	public function listAction($page,$pageSize){
-		
-		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
+    /**
+     * 文章列表
+     * @param $page
+     * @param $pageSize
+     */
+	public function listAction($page=1, $pageSize=10){
+		$search_key = 'article_list_search';
+		if($this->request->isPost()){
+			$params = $this->request->getPost();
+			$this->session->set($search_key, $params);
+		}
 		$where = array();
+		if($this->session->has($search_key)){
+			$where = $this->session->get($search_key);
+			$this->view->where  = $where;
+			foreach($where as $k=>$v){
+				if(empty($v)){
+					unset($where[$k]);
+				}
+			}
+		}
+		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
 		$list = Article::getList($this->modelsManager , $where , $appendix);
 		$page = $list->getPaginate();
-		
-		$divisionCategory = Category::find(
-            "division_id = 3"//该值应该是根据登录用户所在的事业部的id
-        );
+		//echo '<pre>';print_r($page);exit;
+		$divisionCategory = $this->getDivisionCategory();
         
+        //$this->view->searchData = $condition;
         $this->view->divisionCategory = $divisionCategory;
 		$page->pageSize = $appendix['pageSize'];
 		$this->view->page = $page;
@@ -81,9 +105,7 @@ class ArticleController extends ControllerBase
                 $this->flash->error($message);
             }
 		}
-		$divisionCategory = Category::find(
-            "division_id = 3"//该值应该是根据登录用户所在的事业部的id
-        );
+		$divisionCategory = $this->getDivisionCategory();
         $this->view->divisionCategory = $divisionCategory;
 		$this->view->article = $article;
 		$this->view->images = $images;
@@ -140,9 +162,7 @@ class ArticleController extends ControllerBase
             }
 		}
 		
-		$divisionCategory = Category::find(
-            "division_id = 3"//该值应该是根据登录用户所在的事业部的id
-        );
+		$divisionCategory = $this->getDivisionCategory();
         $this->view->divisionCategory = $divisionCategory;
 	}
 	
@@ -189,5 +209,28 @@ class ArticleController extends ControllerBase
 			}
 		}
 		return $image;
+	}
+	
+	/**
+	 * 获取事业部分类
+	 * Enter description here ...
+	 */
+	private function getDivisionCategory(){
+		$divisionId = Division::getID();
+		return $divisionCategory = Category::find(
+            "division_id = {$divisionId}"
+        );
+	}
+	
+	/**
+	 * 移除提交的查询条件
+	 * Enter description here ...
+	 */
+	private function removeSearchSession(){
+		$this->session->remove("title");
+		$this->session->remove("language");
+		$this->session->remove("division_category_id");
+		$this->session->remove("share");
+		$this->session->remove("visibility");
 	}
 }
