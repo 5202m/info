@@ -159,6 +159,7 @@
 [Mon, 18 May 15 11:22:00 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
 [Mon, 18 May 15 11:22:00 +0200][INFO] DESCRIBE `category`
 [Mon, 18 May 15 11:22:00 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+<<<<<<< HEAD
 [Mon, 18 May 15 11:28:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
 [Mon, 18 May 15 11:28:27 +0200][INFO] DESCRIBE `category`
 [Mon, 18 May 15 11:28:27 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
@@ -2036,3 +2037,77 @@
 [Tue, 19 May 15 07:56:40 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
 [Tue, 19 May 15 07:56:40 +0200][INFO] DESCRIBE `category`
 [Tue, 19 May 15 07:56:40 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+=======
+[Mon, 18 May 15 11:25:04 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Mon, 18 May 15 11:25:04 +0200][INFO] DESCRIBE `category`
+[Mon, 18 May 15 11:25:04 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 18 May 15 11:59:57 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Mon, 18 May 15 11:59:57 +0200][INFO] DESCRIBE `division`
+[Mon, 18 May 15 11:59:57 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Mon, 18 May 15 12:00:45 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Mon, 18 May 15 12:00:45 +0200][INFO] DESCRIBE `division`
+[Mon, 18 May 15 12:00:45 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Mon, 18 May 15 12:00:45 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Mon, 18 May 15 12:00:45 +0200][INFO] DESCRIBE `category`
+[Mon, 18 May 15 12:00:45 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 03:25:04 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 03:25:04 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 03:25:04 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 03:25:04 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 03:25:04 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 03:25:04 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 03:25:49 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 03:25:49 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 03:25:49 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 03:28:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 03:28:27 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 03:28:27 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 03:34:04 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 03:34:04 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 03:34:04 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 03:35:01 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 03:35:01 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 03:35:01 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 03:39:04 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 03:39:04 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 03:39:04 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 03:43:44 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 03:43:44 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 03:43:44 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:11:10 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:11:10 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:11:10 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:16:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:16:25 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:16:25 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:16:42 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:16:42 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:16:42 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:22:10 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:22:10 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:22:10 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:22:22 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:22:22 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:22:22 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:29:52 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:29:52 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:29:52 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:31:53 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:31:53 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:31:53 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:32:13 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:32:13 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:32:13 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 05:37:12 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 05:37:12 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 05:37:12 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 07:28:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 07:28:27 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 07:28:27 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Tue, 19 May 15 07:28:35 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 07:28:35 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 07:28:35 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 07:41:19 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Tue, 19 May 15 07:41:19 +0200][INFO] DESCRIBE `division`
+[Tue, 19 May 15 07:41:19 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+>>>>>>> b09a42070affb5a2e6481d9250a3fb29728a94f8

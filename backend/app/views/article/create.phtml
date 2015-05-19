@@ -21,12 +21,12 @@
 						</div>
 					</div>
 					<div class="box-content">
-						<form class="form-horizontal" method="post" action="" name="editForm" id="editForm" enctype="multipart/form-data">
+						<form class="form-horizontal" method="post" action="" name="createForm" id="createForm" enctype="multipart/form-data">
 						  <fieldset>
 							<div class="control-group">
 							  <label class="control-label" for="typeahead">文章标题 </label>
 							  <div class="controls">
-								<input type="text" class="span6 typeahead" id="title" name="title" value="<?php echo $article->title;?>" />
+								<input type="text" class="span6 typeahead" id="title" name="title" value="" />
 								<p class="help-block"></p>
 							  </div>
 							</div>
@@ -35,9 +35,9 @@
 							  <div class="controls">
 								<select name="language" id="language">
 									<option value="">请选择</option>
-									<option value="cn"<?php if($article->language=='cn'):?> selected="selected"<?php endif;?>>CN</option>
-									<option value="tw"<?php if($article->language=='tw'):?> selected="selected"<?php endif;?>>TW</option>
-									<option value="en"<?php if($article->language=='en'):?> selected="selected"<?php endif;?>>EN</option>
+									<option value="cn">CN</option>
+									<option value="tw">TW</option>
+									<option value="en">EN</option>
 								</select>
 							  </div>
 							</div>
@@ -51,7 +51,7 @@
 				                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
 				                    foreach ($items as $vs) :
 				                        ?>
-									<option value="<?php echo $vs['id'];?>"<?php if($article->division_category_id==$vs['id']):?> selected="selected"<?php endif;?>>
+									<option value="<?php echo $vs['id'];?>">
 									<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
     								<?php echo $vs['name']; ?>
     								</option>
@@ -75,30 +75,30 @@
 							  <label class="control-label" for="image">图片</label>
 							  <div class="controls">
 								<input class="input-file uniform_on" id="image" name="image" type="file" />
-								<input type="hidden" name="hdimage" value="<?php if($images):echo $images->url,';',$images->id;endif;?>" />
+								<input type="hidden" name="hdimage" value="" />
 							  </div>
 							</div>  
 							<div class="control-group">
 								<label class="control-label">可见性</label>
 								<div class="controls">
 								  <label class="radio">
-									<input name="visibility" type="radio" value="Visible"<?php if($article->visibility=='Visible'):?> checked="checked"<?php endif;?> /> 可见
+									<input name="visibility" type="radio" value="Visible" /> 可见
 								  </label>
 								  <div style="clear:both"></div>
 								  <label class="radio">
-									<input name="visibility" type="radio" value="Hidden"<?php if($article->visibility=='Hidden'):?> checked="checked"<?php endif;?> /> 不可见
+									<input name="visibility" type="radio" value="Hidden" /> 不可见
 								  </label>
 								</div>
-							</div> 
+							</div>
 							<div class="control-group">
 								<label class="control-label">分享</label>
 								<div class="controls">
 								  <label class="radio">
-									<input name="share" type="radio" value="Y"<?php if($article->share=='Y'):?> checked="checked"<?php endif;?> /> 是
+									<input name="share" type="radio" value="Y" /> 是
 								  </label>
 								  <div style="clear:both"></div>
 								  <label class="radio">
-									<input name="share" type="radio" value="N"<?php if($article->share=='N'):?> checked="checked"<?php endif;?> /> 否
+									<input name="share" type="radio" value="N" /> 否
 								  </label>
 								</div>
 							</div>
@@ -106,15 +106,15 @@
 								<label class="control-label">状态</label>
 								<div class="controls">
 								  <label class="radio">
-									<input name="status" type="radio" value="Hidden"<?php if($article->status=='Hidden'):?> checked="checked"<?php endif;?> /> 隐藏
+									<input name="status" type="radio" value="Hidden" /> 隐藏
 								  </label>
 								  <div style="clear:both"></div>
 								  <label class="radio">
-									<input name="status" type="radio" value="Disabled"<?php if($article->status=='Disabled'):?> checked="checked"<?php endif;?> /> 无效
+									<input name="status" type="radio" value="Disabled" /> 无效
 								  </label>
 								  <div style="clear:both"></div>
 								  <label class="radio">
-									<input name="status" type="radio" value="Enabled"<?php if($article->status=='Enabled'):?> checked="checked"<?php endif;?> /> 有效
+									<input name="status" type="radio" value="Enabled" /> 有效
 								  </label>
 								</div>
 							</div-->  
@@ -122,29 +122,28 @@
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="arcontent">文章内容</label>
 							  <div class="controls">
-								<textarea class="cleditor" id="arcontent" name="arcontent" rows="8" style="width:700px;height:300px;"><?php echo $article->content;?></textarea>
+								<textarea class="cleditor" id="arcontent" name="arcontent" rows="8" style="width:700px;height:300px;"></textarea>
 							  </div>
 							</div>         
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="keyword">关键字SEO</label>
 							  <div class="controls">
-								<input type="text" class="span6" id="keyword" name="keyword" value="<?php echo $article->keyword;?>" />
+								<input type="text" class="span6" id="keyword" name="keyword" value="" />
 							  </div>
 							</div>        
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="description">描述SEO</label>
 							  <div class="controls">
-								<input type="text" class="span6" id="description" name="description" value="<?php echo $article->description;?>" />
+								<input type="text" class="span6" id="description" name="description" value="" />
 							  </div>
-							</div>        
+							</div>    
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="author">作者</label>
 							  <div class="controls">
-								<input type="text" class="input-xlarge" id="author" name="author" value="<?php echo $article->author;?>" />
+								<input type="text" class="input-xlarge" id="author" name="author" value="" />
 							  </div>
 							</div>
 							<div class="form-actions">
-							  <input type="hidden" name="id" value="<?php echo $article->id;?>" />
 							  <button type="submit" class="btn btn-primary">保存</button>
 							  <button type="reset" class="btn">取消</button>
 							</div>

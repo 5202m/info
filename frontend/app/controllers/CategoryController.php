@@ -7,8 +7,6 @@ class CategoryController extends ControllerBase
 	public function indexAction()
 	{
 
-        
-        //print_r($category);
 	}
 	public function htmlAction($template_id, $parent_id){
 		$template_id = intval($template_id);
@@ -52,9 +50,6 @@ class CategoryController extends ControllerBase
 				$conditions,
     			"bind" => $parameters
 		));
-// 		foreach ($categorys as $category){
-// 			printf("%s, %s", $category->id, $category->name);
-// 		}
 		
 		$view = new \Phalcon\Mvc\View();
 		$view->setViewsDir($this->basedir.'/template');
@@ -66,14 +61,13 @@ class CategoryController extends ControllerBase
 		
 		$content =  $view->getContent();
 		
-		if(!is_dir(dirname($categroy_file))){
-			mkdir(dirname($categroy_file), 0755, TRUE);
+		if($content){
+			if(!is_dir(dirname($categroy_file))){
+				mkdir(dirname($categroy_file), 0755, TRUE);
+			}
+			file_put_contents($categroy_file, $content);
 		}
-		file_put_contents($categroy_file, $content);
-		
 		print($content);
-		
-// 		print(time());
 		
 	}
 	public function jsonAction($parent_id){
