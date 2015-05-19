@@ -11,13 +11,14 @@ class ListController extends ControllerBase
     {
 
     }
-    public function htmlAction($template_id,$category_id, $limit = 50, $offset = 0){
+    public function htmlAction($template_id,$category_id, $limit = 20, $offset = 1){
     
     	$template_id = intval($template_id);
     	$category_id = intval($category_id);
     	
     	if(empty($category_id) || empty($template_id)){
-    		echo '404';
+    		//echo '404';
+    		$this->response->setStatusCode(404, 'Not Found');
     	}
     	
     	if($limit > 100){
@@ -61,28 +62,63 @@ class ListController extends ControllerBase
     			"bind" => $parameters,
     			'limit' => $limit
     	));
-//     	print_r($articles);
 
+    	$pages = $this->paginator($category_id, $limit, $offset);
+    	
     	$view = new \Phalcon\Mvc\View();
     	$view->setViewsDir($this->basedir.'/template');
     	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
     	$view->setVar('articles',$articles);
     	$view->setVar('template_id',$template_id);
     	$view->setVar('category_id',$category_id);
-    	
+    	$view->setVar('$pages',$pages);
     	$view->start();
     	$view->render("list","$template_id");
     	$view->finish();
     	
     	$content =  $view->getContent();
-    	
-    	if(!is_dir(dirname($categroy_file))){
-    		mkdir(dirname($categroy_file), 0755, TRUE);
+    	if($content){
+	    	if(!is_dir(dirname($categroy_file))){
+	    		mkdir(dirname($categroy_file), 0755, TRUE);
+	    	}
+	    	file_put_contents($categroy_file, $content);
     	}
-    	file_put_contents($categroy_file, $content);
-    	
     	print($content);
     	
+    }
+    public function pageAction($category_id, $limit, $offset = 1){
+    	$pager = $this->paginator($category_id, $limit, $offset);
+    	print_r($pager);
+    }
+    public function paginator($category_id, $limit, $offset = 1){	
+    	$category_id = intval($category_id);
+    	if(!$category_id){
+    		$this->response->setStatusCode(404, 'Not Found');
+    	}
+    	
+    	$count = Article::count(array(
+    			"(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:",
+    			'bind' => array(
+	    			'category_id' => $category_id,
+	    			'division_category_id' => $category_id,
+	    			'language' => 'cn',
+	    			'visibility' => 'Visible'
+    				)
+    			));
+    	
+    	$total 	= ceil($count / $limit);
+    	$before = $offset<=$total && $offset > 1?$offset-1:1;
+    	$next 	= $offset>=$total?$total:$offset+1;
+    	$paginator = array(
+    			'count' 	=> $count,
+    			'first' 	=> 1,
+    			'last' 		=> $total,
+    			'before' 	=> $before,
+    			'current' 	=> $offset,
+    			'next' 		=> $next,
+    			'total' 	=> $total
+    	); 
+    	return ($paginator);
     }
     public function rssAction($template_id,$category_id, $limit, $offset){
     
@@ -135,9 +171,6 @@ class ListController extends ControllerBase
     	return $response;
     }
     
-    public function pageAction(){
-    	
-    }
     public function purgeAction(){
     }
 }
