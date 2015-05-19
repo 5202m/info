@@ -24,10 +24,11 @@ class Template extends \Phalcon\Mvc\Model
 		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
 		$builder = $modelsManager->createBuilder()
-					->columns('template.*,category.name cname')
+					->columns('template.*')
 					->from('template');
 		$strWhere = null;
 		if($where){
+			
 			foreach($where as $k=>$v){
 				if($k=='name'){
 					$strWhere[]  =  "template.{$k} LIKE  '%{$v}%'";
@@ -37,8 +38,7 @@ class Template extends \Phalcon\Mvc\Model
 			}
 			$strWhere = implode(' AND ', $strWhere);
 		}
-		$builder =$builder->where($strWhere)
-				->leftjoin('category','category.id = template.category_id');
+		$builder =$builder->where($strWhere);
 		
 		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			    "builder" => $builder,

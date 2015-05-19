@@ -2663,3 +2663,182 @@
 [Tue, 19 May 15 10:55:31 +0200][INFO] SELECT `article`.`id` AS `_article_id`, `article`.`title` AS `_article_title`, `article`.`content` AS `_article_content`, `article`.`author` AS `_article_author`, `article`.`keyword` AS `_article_keyword`, `article`.`description` AS `_article_description`, `article`.`image` AS `_article_image`, `article`.`language` AS `_article_language`, `article`.`from` AS `_article_from`, `article`.`share` AS `_article_share`, `article`.`visibility` AS `_article_visibility`, `article`.`category_id` AS `_article_category_id`, `article`.`division_category_id` AS `_article_division_category_id`, `article`.`status` AS `_article_status`, `article`.`ctime` AS `_article_ctime`, `article`.`mtime` AS `_article_mtime`, `category`.`name` AS `cname` FROM `article` LEFT JOIN `category` ON `category`.`id` = `article`.`division_category_id`  WHERE `article`.`share` = 'Y' ORDER BY `article`.`id` DESC LIMIT 10
 [Tue, 19 May 15 10:55:31 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` LEFT JOIN `category` ON `category`.`id` = `article`.`division_category_id`  WHERE `article`.`share` = 'Y'
 [Tue, 19 May 15 10:55:31 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 10:59:13 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:13 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:13 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:13 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:13 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`category_id` AS `_template_category_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 10:59:13 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id` 
+[Tue, 19 May 15 10:59:13 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:17 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:17 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:17 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:19 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:19 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:19 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:19 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:19 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`category_id` AS `_template_category_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 10:59:19 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id` 
+[Tue, 19 May 15 10:59:19 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:22 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:22 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:22 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:22 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:22 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:22 +0200][INFO] SELECT `template`.`id`, `template`.`category_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'CATEGORY'
+[Tue, 19 May 15 10:59:24 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:24 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:24 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:24 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:24 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:24 +0200][INFO] SELECT `template`.`id`, `template`.`category_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'LIST'
+[Tue, 19 May 15 10:59:26 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:26 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:26 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:26 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:26 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:27 +0200][INFO] SELECT `template`.`id`, `template`.`category_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'CATEGORY'
+[Tue, 19 May 15 10:59:36 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:36 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:36 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:36 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:36 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:36 +0200][INFO] SELECT `template`.`id`, `template`.`category_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'LIST'
+[Tue, 19 May 15 10:59:41 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 10:59:41 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 10:59:41 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 10:59:41 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 10:59:41 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 10:59:41 +0200][INFO] SELECT `template`.`id`, `template`.`category_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'CATEGORY'
+[Tue, 19 May 15 11:07:58 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:07:58 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:07:58 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Tue, 19 May 15 11:11:19 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:11:19 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:11:19 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Tue, 19 May 15 11:11:21 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:11:21 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:11:21 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:11:21 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:11:21 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`division_id` AS `_template_division_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 11:16:44 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='article'
+[Tue, 19 May 15 11:16:44 +0200][INFO] DESCRIBE `article`
+[Tue, 19 May 15 11:16:44 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:16:44 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:16:44 +0200][INFO] SELECT `article`.`id` AS `_article_id`, `article`.`title` AS `_article_title`, `article`.`content` AS `_article_content`, `article`.`author` AS `_article_author`, `article`.`keyword` AS `_article_keyword`, `article`.`description` AS `_article_description`, `article`.`image` AS `_article_image`, `article`.`language` AS `_article_language`, `article`.`from` AS `_article_from`, `article`.`share` AS `_article_share`, `article`.`visibility` AS `_article_visibility`, `article`.`category_id` AS `_article_category_id`, `article`.`division_category_id` AS `_article_division_category_id`, `article`.`status` AS `_article_status`, `article`.`ctime` AS `_article_ctime`, `article`.`mtime` AS `_article_mtime`, `category`.`name` AS `cname` FROM `article` LEFT JOIN `category` ON `category`.`id` = `article`.`division_category_id`  ORDER BY `article`.`id` DESC LIMIT 10
+[Tue, 19 May 15 11:16:44 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` LEFT JOIN `category` ON `category`.`id` = `article`.`division_category_id` 
+[Tue, 19 May 15 11:16:44 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 11:16:52 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:16:52 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:16:52 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:16:52 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:16:52 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`division_id` AS `_template_division_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 11:17:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:17:23 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:17:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:17:23 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:17:23 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`division_id` AS `_template_division_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 11:17:24 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:17:24 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:17:24 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:17:24 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:17:24 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`division_id` AS `_template_division_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 11:18:15 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:18:15 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:18:15 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:18:15 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:18:15 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`division_id` AS `_template_division_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 11:18:17 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:18:17 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:18:17 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:18:17 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:18:17 +0200][INFO] SELECT `template`.`id` AS `_template_id`, `template`.`division_id` AS `_template_division_id`, `template`.`name` AS `_template_name`, `template`.`decription` AS `_template_decription`, `template`.`content` AS `_template_content`, `template`.`type` AS `_template_type`, `template`.`status` AS `_template_status`, `template`.`engine` AS `_template_engine`, `template`.`ctime` AS `_template_ctime`, `template`.`mtime` AS `_template_mtime`, `category`.`name` AS `cname` FROM `template` LEFT JOIN `category` ON `category`.`id` = `template`.`category_id`  LIMIT 10
+[Tue, 19 May 15 11:19:02 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='article'
+[Tue, 19 May 15 11:19:02 +0200][INFO] DESCRIBE `article`
+[Tue, 19 May 15 11:19:02 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:19:02 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:19:02 +0200][INFO] SELECT `article`.`id` AS `_article_id`, `article`.`title` AS `_article_title`, `article`.`content` AS `_article_content`, `article`.`author` AS `_article_author`, `article`.`keyword` AS `_article_keyword`, `article`.`description` AS `_article_description`, `article`.`image` AS `_article_image`, `article`.`language` AS `_article_language`, `article`.`from` AS `_article_from`, `article`.`share` AS `_article_share`, `article`.`visibility` AS `_article_visibility`, `article`.`category_id` AS `_article_category_id`, `article`.`division_category_id` AS `_article_division_category_id`, `article`.`status` AS `_article_status`, `article`.`ctime` AS `_article_ctime`, `article`.`mtime` AS `_article_mtime`, `category`.`name` AS `cname` FROM `article` LEFT JOIN `category` ON `category`.`id` = `article`.`division_category_id`  ORDER BY `article`.`id` DESC LIMIT 10
+[Tue, 19 May 15 11:19:02 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` LEFT JOIN `category` ON `category`.`id` = `article`.`division_category_id` 
+[Tue, 19 May 15 11:19:02 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Tue, 19 May 15 11:19:07 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:19:07 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:19:07 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:19:07 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:19:07 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:19:07 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'CATEGORY'
+[Tue, 19 May 15 11:20:51 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:20:51 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:20:51 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:20:51 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:20:51 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:20:51 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`status` = 'Enabled' AND `template`.`type` = 'CATEGORY'
+[Tue, 19 May 15 11:20:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:20:55 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:20:55 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:20:55 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:20:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:20:55 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:20:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:21:47 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:21:47 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:21:47 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:21:47 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:21:47 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:21:47 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:21:47 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:22:48 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:22:48 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:22:48 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:22:48 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:23:02 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:23:02 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:23:02 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:23:02 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:23:02 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:23:02 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:23:02 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:23:33 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:23:33 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:23:33 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:23:33 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:23:33 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:23:33 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:23:33 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:23:53 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:23:53 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:23:53 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:23:53 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:23:53 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:23:53 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:23:53 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:24:10 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:24:10 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:24:10 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:24:10 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:24:10 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:24:10 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:24:10 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:24:12 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:24:12 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:24:12 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:24:12 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:24:12 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:24:12 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:24:12 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:24:19 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:24:19 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:24:19 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:24:21 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:24:21 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:24:21 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:24:21 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:24:21 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:24:21 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:24:21 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
+[Tue, 19 May 15 11:24:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Tue, 19 May 15 11:24:23 +0200][INFO] DESCRIBE `template`
+[Tue, 19 May 15 11:24:23 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` LIMIT 10
+[Tue, 19 May 15 11:24:23 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template`
+[Tue, 19 May 15 11:24:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Tue, 19 May 15 11:24:23 +0200][INFO] DESCRIBE `category`
+[Tue, 19 May 15 11:24:23 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category`
