@@ -24,19 +24,6 @@
 							<div class="span11">
 							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
 								<div class="dataTables_filter">
-								分类：<select name="category_id">
-								<option value="">--</option>
-							  <?php 
-                                   $cates_arr = $this->objToArray->ohYeah(Category::find());
-                                   $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
-                                   foreach ($items as $vs) :?>
-                                        <option value="<?php echo $vs['id'];?>" 
-                                        <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
-                                             <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
-                                                 <?php echo $vs['name'];?>
-                                              </option>
-                                            <?php endforeach;?>
-                                </select>
                                 	名字：<?php echo \Phalcon\Tag::textField(array("name", "class" => "span2 typeahead" , "value"=>isset($where['name']) ? $where['name'] : '')) ?>
                                 	状态：<?php echo \Phalcon\Tag::selectStatic(array("status", array(''=>'--','Enabled' => '启用', 'Disabled' => '关闭'),'class'=>'span2',"value"=>isset($where['status']) ? $where['status'] : ''));?>
                                 	类型：<?php echo \Phalcon\Tag::selectStatic(array("type", array(''=>'--','Category' => '分类', 'List' => '列表','Detail'=>'内容页'),'class'=>'span2',"value"=>isset($where['type']) ? $where['type'] : ''));?>
@@ -54,10 +41,10 @@
 				
 								  <th width="5%">模板名字</th>
 								  <th width="9%">模板描述</th>
-								  <th width="2%">模板状态</th>
 								  <th width="2%">模板类型</th><!--  <th width="2%">模板引擎</th>-->
 								  <th width="4%">创建时间</th>
 								  <th width="4%">修改时间</th>
+								  <th width="2%">模板状态</th>
 								  <th width="6%">操作</th>
 							  </tr>
 						  </thead>   
@@ -69,10 +56,17 @@
 							
 								<td><?php echo $item->name;?></td>
 								<td><?php echo $item->decription;?></td>
-								<td><?php echo $item->status;?></td>
+								
 								<td><?php echo $item->type;?></td><!--  <td><?php echo $item->engine;?></td>-->
 								<td><?php echo $item->ctime;?></td>
 								<td><?php echo $item->mtime;?></td>
+								<td class="center">
+								<?php if($item->status=='Enabled') :?>
+								<span class="label label-success">启用</span>
+								<?php else :?>
+								<span class="label label-error">关闭</span>
+								<?php endif ;?>
+								</td>
 								<td class="center">
 									<a class="btn btn-success" href="/template/preview/<?php echo $item->id ?>">
 										<i class="halflings-icon white zoom-in"></i>  
