@@ -227,10 +227,7 @@ class ArticleController extends ControllerBase
 	 * Enter description here ...
 	 */
 	private function removeSearchSession(){
-		$this->session->remove("title");
-		$this->session->remove("language");
-		$this->session->remove("division_category_id");
-		$this->session->remove("share");
-		$this->session->remove("visibility");
+		$search_key = 'article_list_search';
+		$this->session->remove($search_key);
 	}
 }
