@@ -25,8 +25,20 @@ class Template extends \Phalcon\Mvc\Model
 		
 		$builder = $modelsManager->createBuilder()
 					->columns('template.*,category.name cname')
-					->from('template')
-					->leftjoin('category','category.id = template.category_id');
+					->from('template');
+		if($where){
+			$strWhere = null;
+			foreach($where as $k=>$v){
+				if($k=='name'){
+					$strWhere[]  =  "template.{$k} LIKE  '%{$v}%'";
+				}else{
+					$strWhere[]  =  "template.{$k} = '{$v}'";
+				}
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+		$builder =$builder->where($strWhere)
+				->leftjoin('category','category.id = template.category_id');
 		
 		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			    "builder" => $builder,
@@ -37,7 +49,7 @@ class Template extends \Phalcon\Mvc\Model
 	}
 	static function defaultObject($returnArr = false){
 		
-		$columns = array('id'=>0,'category_id','name','decription','content','status','engine');
+		$columns = array('id'=>0,'category_id','name','decription','content','type','status','engine');
 		if($returnArr === true ) return $columns;
 		$obj = new stdClass;
 		foreach($columns as $k=>$v){

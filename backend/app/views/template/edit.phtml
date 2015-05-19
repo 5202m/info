@@ -6,7 +6,7 @@
 				</li>
 				<li>
 					<i class="icon-edit"></i>
-					<a href="#">编辑模板</a>
+					<a href="#"><?php echo $info->id > 0 ?  '编辑模板' : '新增模板'?></a>
 				</li>
 			</ul>
 			<?php if(isset($message_info)) :?>
@@ -20,7 +20,7 @@
 			<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon edit"></i><span class="break"></span><?php echo $info->id > 0 ?  '编辑模板' : '新赠模板'?></h2>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span><?php echo $info->id > 0 ?  '编辑模板' : '新增模板'?></h2>
 						<div class="box-icon">
 							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -48,7 +48,8 @@
                                    $cates_arr = $this->objToArray->ohYeah(Category::find());
                                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
                                    foreach ($items as $vs){?>
-                                        <option value="<?php echo $vs['id'];?>">
+                                        <option value="<?php echo $vs['id'];?>"
+                                        <?php echo (isset($info->category_id) && $info->category_id==$vs['id']) ? 'selected' : '' ?>>
                                              <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                  <?php echo $vs['name'];?>
                                               </option>
@@ -90,6 +91,14 @@
 							  </div>
 							</div>
 							
+							<div class="control-group">
+							  <label class="control-label" for="typeahead">模板类型</label>
+							  <div class="controls">
+								  <?php 
+								  echo \Phalcon\Tag::selectStatic(array("type", array('Category' => '栏目', 'List' => '列表','Detail'=>'内容页'),"value"=>$info->type));
+								  ?>
+								</div>
+							</div>
 							
 							
 							<div class="control-group">

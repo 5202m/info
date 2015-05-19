@@ -4,12 +4,28 @@ class TemplateController extends ControllerBase
 
 	public function indexAction()
 	{
-		
+		var_dump($this);
+		exit();
 	}
 	
-	public function listAction($page = 1 , $pageSize = 5){
-		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
+	public function listAction($page = 1 , $pageSize = 10){
+		$search_key = 'template_list_search';
+		if($this->request->isPost()){
+			$params = $this->request->getPost();
+			$this->session->set($search_key, $params);
+		}
 		$where = array();
+		if($this->session->has($search_key)){
+			$where = $this->session->get($search_key);
+			$this->view->where  = $where;
+			foreach($where as $k=>$v){
+				if(empty($v)){
+					unset($where[$k]);
+				}
+			}
+		}
+		
+		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$list = Template::getList($this->modelsManager , $where , $appendix);
 		$page = $list->getPaginate();
 		
