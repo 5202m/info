@@ -2,26 +2,29 @@
 class CategoryController extends ControllerBase
 {
     public function indexAction(){
+        $id = Division::getID();
         $category = Category::find(
-            "division_id = 3"
+            "division_id = '{$id}'"
         );
         $this->view->setVar('pages',$category);
     }
     //编辑分类页面
     public function editAction($id){
+        $Division_id = Division::getID();
         $cates = Category::findFirst(
             "id = '{$id}'"
         );
         $category = Category::find(
-            "division_id = 3"
+            "division_id = '{$Division_id}'"
         );
         $this->view->setVar('pages',$category);
         $this->view->setVar('cates',$cates);
     }
     //添加分类页面
     public function addAction(){
+        $id = Division::getID();
         $category = Category::find(
-            "division_id = 3"
+            "division_id = '{$id}'"
         );
         $this->view->setVar('pages',$category);
     }
@@ -34,6 +37,7 @@ class CategoryController extends ControllerBase
     }
     //处理编辑分类
     public function editHandleAction(){
+        $Division_id = Division::getID();
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
         }
@@ -45,7 +49,7 @@ class CategoryController extends ControllerBase
         }
         $form = new CategoryForm();
         $category->name = $this->request->getPost('name');
-        $category->division_id = '3';
+        $category->division_id = $Division_id;
         $category->visibility = $this->request->getPost('visibility');
         $category->mtime = date("Y-m-d H:i:s",  time());
         $category->parent_id = $this->request->getPost('parent_id');
@@ -68,6 +72,7 @@ class CategoryController extends ControllerBase
     }
     //处理添加分类
     public function addHandleAction(){
+        $Division_id = Division::getID();
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
         }
@@ -75,7 +80,7 @@ class CategoryController extends ControllerBase
         
         $category = new Category();
         $category->name = $this->request->getPost('name');
-        $category->division_id = '3';
+        $category->division_id = $Division_id;
         $category->visibility = $this->request->getPost('visibility'); 
         $category->path = '/';
         $category->status = 'Disabled';
