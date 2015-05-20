@@ -81,5 +81,35 @@ class Article extends \Phalcon\Mvc\Model
 		return false;
 	}
 	
+	/**
+	 * 更新文章
+	 * @param unknown_type $modelsManager
+	 * @param unknown_type $new
+	 * @param unknown_type $where
+	 */
+	static function modifyArticle($modelsManager, $new = array(), $where = array()){
+		$newVal = null;
+		if($new){
+			foreach($new as $k => $v){
+				$newVal[] = "article.{$k} = '{$v}'";
+			}
+			$newVal = implode(',', $newVal);
+		}
+		$strWhere = null;
+		if($where){
+			foreach ($where as $k => $v){
+				$strWhere[] = "article.{$k} = '{$v}'";
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+		if($newVal && $strWhere){
+			$phql = "UPDATE article SET {$newVal} WHERE {$strWhere}";
+			$status = $modelsManager->executeQuery($phql);
+		    //print_r($status);exit;
+		    return $status;
+		}
+		return false;
+	}
+	
 }
 ?>

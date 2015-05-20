@@ -202,8 +202,27 @@ class ArticleController extends ControllerBase
         $this->view->divisionCategory = $divisionCategory;
 	}
 	
-	public function moveAction($from, $to){
-		
+	/**
+	 * 文章分类迁移
+	 * Enter description here ...
+	 */
+	public function moveAction(){
+		if($this->request->isPost()){
+			$newVal['division_category_id'] = $this->request->getPost('new_division_category_id');
+			$where['division_category_id'] = $this->request->getPost('ori_division_category_id');
+			$status = Article::modifyArticle($this->modelsManager, $newVal, $where);
+			if($status->success() == true){
+				$this->flash->error('文章分类迁移成功');
+			}
+			else{
+				foreach ($status->getMessages() as $message) {
+		            $this->flash->error($message->getMessage());//$errors[] = $message->getMessage();
+		        }
+				
+			}
+		}
+		$divisionCategory = $this->getDivisionCategory();
+        $this->view->divisionCategory = $divisionCategory;
 	}
 	
 	/**
