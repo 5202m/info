@@ -38,7 +38,6 @@ class TemplateController extends ControllerBase
 		$this->view->page = $page;
 	}
 	public function editAction($id = 0){
-		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$last_id = Template::insert($params);
@@ -58,7 +57,7 @@ class TemplateController extends ControllerBase
 		}
 		
 	}
-	public function previewAction($type='category'){
+	public function previewAction($type='category',$template_id = 0, $category_id = 0){
 		
 		$preview_maps = array(
 			'category'=>'http://inf.hx9999.com/category/html/:template_id/:category_id.html',
@@ -68,7 +67,7 @@ class TemplateController extends ControllerBase
 		
 		$this->view->url = $preview_maps[$type];
 		$this->view->type = strtoupper($type);
-		
+		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id);
 	}
 	public function deleteAction($id = 0){
 		if($id){
@@ -80,6 +79,140 @@ class TemplateController extends ControllerBase
 				}
 			}
 			
+		}
+	}
+	public function categoryAction($type='category'){
+		
+		if($this->request->isPost()){
+			$msg = null;
+			$params = $this->request->getPost();
+			$category_ht = new CategoryHasTemplate;
+			if(isset($params['category_id']) && is_numeric($params['category_id'])){
+				$category_ht->category_id = $params['category_id'];
+				if(isset($params['template_id']) && is_array($params['template_id'])){
+					
+					try {
+						$transactionManager = new \Phalcon\Mvc\Model\Transaction\Manager();
+						$transaction = $transactionManager->get();
+						$category_ht->setTransaction($transaction);
+						$hasError = false ;
+						foreach($params['template_id'] as $k=>$v){
+							if($hasError === false){
+								$category_ht->template_id = $v;
+								if(!$category_ht->count("template_id='{$category_ht->template_id}' AND category_id='{$category_ht->category_id}'")){
+									if(!$category_ht->save()){
+										$hasError = true ;
+									}
+								}else{
+									$hasError = true ;
+									$msg = '该分类模板已经关联';
+								}
+							}
+						}
+						if($hasError === false){
+							$transaction->commit();
+						}else{
+							$category_ht->getMessages();
+							$msg = $msg ? $msg : $category_ht->getMessages();
+							if(isset($category_ht->id)){
+								$transaction->rollback();
+							}
+						}
+					}catch(Phalcon\Mvc\Model\Transaction\Failed $e){
+					  	$msg = $msg ? $msg : $e->getMessage();
+					}
+					
+				}else{
+					$hasError = true ;
+					$msg = '模板不存在';
+				}
+			}else{
+				$hasError = true ;
+				$msg = '分类不存在';
+			}
+			if(isset($params['ajax']) && $params['ajax']==1){
+				$this->view->disable();
+				$list = null;
+				if(isset($params['list'])){
+					$list = categorylistAction();
+				}
+				
+				echo json_encode(array('status'=>$hasError,'list'=>$list,'msg'=>$msg));
+				return ;
+			}
+		}
+		$this->view->type = strtoupper($type);
+	}
+	public function categorylistAction($page = 1 , $pageSize = 1000 ,$isPartView = false){
+		$where = array();
+		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
+		$this->view->list =  CategoryHasTemplate::getList($this->db , $where , $appendix);
+		print_R($this->view->list);
+		
+		if($isPartView){
+			$this->view->partial('template/categorylist');
+			$this->view->isPartView = 1;
+			$this->view->disable();
+		}
+	}
+	public function ajaxtemplateAction(){
+		if($this->request->isPost()){
+			$category_id = $this->request->getPost('category_id'); 
+			$template_id = $this->request->getPost('template_id'); 
+			$sql="SELECT id,name FROM template WHERE id NOT 
+					in(SELECT template_id FROM category_has_template WHERE category_id = '{$category_id}')";
+			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
+			$option = '';
+			$results = '';
+			if(isset($list) && $list)
+			{
+				foreach($list as $k=>$v){
+					$option.='<option value="'.$v['id'].'">'.$v['name']."</option>";
+					$results.= '<li id="template_id_chzn_o_'+$k+'" class="active-result" style="">'.$v['name'].'</li>';
+				}
+			}
+			//echo json_encode(array('option'=>$option,'result'=>$results));
+			echo $option.'####$$'.$results;
+		}
+		
+		/**
+		echo \Phalcon\Tag::selectStatic(array(
+				"template_id[]",
+				Template::find('status= \'Enabled\''),
+				"using" => array("id", "name"),
+				"value"=>'',
+				"id"=>'template_id',
+				"multiple"=>'multiple',
+				"data-rel"=>'chosen'
+		));
+		**/
+		
+		
+		$this->view->disable();
+	}
+	public function deleteHasCategoryAction($id = 0){
+		$status = false;
+		$msg = 0;
+		if($id){
+			$category_hx = new CategoryHasTemplate();
+			if($category_hx->count($id)){
+					$category_hx->id = $id;
+					if($category_hx->delete()){
+						$msg = '关联删除成功';
+					}else{
+						$status = true ; 
+						$msg = '关联删除失败';
+					}
+			}else{
+				$status = true ;
+				$msg = '关联不存在';
+			}
+			if($this->request->getQuery('ajax')==1){
+				$this->view->disable();
+				echo json_encode(array('status'=>$status,'msg'=>$msg));
+				return ;
+			}
+			return $this->response->redirect("/template/category");
 		}
 	}
 }

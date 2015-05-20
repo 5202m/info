@@ -1,0 +1,149 @@
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="/">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li><a href="#">模板管理</a><i class="icon-angle-right"></i></li>
+				<li><a href="#">分类模板关联</a></li>
+			</ul>
+
+			<div class="row-fluid sortable">		
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon align-justify"></i><span class="break"></span>分类模板关联</h2>
+						<div class="box-icon">
+							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+						</div>
+					</div>
+					<div class="box-content">
+					<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
+						 <fieldset>
+								
+								<div class="control-group">
+								<label class="control-label" for=template_id>分类</label>
+								<div class="controls">
+								<select name="category_id" id="category_id">
+								<option value="">--</option>
+							  <?php 
+                                   $cates_arr = $this->objToArray->ohYeah(Category::find());
+                                   $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+                                   foreach ($items as $vs) :?>
+                                        <option value="<?php echo $vs['id'];?>" 
+                                        <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
+                                             <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
+                                                 <?php echo $vs['name'];?>
+                                              </option>
+                                            <?php endforeach;?>
+                                </select>
+                                	</div>
+							  	</div>
+                                
+                                <div class="control-group">
+								<label class="control-label" for=template_id>模板</label>
+								<div class="controls" id="ajaxtemplate">
+								<?php 
+                                	echo \Phalcon\Tag::selectStatic(array(
+                                			"template_id[]",
+                                			Template::find('status= \'Enabled\''),
+                                			"using" => array("id", "name"),
+                                			"value"=>'',
+											"id"=>'template_id',
+											"multiple"=>'multiple',
+											"data-rel"=>'chosen'
+                                	));
+                                	
+                                	?>
+                                	</div>
+							  	</div>
+							  	<div class="controls">
+                                <?php echo \Phalcon\Tag::submitButton(array("保存",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+								</div>
+						</fieldset>
+						<?php echo \Phalcon\Tag::endForm()?>
+						<div id="loading" class="loading">
+						
+						
+						</div>
+						
+					            
+					</div>
+				</div><!--/span-->
+			
+			</div><!--/row-->
+			
+			<script>
+			$(document).ready(function(){
+				loadtable();
+				$('#submit').click(function(){
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					if(!template_id){
+						$('#myModal>.modal-body>p').html('模板不能为空');
+						$('#myModal').modal('show');
+						return false;
+					}
+					if(!category_id){
+						$('#myModal>.modal-body>p').html('分类不能为空');
+						$('#myModal').modal('show');
+						return false;
+					}
+					$.ajax({
+				        type: "POST",
+				        url: '/template/category',
+				        data: {'ajax':1,'template_id':template_id,'category_id':category_id},
+				        async:false,
+				        dataType: "json",
+				        success: function(data){
+				        	if(!data.status){
+				        		$('#myModal>.modal-body>p').html('分类模板关联保存成功');
+				        	}else{
+				        		$('#myModal>.modal-body>p').html(data.msg);
+				        	}
+				        	$('#myModal').modal('show');
+				        	loadtable();
+				        	
+				    	}
+				    });
+					return false;
+				})
+
+				$('#category_id').change(function(){
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					$.ajax({
+				        type: "POST",
+				        url: '/template/ajaxtemplate',
+				        data: {'ajax':1,'template_id':template_id,'category_id':category_id},
+				        async:false,
+				       dataType: "json",
+				        success: function(data){
+				        	$('#template_id').html(data.option);
+				        	$.each($(".chzn-choices li"), function(){  
+				        	    if($(this).attr('class')=='search-choice'){
+				        	    	$(this).find('a').trigger("click");
+				        		}
+				        	});
+				        	//$('.chzn-results').html(data.result);
+				    	}
+				    });
+					
+					//$('.chzn-choices').find('li.search-choice').remove();
+					//$('#template_id_chzn_o_4').hide();
+				})
+			});
+			function loadtable(){
+				$.ajax({
+			        type: "GET",
+			        url: '/template/categorylist/1/1000/1',
+			        data: {},
+			        async:false,
+			        success: function(data){
+			        	$('#loading').html(data);
+			    	}
+			    });
+			}
+				
+			</script>
