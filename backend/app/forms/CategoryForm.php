@@ -16,7 +16,7 @@ class CategoryForm extends Form
             'message' => 'The name is required'
         )));
         $name->addValidator(new StringLength(array(
-            'min' => 10,
+            'min' => 1,
             'messageMinimum' => 'The name is too short'
         )));
         $this->add($name);
