@@ -25,7 +25,11 @@ class Article extends \Phalcon\Mvc\Model
 			foreach($where as $k=>$v){
 				if($k=='title'){
 					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
-				}else{
+				}
+				elseif($k=='ctime'){
+					$strWhere[] = "article.{$k} LIKE '{$v}%'";
+				}
+				else{
 					$strWhere[]  =  "article.{$k} = '{$v}'";
 				}
 			}
@@ -59,6 +63,22 @@ class Article extends \Phalcon\Mvc\Model
 			return (object)$article;
 		}
 		return null;
+	}
+	
+	/**
+	 * 删除文章
+	 * @param unknown_type $modelsManager
+	 * @param unknown_type $ids
+	 */
+	static function deleteArticle($modelsManager, $ids){
+		if(!empty($ids)){
+			//$parameters = array('id'=>$ids);
+			$phql = "UPDATE article SET article.visibility='Hidden', article.status='Disabled' WHERE article.id in ({$ids})";
+			$status = $modelsManager->executeQuery($phql);
+		    //print_r($status);exit;
+		    return $status;
+		}
+		return false;
 	}
 	
 }

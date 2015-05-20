@@ -127,6 +127,51 @@ $(document).ready(function(){
 	chart();
 	messageLike();	
 	
+	/*批量删除	begin*/
+	$('input[name="ckall"]').click(function(){
+		if($(this).is(':checked')){
+			$('.table tbody input[type="checkbox"]').attr('checked','checked');
+			$('.table tbody input[type="checkbox"]').parent('span').addClass('checked');
+		}
+		else{
+			$('.table tbody input[type="checkbox"]').removeAttr('checked');
+			$('.table tbody input[type="checkbox"]').parent('span').removeClass('checked');
+		}
+	});
+	
+	$('#btnDelete').click(function(){
+		var ids = '';
+		$('.table tbody input[type="checkbox"]').each(function(){
+			if($(this).is(':checked')){
+				if(ids!=''){
+					ids += ',';
+				}
+				ids += $(this).val();
+			}
+		});
+		if(ids!=''){
+			$.post($(this).attr('url'),
+					{
+						ids: ids
+					},
+					function(data){
+						if(data!=null){
+							if(data.status){
+								//alert('');
+								location.href=location.href;
+							}
+							else{
+								alert(data.messages);
+							}
+						}
+					},
+					'json');
+		}
+		else{
+			alert('请选择要删除的文章');
+		}
+	});
+	/*批量删除	end*/
 });
 
 /* ---------- Like/Dislike ---------- */
@@ -304,7 +349,7 @@ function template_functions(){
 	//$('.cleditor').cleditor();
 	
 	/* ---------- Datapicker ---------- */
-	$('.datepicker').datepicker();
+	$('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
 	
 	/* ---------- Notifications ---------- */
 	$('.noty').click(function(e){
