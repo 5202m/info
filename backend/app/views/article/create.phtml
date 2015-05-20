@@ -24,10 +24,10 @@
 						<form class="form-horizontal" method="post" action="" name="createForm" id="createForm" enctype="multipart/form-data">
 						  <fieldset>
 							<div class="control-group">
-							  <label class="control-label" for="typeahead">文章标题 </label>
+							  <label class="control-label" for="title">文章标题 </label>
 							  <div class="controls">
 								<input type="text" class="span6 typeahead" id="title" name="title" value="" />
-								<p class="help-block"></p>
+								<span id="title_msg" class="help-inline"></span>
 							  </div>
 							</div>
 							<div class="control-group">
@@ -39,10 +39,11 @@
 									<option value="tw">TW</option>
 									<option value="en">EN</option>
 								</select>
+								<span id="language_msg" class="help-inline"></span>
 							  </div>
 							</div>
 							<div class="control-group">
-							  <label class="control-label" for="category_id">事业部分类 </label>
+							  <label class="control-label" for="category_id">分类 </label>
 							  <div class="controls">
 								<select name="division_category_id" id="division_category_id">
 									<option value="">请选择</option>
@@ -57,6 +58,7 @@
     								</option>
 									<?php endforeach;?>
 								</select>
+								<span id="division_category_id_msg" class="help-inline"></span>
 							  </div>
 							</div>
 							<!--div class="control-group">
@@ -88,6 +90,7 @@
 								  <label class="radio">
 									<input name="visibility" type="radio" value="Hidden" /> 不可见
 								  </label>
+								  <span id="visibility_msg" class="help-inline"></span>
 								</div>
 							</div>
 							<div class="control-group">
@@ -100,6 +103,7 @@
 								  <label class="radio">
 									<input name="share" type="radio" value="N" /> 否
 								  </label>
+								  <span id="share_msg" class="help-inline"></span>
 								</div>
 							</div>
 							<!--div class="control-group">
@@ -120,9 +124,10 @@
 							</div-->  
 							
 							<div class="control-group hidden-phone">
-							  <label class="control-label" for="arcontent">文章内容</label>
+							  <label class="control-label" for="content">文章内容</label>
 							  <div class="controls">
-								<textarea class="cleditor" id="arcontent" name="arcontent" rows="8" style="width:700px;height:300px;"></textarea>
+								<textarea class="cleditor" id="content" name="content" rows="8" style="width:700px;height:300px;"></textarea>
+								<span id="content_msg" class="help-inline"></span>
 							  </div>
 							</div>         
 							<div class="control-group hidden-phone">
@@ -144,7 +149,7 @@
 							  </div>
 							</div>
 							<div class="form-actions">
-							  <button type="submit" class="btn btn-primary">保存</button>
+							  <button id="submit" type="submit" class="btn btn-primary">保存</button>
 							  <button type="reset" class="btn">取消</button>
 							</div>
 						  </fieldset>
@@ -157,35 +162,86 @@
 			<script type="text/javascript">
 				var editor;
 				KindEditor.ready(function(K) {
-					editor = K.create('textarea[name="arcontent"]', {
-						allowFileManager : true
+					editor = K.create('textarea[name="content"]', {
+						cssPath : '/css/editor/code/prettify.css',
+						uploadJson : '/editor/upload',
+						fileManagerJson : '/editor/fileManager',
+						allowFileManager : true,
+						afterCreate : function() {
+							var self = this;
+							K.ctrl(document, 13, function() {
+								self.sync();
+								K('form[name=createForm]')[0].submit();
+							});
+							K.ctrl(self.edit.doc, 13, function() {
+								self.sync();
+								K('form[name=createForm]')[0].submit();
+							});
+						}
 					});
-					/*K('input[name=getHtml]').click(function(e) {
-						alert(editor.html());
-					});
-					K('input[name=isEmpty]').click(function(e) {
-						alert(editor.isEmpty());
-					});
-					K('input[name=getText]').click(function(e) {
-						alert(editor.text());
-					});
-					K('input[name=selectedHtml]').click(function(e) {
-						alert(editor.selectedHtml());
-					});
-					K('input[name=setHtml]').click(function(e) {
-						editor.html('<h3>Hello KindEditor</h3>');
-					});
-					K('input[name=setText]').click(function(e) {
-						editor.text('<h3>Hello KindEditor</h3>');
-					});
-					K('input[name=insertHtml]').click(function(e) {
-						editor.insertHtml('<strong>插入HTML</strong>');
-					});
-					K('input[name=appendHtml]').click(function(e) {
-						editor.appendHtml('<strong>添加HTML</strong>');
-					});
-					K('input[name=clear]').click(function(e) {
-						editor.html('');
-					});*/
 				});
+				$(document).ready(function(){
+					$('#createForm').submit(function(){
+						var error_count = 0;
+						if($.trim($('#title').val())==''){
+							error_count++;
+							$('#title').parent().parent().addClass('error');
+							$('#title_msg').text('标题不能为空');
+						}
+						else{
+							$('#title').parent().parent().removeClass('error');
+							$('#title_msg').text('');
+						}
+						if($('#language').val()==''){
+							error_count++;
+							$('#language').parent().parent().addClass('error');
+							$('#language_msg').text('请选择语言');
+						}
+						else{
+							$('#language').parent().parent().removeClass('error');
+							$('#language_msg').text('');
+						}
+						if($('#division_category_id').val()==''){
+							error_count++;
+							$('#division_category_id').parent().parent().addClass('error');
+							$('#division_category_id_msg').text('请选择分类');
+						}
+						else{
+							$('#division_category_id').parent().parent().removeClass('error');
+							$('#division_category_id_msg').text('');
+						}
+						if($('input[name="visibility"]:checked').val()==null){
+							error_count++;
+							$('#visibility_msg').parent().parent().addClass('error');
+							$('#visibility_msg').text('请选择是否可见');
+						}
+						else{
+							$('#visibility_msg').parent().parent().removeClass('error');
+							$('#visibility_msg').text('');
+						}
+						if($('input[name="share"]:checked').val()==null){
+							error_count++;
+							$('#share_msg').parent().parent().addClass('error');
+							$('#share_msg').text('请选择是否分享');
+						}
+						else{
+							$('#share_msg').parent().parent().removeClass('error');
+							$('#share_msg').text('');
+						}
+						if(editor.text()==''){
+							error_count++;
+							$('#content_msg').parent().parent().addClass('error');
+							$('#content_msg').text('文章内容不能为空');
+						}
+						else{
+							$('#content_msg').parent().parent().removeClass('error');
+							$('#content_msg').text('');
+						}
+						if(error_count>0){
+							$('body,html').animate({scrollTop:0},1000); 
+							return false;
+						}
+						return true;
+					});
+				})
 			</script>

@@ -30,9 +30,8 @@ class DetailController extends ControllerBase
     	if(!is_file($template_file)){
     		 
     		$template = Template::findFirst(array(
-    				"category_id = :category_id: AND id = :template_id: AND status = :status:",
+    				"id = :template_id: AND status = :status:",
     				"bind" => array(
-    						'category_id' => $category_id,
     						'template_id' => $template_id,
     						'status' => 'Enabled'
     				)
@@ -83,10 +82,11 @@ class DetailController extends ControllerBase
 
     	$this->view->disable();
     
-    	$conditions = "category_id = :category_id: AND id = :article_id: AND visibility = :visibility:";
+    	$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND id = :article_id: AND visibility = :visibility:";
     
     	$parameters = array(
     			'category_id' => $category_id,
+    			'division_category_id' => $category_id,
     			'article_id' => $article_id,
     			'visibility' => 'Visible'
     	);
@@ -94,7 +94,7 @@ class DetailController extends ControllerBase
     			$conditions,
     			"bind" => $parameters
     	));
-   	
+   		print_r($article);
     	$response = new Phalcon\Http\Response();
     	$response->setHeader('Cache-Control', 'max-age=60');
     	$response->setContentType('application/json', 'utf-8');

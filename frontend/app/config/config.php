@@ -16,6 +16,12 @@ return new \Phalcon\Config(array(
 		'libraryDir'     => __DIR__ . '/../../app/library/',
 		'baseUri'        => '/mvc/single-factory-default/',
 	),
+	'redis' => array(
+		'host' => '192.168.6.1',
+		'port' => 6379,
+		'auth' => ''
+	),
+		
 	'models' => array(
 		'metadata' => array(
 			'adapter' => 'Memory'

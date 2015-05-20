@@ -3,7 +3,7 @@
 class Article extends \Phalcon\Mvc\Model
 {
 	public function initialize(){
-		//$this->hasOne('id', 'Category', 'category_id');
+		//$this->hasOne('id', 'Category', 'division_category_id');
 		$this->skipAttributes(array('from', 'status', 'ctime'));
 	}
 	
@@ -18,21 +18,25 @@ class Article extends \Phalcon\Mvc\Model
 		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
 		$builder = $modelsManager->createBuilder()
-					->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
+					->columns("*")//->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
 					->from("article");
 		$strWhere = null;
 		if($where){
 			foreach($where as $k=>$v){
 				if($k=='title'){
 					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
-				}else{
+				}
+				elseif($k=='ctime'){
+					$strWhere[] = "article.{$k} LIKE '{$v}%'";
+				}
+				else{
 					$strWhere[]  =  "article.{$k} = '{$v}'";
 				}
 			}
 			$strWhere = implode(' AND ', $strWhere);
 		}
-		$builder =$builder->where($strWhere)
-					->leftjoin("category", "category.id = article.division_category_id")
+		$builder = $builder->where($strWhere)
+					//->leftjoin("category", "category.id = article.division_category_id")
 					->orderby($appendix['order']);
 		//echo '<pre>';print_r($builder);exit;
 		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
@@ -59,6 +63,52 @@ class Article extends \Phalcon\Mvc\Model
 			return (object)$article;
 		}
 		return null;
+	}
+	
+	/**
+	 * 删除文章
+	 * @param unknown_type $modelsManager
+	 * @param unknown_type $ids
+	 */
+	static function deleteArticle($modelsManager, $ids){
+		if(!empty($ids)){
+			//$parameters = array('id'=>$ids);
+			$phql = "UPDATE article SET article.visibility='Hidden', article.status='Disabled' WHERE article.id in ({$ids})";
+			$status = $modelsManager->executeQuery($phql);
+		    //print_r($status);exit;
+		    return $status;
+		}
+		return false;
+	}
+	
+	/**
+	 * 更新文章
+	 * @param unknown_type $modelsManager
+	 * @param unknown_type $new
+	 * @param unknown_type $where
+	 */
+	static function modifyArticle($modelsManager, $new = array(), $where = array()){
+		$newVal = null;
+		if($new){
+			foreach($new as $k => $v){
+				$newVal[] = "article.{$k} = '{$v}'";
+			}
+			$newVal = implode(',', $newVal);
+		}
+		$strWhere = null;
+		if($where){
+			foreach ($where as $k => $v){
+				$strWhere[] = "article.{$k} = '{$v}'";
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+		if($newVal && $strWhere){
+			$phql = "UPDATE article SET {$newVal} WHERE {$strWhere}";
+			$status = $modelsManager->executeQuery($phql);
+		    //print_r($status);exit;
+		    return $status;
+		}
+		return false;
 	}
 	
 }

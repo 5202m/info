@@ -6,10 +6,7 @@ class ArticleController extends ControllerBase
 	 * 默认页，显示文章列表
 	 */
     public function indexAction(){
-		$action = $this->request->getQuery('action');
-		if($action=='list'){
-			$this->removeSearchSession();
-		}
+		$this->removeSearchSession();
 		$this->listAction(1, 10);
     }
     
@@ -35,12 +32,36 @@ class ArticleController extends ControllerBase
 			}
 		}
 		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
+		
+		/*$builder = $this->modelsManager->createBuilder()
+					->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
+					->from("article");
+		$strWhere = null;
+		if($where){
+			foreach($where as $k=>$v){
+				if($k=='title'){
+					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
+				}else{
+					$strWhere[]  =  "article.{$k} = '{$v}'";
+				}
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+		$builder = $builder->where($strWhere)
+					->leftjoin("category", "category.id = article.division_category_id")
+					->orderby($appendix['order']);
+		//echo '<pre>';print_r($builder);exit;
+	    $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			    "builder" => $builder,
+			    "limit"=> $pageSize,
+				"page" => $page
+			));*/
 		$list = Article::getList($this->modelsManager , $where , $appendix);
 		$page = $list->getPaginate();
+		//$page = $paginator->getPaginate();
 		//echo '<pre>';print_r($page);exit;
 		$divisionCategory = $this->getDivisionCategory();
         
-        //$this->view->searchData = $condition;
         $this->view->divisionCategory = $divisionCategory;
 		$page->pageSize = $appendix['pageSize'];
 		$this->view->page = $page;
@@ -63,9 +84,10 @@ class ArticleController extends ControllerBase
         );
 		$images = Images::findFirst($parameters);
 		if($this->request->isPost()){
+			//$form = new ArticleForm();
 			$article->id = $this->request->getPost('id');
 			$article->title = $this->request->getPost('title', 'trim');
-			$article->content = $this->request->getPost('arcontent', 'trim');
+			$article->content = $this->request->getPost('content', 'trim');
 			$oriPath = '';
 			$imagesId = 0;
 			$imageVal = $this->request->getPost('hdimage', 'trim');
@@ -97,7 +119,14 @@ class ArticleController extends ControllerBase
             $article->division_category_id = $this->request->getPost('division_category_id');
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
+            /*if(!$form->isValid($this->request->getPost())){
+	            foreach ($form->getMessages() as $message) {
+	                $this->flash->error($message);
+	            }
+	            $this->response->redirect('/article/edit/'.$id);
+            }*/
             if($article->save()){
+            	//$form->clear();
             	$this->response->redirect('/article');
             }
             
@@ -117,10 +146,10 @@ class ArticleController extends ControllerBase
 	public function createAction(){
 		if ($this->request->isPost()) {
 			//$this->db->begin();
-			
+			//$form = new ArticleForm();
 			$article = new Article();
 			$article->title = $this->request->getPost('title', 'trim');
-			$article->content = $this->request->getPost('arcontent', 'trim');
+			$article->content = $this->request->getPost('content', 'trim');
             $article->keyword = $this->request->getPost('keyword', 'trim');
             $article->description = $this->request->getPost('description', 'trim');
             $article->language = $this->request->getPost('language');
@@ -130,6 +159,13 @@ class ArticleController extends ControllerBase
             $article->division_category_id = $this->request->getPost('division_category_id');
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
+			/*if(!$form->isValid($this->request->getPost())){
+	            foreach ($form->getMessages() as $message) {
+	                $this->flash->error($message);
+	            }
+	            $this->response->redirect('/article/create');
+            }*/
+            
             if($article->save()){
             	/*$this->db->rollback();
 	            foreach ($article->getMessages() as $message) {
@@ -141,9 +177,9 @@ class ArticleController extends ControllerBase
 				$images->url = $this->uploadImage($article->id, $oriPath);
 				$images->save();
 				
+            	//$form->clear();
 				$this->response->redirect('/article');
             }
-            
             /*$images = new Images();
 			$images->article_id = $article->id;
 			$images->url = $this->uploadImage($article->id, $oriPath);
@@ -166,8 +202,52 @@ class ArticleController extends ControllerBase
         $this->view->divisionCategory = $divisionCategory;
 	}
 	
-	public function moveAction($from, $to){
-		
+	/**
+	 * 文章分类迁移
+	 * Enter description here ...
+	 */
+	public function moveAction(){
+		if($this->request->isPost()){
+			$newVal['division_category_id'] = $this->request->getPost('new_division_category_id');
+			$where['division_category_id'] = $this->request->getPost('ori_division_category_id');
+			$status = Article::modifyArticle($this->modelsManager, $newVal, $where);
+			if($status->success() == true){
+				$this->flash->error('文章分类迁移成功');
+			}
+			else{
+				foreach ($status->getMessages() as $message) {
+		            $this->flash->error($message->getMessage());//$errors[] = $message->getMessage();
+		        }
+				
+			}
+		}
+		$divisionCategory = $this->getDivisionCategory();
+        $this->view->divisionCategory = $divisionCategory;
+	}
+	
+	/**
+	 * 删除文章
+	 */
+	public function deleteAction(){
+		if($this->request->isAjax()){
+			$ids = $this->request->getPost('ids', 'trim');
+			if(!empty($ids)){
+				$status = Article::deleteArticle($this->modelsManager, $ids);
+				$response = new Phalcon\Http\Response();
+				if ($status->success() == true) {
+			        $response->setJsonContent(array('status' => true));
+			    } else {
+			        //Change the HTTP status
+			        $response->setStatusCode(409, "Conflict");
+			        $errors = array();
+			        foreach ($status->getMessages() as $message) {
+			            $errors[] = $message->getMessage();
+			        }
+			        $response->setJsonContent(array('status' => false, 'messages' => $errors));
+			    }
+			    return $response;
+			}
+		}
 	}
 	
 	/**
@@ -177,10 +257,13 @@ class ArticleController extends ControllerBase
 	 */
 	private function uploadImage($articleId, $oriPath = ''){
 		$image = '';
-		$savePath = dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
+		$savePath = $this->imagesPath.$articleId.'/';//dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
 		$returnPage = 'images/'.$articleId.'/';
+    	if(php_uname('s')=='Windows NT'){
+    		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/'.$articleId.'/';
+    	}
 		if(!file_exists($savePath)){
-			mkdir($savePath, 0777);
+			mkdir($savePath, 0777, true);
 		}
 		//Check if the user has uploaded files
 		if ($this->request->hasFiles() == true) {

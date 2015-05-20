@@ -15,7 +15,9 @@ return new \Phalcon\Config(array(
 		'viewsDir'       => __DIR__ . '/../../app/views/',
 		'pluginsDir'     => __DIR__ . '/../../app/plugins/',
 		'libraryDir'     => __DIR__ . '/../../app/library/',
-                'formsDir'       => __DIR__ . '/../../app/forms/',
+        'formsDir'       => __DIR__ . '/../../app/forms/',
+		'imagesDir'		 => '/www/hx9999.com/inf.hx9999.com/images/',
+		'imagesUri'		 => 'http://inf.hx9999.com/images/',
 		'baseUri'        => '',
 	),
 	'models' => array(
