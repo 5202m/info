@@ -84,6 +84,7 @@ class ArticleController extends ControllerBase
         );
 		$images = Images::findFirst($parameters);
 		if($this->request->isPost()){
+			//$form = new ArticleForm();
 			$article->id = $this->request->getPost('id');
 			$article->title = $this->request->getPost('title', 'trim');
 			$article->content = $this->request->getPost('content', 'trim');
@@ -118,7 +119,14 @@ class ArticleController extends ControllerBase
             $article->division_category_id = $this->request->getPost('division_category_id');
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
+            /*if(!$form->isValid($this->request->getPost())){
+	            foreach ($form->getMessages() as $message) {
+	                $this->flash->error($message);
+	            }
+	            $this->response->redirect('/article/edit/'.$id);
+            }*/
             if($article->save()){
+            	//$form->clear();
             	$this->response->redirect('/article');
             }
             
@@ -138,7 +146,7 @@ class ArticleController extends ControllerBase
 	public function createAction(){
 		if ($this->request->isPost()) {
 			//$this->db->begin();
-			
+			//$form = new ArticleForm();
 			$article = new Article();
 			$article->title = $this->request->getPost('title', 'trim');
 			$article->content = $this->request->getPost('content', 'trim');
@@ -151,6 +159,13 @@ class ArticleController extends ControllerBase
             $article->division_category_id = $this->request->getPost('division_category_id');
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
+			/*if(!$form->isValid($this->request->getPost())){
+	            foreach ($form->getMessages() as $message) {
+	                $this->flash->error($message);
+	            }
+	            $this->response->redirect('/article/create');
+            }*/
+            
             if($article->save()){
             	/*$this->db->rollback();
 	            foreach ($article->getMessages() as $message) {
@@ -162,9 +177,9 @@ class ArticleController extends ControllerBase
 				$images->url = $this->uploadImage($article->id, $oriPath);
 				$images->save();
 				
+            	//$form->clear();
 				$this->response->redirect('/article');
             }
-            
             /*$images = new Images();
 			$images->article_id = $article->id;
 			$images->url = $this->uploadImage($article->id, $oriPath);
