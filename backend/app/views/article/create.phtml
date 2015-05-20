@@ -120,9 +120,9 @@
 							</div-->  
 							
 							<div class="control-group hidden-phone">
-							  <label class="control-label" for="arcontent">文章内容</label>
+							  <label class="control-label" for="content">文章内容</label>
 							  <div class="controls">
-								<textarea class="cleditor" id="arcontent" name="arcontent" rows="8" style="width:700px;height:300px;"></textarea>
+								<textarea class="cleditor" id="content" name="content" rows="8" style="width:700px;height:300px;"></textarea>
 							  </div>
 							</div>         
 							<div class="control-group hidden-phone">
@@ -157,8 +157,22 @@
 			<script type="text/javascript">
 				var editor;
 				KindEditor.ready(function(K) {
-					editor = K.create('textarea[name="arcontent"]', {
-						allowFileManager : true
+					editor = K.create('textarea[name="content"]', {
+						cssPath : '/css/editor/code/prettify.css',
+						uploadJson : '../php/upload_json.php',
+						fileManagerJson : '../php/file_manager_json.php',
+						allowFileManager : true,
+						afterCreate : function() {
+							var self = this;
+							K.ctrl(document, 13, function() {
+								self.sync();
+								K('form[name=createForm]')[0].submit();
+							});
+							K.ctrl(self.edit.doc, 13, function() {
+								self.sync();
+								K('form[name=createForm]')[0].submit();
+							});
+						}
 					});
 					/*K('input[name=getHtml]').click(function(e) {
 						alert(editor.html());

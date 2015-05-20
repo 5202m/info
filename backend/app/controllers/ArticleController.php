@@ -35,12 +35,36 @@ class ArticleController extends ControllerBase
 			}
 		}
 		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
+		
+		/*$builder = $this->modelsManager->createBuilder()
+					->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
+					->from("article");
+		$strWhere = null;
+		if($where){
+			foreach($where as $k=>$v){
+				if($k=='title'){
+					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
+				}else{
+					$strWhere[]  =  "article.{$k} = '{$v}'";
+				}
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+		$builder = $builder->where($strWhere)
+					->leftjoin("category", "category.id = article.division_category_id")
+					->orderby($appendix['order']);
+		//echo '<pre>';print_r($builder);exit;
+	    $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			    "builder" => $builder,
+			    "limit"=> $pageSize,
+				"page" => $page
+			));*/
 		$list = Article::getList($this->modelsManager , $where , $appendix);
 		$page = $list->getPaginate();
+		//$page = $paginator->getPaginate();
 		//echo '<pre>';print_r($page);exit;
 		$divisionCategory = $this->getDivisionCategory();
         
-        //$this->view->searchData = $condition;
         $this->view->divisionCategory = $divisionCategory;
 		$page->pageSize = $appendix['pageSize'];
 		$this->view->page = $page;
@@ -65,7 +89,7 @@ class ArticleController extends ControllerBase
 		if($this->request->isPost()){
 			$article->id = $this->request->getPost('id');
 			$article->title = $this->request->getPost('title', 'trim');
-			$article->content = $this->request->getPost('arcontent', 'trim');
+			$article->content = $this->request->getPost('content', 'trim');
 			$oriPath = '';
 			$imagesId = 0;
 			$imageVal = $this->request->getPost('hdimage', 'trim');
@@ -120,7 +144,7 @@ class ArticleController extends ControllerBase
 			
 			$article = new Article();
 			$article->title = $this->request->getPost('title', 'trim');
-			$article->content = $this->request->getPost('arcontent', 'trim');
+			$article->content = $this->request->getPost('content', 'trim');
             $article->keyword = $this->request->getPost('keyword', 'trim');
             $article->description = $this->request->getPost('description', 'trim');
             $article->language = $this->request->getPost('language');
@@ -177,7 +201,7 @@ class ArticleController extends ControllerBase
 	 */
 	private function uploadImage($articleId, $oriPath = ''){
 		$image = '';
-		$savePath = dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
+		$savePath = $this->imagesPath.$articleId.'/';//dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
 		$returnPage = 'images/'.$articleId.'/';
 		if(!file_exists($savePath)){
 			mkdir($savePath, 0777);
