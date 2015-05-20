@@ -57,7 +57,7 @@ try {
 	});
 
 		//Set the models cache service
-		$di->set('modelsCache', function() use ($config) {
+		$di->set('cache', function() use ($config) {
 		
 			//Cache data for one day by default
 			$frontCache = new \Phalcon\Cache\Frontend\Data(array(
