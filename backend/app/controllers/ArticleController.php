@@ -6,10 +6,7 @@ class ArticleController extends ControllerBase
 	 * 默认页，显示文章列表
 	 */
     public function indexAction(){
-		$action = $this->request->getQuery('action');
-		if($action=='list'){
-			$this->removeSearchSession();
-		}
+		$this->removeSearchSession();
 		$this->listAction(1, 10);
     }
     
@@ -192,6 +189,31 @@ class ArticleController extends ControllerBase
 	
 	public function moveAction($from, $to){
 		
+	}
+	
+	/**
+	 * 删除文章
+	 */
+	public function deleteAction(){
+		if($this->request->isAjax()){
+			$ids = $this->request->getPost('ids', 'trim');
+			if(!empty($ids)){
+				$status = Article::deleteArticle($this->modelsManager, $ids);
+				$response = new Phalcon\Http\Response();
+				if ($status->success() == true) {
+			        $response->setJsonContent(array('status' => true));
+			    } else {
+			        //Change the HTTP status
+			        $response->setStatusCode(409, "Conflict");
+			        $errors = array();
+			        foreach ($status->getMessages() as $message) {
+			            $errors[] = $message->getMessage();
+			        }
+			        $response->setJsonContent(array('status' => false, 'messages' => $errors));
+			    }
+			    return $response;
+			}
+		}
 	}
 	
 	/**
