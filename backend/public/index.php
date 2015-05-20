@@ -20,7 +20,8 @@ try {
 		array(
 			$config->application->controllersDir,
 			$config->application->modelsDir,
-                        $config->application->formsDir
+            $config->application->formsDir,
+            $config->application->imagesDir,
 		)
 	)->register();
 
@@ -59,6 +60,13 @@ try {
 		return $view;
 	});
 
+	/**
+	 * 直接返回保存图片的目录
+	 */
+	$di->set('imagesPath', function() use ($config) {
+		return $config->application->imagesDir;
+	});
+	
 	/**
 	 * Database connection is created based in the parameters defined in the configuration file
 	 */

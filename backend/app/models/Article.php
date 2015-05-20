@@ -3,7 +3,7 @@
 class Article extends \Phalcon\Mvc\Model
 {
 	public function initialize(){
-		//$this->hasOne('id', 'Category', 'category_id');
+		//$this->hasOne('id', 'Category', 'division_category_id');
 		$this->skipAttributes(array('from', 'status', 'ctime'));
 	}
 	
@@ -18,7 +18,7 @@ class Article extends \Phalcon\Mvc\Model
 		$page = isset($appendix['page']) ? $appendix['page'] : 1;
 		
 		$builder = $modelsManager->createBuilder()
-					->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
+					->columns("*")//->columns("article.*,category.name cname")//连接查询的表中有相同名称的字段不能使用as别名的方式，否则用相同名称的字段进行条件筛选时会报错
 					->from("article");
 		$strWhere = null;
 		if($where){
@@ -31,8 +31,8 @@ class Article extends \Phalcon\Mvc\Model
 			}
 			$strWhere = implode(' AND ', $strWhere);
 		}
-		$builder =$builder->where($strWhere)
-					->leftjoin("category", "category.id = article.division_category_id")
+		$builder = $builder->where($strWhere)
+					//->leftjoin("category", "category.id = article.division_category_id")
 					->orderby($appendix['order']);
 		//echo '<pre>';print_r($builder);exit;
 		return $paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(

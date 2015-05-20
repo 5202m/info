@@ -66,7 +66,7 @@
 						  <thead>
 							  <tr>
 								  <th>标题</th>
-								  <th>所属分类</th>
+								  <!--th>所属分类</th-->
 								  <th>作者</th>
 								  <th>语言</th>
 								  <th>分享</th>
@@ -78,20 +78,20 @@
 						  <tbody>
 						  <?php foreach ($page->items as $item):?>
 							<tr>
-								<td><?php echo $item->article->title;?></td>
-								<td class="center"><?php echo $item->cname;?></td>
-								<td class="center"><?php echo $item->article->author;?></td>
-								<td><?php echo $item->article->language;?></td>
-								<td><?php echo $item->article->share=='N'?'<span class="label label-error">否</span>':'<span class="label label-success">是</span>';?></td>
+								<td><?php echo $item->title;?></td>
+								<!--td class="center"><?php //echo $item->cname;?></td-->
+								<td class="center"><?php echo $item->author;?></td>
+								<td><?php echo $item->language;?></td>
+								<td><?php echo $item->share=='N'?'<span class="label label-error">否</span>':'<span class="label label-success">是</span>';?></td>
 								<td class="center">
-									<?php echo $item->article->visibility=='Visible'?'<span class="label label-success">显示</span>':'<span class="label label-error">隐藏</span>';?>
+									<?php echo $item->visibility=='Visible'?'<span class="label label-success">显示</span>':'<span class="label label-error">隐藏</span>';?>
 								</td>
-								<td><?php echo $item->article->ctime;?></td>
+								<td><?php echo $item->ctime;?></td>
 								<td class="center">
 									<!--a class="btn btn-success" href="#">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a-->
-									<a class="btn btn-info" href="/article/edit/<?php echo $item->article->id;?>">
+									<a class="btn btn-info" href="/article/edit/<?php echo $item->id;?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
 									<!--a class="btn btn-danger" href="#">
