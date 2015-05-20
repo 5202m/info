@@ -68,6 +68,13 @@ try {
 	});
 	
 	/**
+	 * 直接返回图片域名
+	 */
+	$di->set('imagesUri', function() use ($config) {
+		return $config->application->imagesUri;
+	});
+	
+	/**
 	 * Database connection is created based in the parameters defined in the configuration file
 	 */
     

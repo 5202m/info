@@ -159,8 +159,8 @@
 				KindEditor.ready(function(K) {
 					editor = K.create('textarea[name="content"]', {
 						cssPath : '/css/editor/code/prettify.css',
-						uploadJson : '../php/upload_json.php',
-						fileManagerJson : '../php/file_manager_json.php',
+						uploadJson : '/editor/upload',
+						fileManagerJson : '/editor/fileManager',
 						allowFileManager : true,
 						afterCreate : function() {
 							var self = this;

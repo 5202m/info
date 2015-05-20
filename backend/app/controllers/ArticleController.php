@@ -203,8 +203,11 @@ class ArticleController extends ControllerBase
 		$image = '';
 		$savePath = $this->imagesPath.$articleId.'/';//dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
 		$returnPage = 'images/'.$articleId.'/';
+    	if(php_uname('s')=='Windows NT'){
+    		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/'.$articleId.'/';
+    	}
 		if(!file_exists($savePath)){
-			mkdir($savePath, 0777);
+			mkdir($savePath, 0777, true);
 		}
 		//Check if the user has uploaded files
 		if ($this->request->hasFiles() == true) {
