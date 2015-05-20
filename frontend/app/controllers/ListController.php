@@ -92,6 +92,7 @@ class ListController extends ControllerBase
 // 	    	}
 // 	    	file_put_contents($categroy_file, $content);
 //     	}
+    	$this->response->setHeader('Cache-Control', 'max-age=60');
     	print($content);
     	
     }
