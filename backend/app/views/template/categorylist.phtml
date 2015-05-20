@@ -126,6 +126,7 @@
 			$(document).ready(function(){
 				$('a.deleteAction').live('click',function(){
 					var href= $(this).attr('href');
+					var deleteSuccess = 0;
 					$.ajax({
 				        type: "GET",
 				        url: href,
@@ -135,8 +136,15 @@
 				        success: function(data){
 				        	$('#myModal>.modal-body>p').html(data.msg);
 				        	$('#myModal').modal('show');
+				        	if(!data.status){
+				        		deleteSuccess = 1;
+				        	}
+				        
 				    	}
 				    });
+					if(deleteSuccess==1){
+						$(this).parent().html('');
+					}
 					return false;
 				});
 				

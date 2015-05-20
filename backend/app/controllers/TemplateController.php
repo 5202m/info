@@ -101,10 +101,10 @@ class TemplateController extends ControllerBase
 								$category_ht->template_id = $v;
 								if(!$category_ht->count("template_id='{$category_ht->template_id}' AND category_id='{$category_ht->category_id}'")){
 									if(!$category_ht->save()){
-										$hasError = true ;
+										$hasError +=1 ;
 									}
 								}else{
-									$hasError = true ;
+									#$hasError = true ;
 									$msg = '该分类模板已经关联';
 								}
 							}
@@ -147,7 +147,7 @@ class TemplateController extends ControllerBase
 		$where = array();
 		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$this->view->list =  CategoryHasTemplate::getList($this->db , $where , $appendix);
-		print_R($this->view->list);
+		
 		
 		if($isPartView){
 			$this->view->partial('template/categorylist');
