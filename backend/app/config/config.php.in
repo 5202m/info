@@ -19,6 +19,11 @@ return new \Phalcon\Config(array(
         'imagesDir'		=> '/www/hx9999.com/inf.hx9999.com/images/',
 		'baseUri'        => '',
 	),
+	'redis' => array(
+		'host' => '{{redis_host}}',
+		'port' => '{{redis_port}}',
+		'auth' => '{{redis_auth}}'
+	),
 	'models' => array(
 		'metadata' => array(
 			'adapter' => 'Memory'

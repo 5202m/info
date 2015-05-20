@@ -15,9 +15,10 @@ class ListController extends ControllerBase
     
     	$template_id = intval($template_id);
     	$category_id = intval($category_id);
+    	$limit 		 = intval($limit);
+    	$offset 	 = intval($offset);
     	
     	if(empty($category_id) || empty($template_id)){
-    		//echo '404';
     		$this->response->setStatusCode(404, 'Not Found');
     	}
     	
@@ -33,9 +34,8 @@ class ListController extends ControllerBase
     	if(!is_file($template_file)){
     	
     		$template = Template::findFirst(array(
-    				"category_id = :category_id: AND id = :template_id: AND status = :status:",
+    				"id = :template_id: AND status = :status:",
     				"bind" => array(
-    						'category_id' => $category_id,
     						'template_id' => $template_id,
     						'status' => 'Enabled'
     				)
@@ -60,7 +60,9 @@ class ListController extends ControllerBase
     	$articles = Article::find(array(
     			$conditions,
     			"bind" => $parameters,
-    			'limit' => $limit
+    			"order" => "ctime DESC",
+    			'limit' => array('number'=>$limit, 'offset'=>$offset)
+    			//, "cache" => array("key" => sprintf("list:%s:%s:%s:%s", $template_id,$category_id, $limit, $offset ), "lifetime" => 60)
     	));
 
     	$pages = $this->paginator($category_id, $limit, $offset);
@@ -71,18 +73,20 @@ class ListController extends ControllerBase
     	$view->setVar('articles',$articles);
     	$view->setVar('template_id',$template_id);
     	$view->setVar('category_id',$category_id);
-    	$view->setVar('$pages',$pages);
+    	$view->setVar('limit',$limit);
+    	$view->setVar('offset',$offset);
+    	$view->setVar('pages',$pages);
     	$view->start();
     	$view->render("list","$template_id");
     	$view->finish();
     	
     	$content =  $view->getContent();
-    	if($content){
-	    	if(!is_dir(dirname($categroy_file))){
-	    		mkdir(dirname($categroy_file), 0755, TRUE);
-	    	}
-	    	file_put_contents($categroy_file, $content);
-    	}
+//     	if($content){
+// 	    	if(!is_dir(dirname($categroy_file))){
+// 	    		mkdir(dirname($categroy_file), 0755, TRUE);
+// 	    	}
+// 	    	file_put_contents($categroy_file, $content);
+//     	}
     	print($content);
     	
     }
