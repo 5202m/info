@@ -46,6 +46,8 @@ class ListController extends ControllerBase
     				mkdir(dirname($template_file), 0755, TRUE);
     			}
     			file_put_contents($template_file , $template->content);
+    		}else{
+    			$this->response->setStatusCode(404, 'Template Not Found');
     		}
     	}
     	
@@ -66,6 +68,9 @@ class ListController extends ControllerBase
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));
+    	if(empty($articles)){
+    		$this->response->setStatusCode(404, 'Article List Not Found');
+    	}
 
     	//$this->cache->save('my-data', array(1, 2, 3, 4, 5));
     	//print_r($this->cache->get('my-data')) ;
