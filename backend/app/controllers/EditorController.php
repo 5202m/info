@@ -1,6 +1,6 @@
 <?php
-class EditorController extends ControllerBase
-{
+class EditorController extends ControllerBase {
+	
 	public function uploadAction($dir){
     	/*//返回json格式数据*/
     	$response = new Phalcon\Http\Response();
@@ -22,7 +22,7 @@ class EditorController extends ControllerBase
 		//最大文件大小
 		$maxSize = 1000000;
 		//检查目录名
-		$dirName = empty($dir) ? 'image' : trim($dir);
+		$dirName = empty($dir) ? 'image' : urldecode(trim($dir));
 		if (empty($extArr[$dirName])) {
 			$this->alert("目录名不正确。");
 		}
@@ -78,9 +78,9 @@ class EditorController extends ControllerBase
 	
 	public function fileManagerAction(){
 		$response = new Phalcon\Http\Response();
-		$path = $this->request->getPost('path');
-	    $order = $this->request->getPost('order');//'NAME', 
-	    $dir = $this->request->getPost('dir');
+		$path = urldecode($this->request->getPost('path'));//echo $path;exit;
+	    $order = urldecode($this->request->getPost('order'));//'NAME', 
+	    $dir = urldecode($this->request->getPost('dir'));
 		//根目录路径，可以指定绝对路径，比如 /var/www/attached/
 		$rootPath = $this->imagesPath;
 		//根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
