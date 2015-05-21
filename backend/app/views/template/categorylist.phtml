@@ -1,5 +1,5 @@
 			<?php
-			$cates_arr = $this->objToArray->ohYeah(Category::find());
+			$cates_arr = $this->objToArray->ohYeah(Category::find('division_id='.$division_id));
 			$items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
 			
 			
@@ -128,7 +128,7 @@
 					var href= $(this).attr('href');
 					var deleteSuccess = 0;
 					$.ajax({
-				        type: "GET",
+				        type: "POST",
 				        url: href,
 				        data: {'ajax':1},
 				        async:false,

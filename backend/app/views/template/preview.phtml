@@ -1,3 +1,7 @@
+<?php
+		$cates_arr = $this->objToArray->ohYeah(Category::find('division_id='.$division_id));
+		$items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+			?>
 			<ul class="breadcrumb">
 				<li>
 					<i class="icon-home"></i>
@@ -24,17 +28,14 @@
 							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
 								<div class="dataTables_filter">
 								分类：
-								<?php echo $getData['category_id'];?>
 								<select name="category_id" id="category_id">
 								<option value="">--</option>
 							  <?php 
-                                   $cates_arr = $this->objToArray->ohYeah(Category::find());
-                                   $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
                                    foreach ($items as $vs) :?>
                                         <option value="<?php echo $vs['id'];?>" 
                                         <?php echo ($getData['category_id']==$vs['id']) ? 'selected' : '' ?>>
                                              <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
-                                                 <?php $vs['name'];?>
+                                                 <?php echo $vs['name'];?>
                                               </option>
                                             <?php endforeach;?>
                                 </select>
@@ -101,6 +102,14 @@
 				$('#template_id').change(function(){
 					$(".btn-primary").trigger("click");
 				});
+
+				var url = "<?php echo $url ?>";
+				url = url.replace(':template_id',<?php echo $getData['template_id']?>)
+							.replace(':category_id',<?php echo $getData['category_id']?>);
+
+				$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+				
+				
 			});
 			
 			</script>

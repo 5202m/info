@@ -4,6 +4,7 @@ class TemplateController extends ControllerBase
 	public function initialize(){
 		$this->division_id = 3 ;//Division::getID();
 		$this->view->division_id = $this->division_id;
+		
 	}
 	public function indexAction()
 	{
@@ -169,6 +170,7 @@ class TemplateController extends ControllerBase
 		$this->view->type = strtoupper($type);
 	}
 	public function categorylistAction($page = 1 , $pageSize = 1000 ,$isPartView = false){
+		
 		$where = array();
 		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$this->view->list =  CategoryHasTemplate::getList($this->db , $where , $appendix);
@@ -217,7 +219,7 @@ class TemplateController extends ControllerBase
 				$status = true ;
 				$msg = '关联已经删除或不存在';
 			}
-			if($this->request->getQuery('ajax')==1){
+			if($this->request->getPost('ajax')==1){
 				$this->view->disable();
 				echo json_encode(array('status'=>$status,'msg'=>$msg));
 				return ;
