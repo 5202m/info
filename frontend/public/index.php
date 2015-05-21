@@ -64,18 +64,15 @@ try {
 				"lifetime" => 86400
 		));
 			
-			//Memcached connection settings
-// 			$cache = new BackendMemcache($frontCache, array(
-// 					"host" => "localhost",
-// 					"port" => "11211"
-// 			));
-
 		//Create the Cache setting redis connection options
 		$cache = new Phalcon\Cache\Backend\Redis($frontCache, array(
 				'host' => $config->redis->host,
 				'port' => $config->redis->port,
-// 					'auth' => $config->redis->auth,
-				'persistent' => true
+// 				'auth' => $config->redis->auth,
+				'persistent' => true,
+// 				'statsKey' => 'info',
+				'index' => 1
+				
 		));
 	
 		return $cache;

@@ -48,6 +48,8 @@ class ListController extends ControllerBase
     			file_put_contents($template_file , $template->content);
     		}else{
     			$this->response->setStatusCode(404, 'Template Not Found');
+    			echo 'Template Not Found';
+    			return;
     		}
     	}
     	
@@ -68,38 +70,38 @@ class ListController extends ControllerBase
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));
-    	if(empty($articles)){
+    	
+    	if(count($articles) == 0){
     		$this->response->setStatusCode(404, 'Article List Not Found');
+    		echo 'Article List Not Found';
+    	}else{
+    		$pages = $this->paginator($category_id, $limit, $offset);
+    		 
+    		$view = new \Phalcon\Mvc\View();
+    		$view->setViewsDir($this->basedir.'/template');
+    		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+    		$view->setVar('articles',$articles);
+    		$view->setVar('template_id',$template_id);
+    		$view->setVar('category_id',$category_id);
+    		$view->setVar('limit',$limit);
+    		$view->setVar('offset',$offset);
+    		$view->setVar('pages',$pages);
+    		$view->start();
+    		$view->render("list","$template_id");
+    		$view->finish();
+    		 
+    		$content =  $view->getContent();
+    		//     	if($content){
+    		// 	    	if(!is_dir(dirname($categroy_file))){
+    		// 	    		mkdir(dirname($categroy_file), 0755, TRUE);
+    		// 	    	}
+    		// 	    	file_put_contents($categroy_file, $content);
+    		//     	}
+    		$this->response->setHeader('Cache-Control', 'max-age=60');
+    		print($content);
+
     	}
 
-    	//$this->cache->save('my-data', array(1, 2, 3, 4, 5));
-    	//print_r($this->cache->get('my-data')) ;
-    	
-    	$pages = $this->paginator($category_id, $limit, $offset);
-    	
-    	$view = new \Phalcon\Mvc\View();
-    	$view->setViewsDir($this->basedir.'/template');
-    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
-    	$view->setVar('articles',$articles);
-    	$view->setVar('template_id',$template_id);
-    	$view->setVar('category_id',$category_id);
-    	$view->setVar('limit',$limit);
-    	$view->setVar('offset',$offset);
-    	$view->setVar('pages',$pages);
-    	$view->start();
-    	$view->render("list","$template_id");
-    	$view->finish();
-    	
-    	$content =  $view->getContent();
-//     	if($content){
-// 	    	if(!is_dir(dirname($categroy_file))){
-// 	    		mkdir(dirname($categroy_file), 0755, TRUE);
-// 	    	}
-// 	    	file_put_contents($categroy_file, $content);
-//     	}
-    	$this->response->setHeader('Cache-Control', 'max-age=60');
-    	print($content);
-    	
     }
     public function pageAction($category_id, $limit, $offset = 1){
     	$pager = $this->paginator($category_id, $limit, $offset);
