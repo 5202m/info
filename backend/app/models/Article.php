@@ -70,10 +70,16 @@ class Article extends \Phalcon\Mvc\Model
 	 * @param unknown_type $modelsManager
 	 * @param unknown_type $ids
 	 */
-	static function deleteArticle($modelsManager, $ids){
+	static function deleteArticle($modelsManager, $ids, $status){
 		if(!empty($ids)){
 			//$parameters = array('id'=>$ids);
-			$phql = "UPDATE article SET article.visibility='Hidden', article.status='Disabled' WHERE article.id in ({$ids})";
+			$phql = '';
+			if($status=='hidden'){
+				$phql = "UPDATE article SET article.visibility='Hidden', article.status='Disabled' WHERE article.id in ({$ids})";
+			}
+			elseif($status=='show'){
+				$phql = "UPDATE article SET article.visibility='Visible', article.status='Enabled' WHERE article.id in ({$ids})";
+			}
 			$status = $modelsManager->executeQuery($phql);
 		    //print_r($status);exit;
 		    return $status;
@@ -110,6 +116,56 @@ class Article extends \Phalcon\Mvc\Model
 		}
 		return false;
 	}
-	
+
+	/*public function beforeSave(){
+    	if($this->title==''){
+    		$text = "标题不能为空";
+	        $field = "title";
+	        $type = "InvalidValue";
+	        $code = 103;
+	        $message = new Message($text, $field, $type, $code);
+	        $this->appendMessage($message);
+    	}
+    	if($this->division_category_id==''){
+    		$text = "请选择分类";
+	        $field = "division_category_id";
+	        $type = "InvalidValue";
+	        $code = 103;
+	        $message = new Message($text, $field, $type, $code);
+	        $this->appendMessage($message);
+    	}
+    	if($this->language==''){
+    		$text = "请选择语言";
+	        $field = "language";
+	        $type = "InvalidValue";
+	        $code = 103;
+	        $message = new Message($text, $field, $type, $code);
+	        $this->appendMessage($message);
+    	}
+    	if($this->share==''){
+    		$text = "请设置是否分享";
+	        $field = "share";
+	        $type = "InvalidValue";
+	        $code = 103;
+	        $message = new Message($text, $field, $type, $code);
+	        $this->appendMessage($message);
+    	}
+    	if($this->visibility==''){
+    		$text = "请设置是否可见";
+	        $field = "visibility";
+	        $type = "InvalidValue";
+	        $code = 103;
+	        $message = new Message($text, $field, $type, $code);
+	        $this->appendMessage($message);
+    	}
+    	if($this->content==''){
+    		$text = "文章内容不能为空";
+	        $field = "content";
+	        $type = "InvalidValue";
+	        $code = 103;
+	        $message = new Message($text, $field, $type, $code);
+	        $this->appendMessage($message);
+    	}
+    }*/
 }
 ?>

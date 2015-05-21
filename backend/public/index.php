@@ -183,6 +183,15 @@ try {
     $di->set('templateDir', function() use ($config) {	
     	return $config->application->templateDir;
     });
+    
+    $di->set('tipsToRedirect', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('TipsToRedirect')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}TipsToRedirect.php";
+        }
+        $obj = new TipsToRedirect();
+        return $obj;
+    });
 	/**
 	 * Handle the request
 	 */
