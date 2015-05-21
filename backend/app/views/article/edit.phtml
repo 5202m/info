@@ -20,6 +20,16 @@
 							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
 						</div>
 					</div>
+					<?php if(isset($errorMessage)):?>
+					<div class="box-content alerts">
+						<div class="alert alert-error">
+							<button type="button" class="close" data-dismiss="alert">×</button>
+							<?php foreach($errorMessage as $message):?>
+							<strong><?php echo $message;?></strong><br />
+							<?php endforeach;?>
+						</div>
+					</div>
+					<?php endif;?>
 					<div class="box-content">
 						<form class="form-horizontal" method="post" action="" name="editForm" id="editForm" enctype="multipart/form-data">
 						  <fieldset>
@@ -244,5 +254,8 @@
 						}
 						return true;
 					});
+					<?php if(isset($successMessage)):
+						echo $successMessage;
+					 endif;?>
 				})
 			</script>

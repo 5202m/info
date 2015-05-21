@@ -3,6 +3,9 @@
 <head>
 	
 	<!-- start: Meta -->
+	<?php if(isset($times) && isset($url)):?>
+	<meta http-equiv="refresh" content="<?php echo $times;?>;url=<?php echo $url;?>">
+	<?php endif;?>
 	<meta charset="utf-8" />
 	<title>资讯管理后台</title>
 	<meta name="description" content="Bootstrap Metro Dashboard" />
@@ -430,6 +433,19 @@
 		</div>
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal">关闭</a>
+		</div>
+	</div>
+	
+	<div class="modal hide fade" id="successModal">
+		<div class="modal-header">
+			<button type="button" class="close success" data-dismiss="modal">×</button>
+			<h3>提示信息</h3>
+		</div>
+		<div class="modal-body">
+			<p></p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn success" data-dismiss="modal">确定</a>
 		</div>
 	</div>
 	
