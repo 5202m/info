@@ -206,7 +206,7 @@ class ArticleController extends ControllerBase
 	 * 文章分类迁移
 	 * Enter description here ...
 	 */
-	public function moveAction(){
+	public function moveAction(){ 
 		if($this->request->isPost()){
 			$newVal['division_category_id'] = $this->request->getPost('new_division_category_id');
 			$where['division_category_id'] = $this->request->getPost('ori_division_category_id');
