@@ -88,14 +88,14 @@
 								<td><?php echo $info['tname']?></td>
 								
 								<td>
-									<a class="btn btn-success" href="/template/preview/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
+									<a title="预览" class="btn btn-success" href="/template/preview/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
-									<a class="btn btn-info" href="/template/edit/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
-										<i class="halflings-icon white edit"></i>  
+									<a title="清空缓存" class="btn btn-info" href="/template/purge/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
+										<i class="halflings-icon white refresh"></i>  
 									</a>
-									<a class="btn btn-danger deleteAction" href="/template/deleteHasCategory/<?php echo $info['id']?>">
-										<i class="halflings-icon white trash"></i> 
+									<a title="解除关联" class="btn btn-danger deleteAction" href="/template/deleteHasCategory/<?php echo $info['id']?>">
+										<i class="halflings-icon white resize-full"></i> 
 									</a>
 								</td>
 							</tr>
