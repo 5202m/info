@@ -23,7 +23,7 @@
 						<div class="row-fluid">
 							 
 							<div class="span11">
-							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
+							<?php echo \Phalcon\Tag::form(array("/template/list", "method" => "post",'class'=>'form-horizontal')); ?>
 								<div class="dataTables_filter">
                                 	名字：<?php echo \Phalcon\Tag::textField(array("name", "class" => "span2 typeahead" , "value"=>isset($where['name']) ? $where['name'] : '')) ?>
                                 	状态：<?php echo \Phalcon\Tag::selectStatic(array("status", array(''=>'--','Enabled' => '启用', 'Disabled' => '关闭'),'class'=>'span2',"value"=>isset($where['status']) ? $where['status'] : ''));?>

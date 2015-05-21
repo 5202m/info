@@ -48,8 +48,8 @@ class Template extends \Phalcon\Mvc\Model
 		
 	}
 	static function defaultObject($returnArr = false){
-		
-		$columns = array('id'=>0,'category_id','name','decription','content','type','status','engine');
+
+		$columns = array('id'=>0,'division_id'=>0,'name','decription','content','type','status','engine');
 		if($returnArr === true ) return $columns;
 		$obj = new stdClass;
 		foreach($columns as $k=>$v){

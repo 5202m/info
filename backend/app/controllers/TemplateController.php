@@ -1,25 +1,27 @@
 <?php 
 class TemplateController extends ControllerBase
 {
-
+	public function initialize(){
+		$this->division_id = 3 ;//Division::getID();
+		$this->view->division_id = $this->division_id;
+	}
 	public function indexAction()
 	{
-		var_dump($this);
-		exit();
+		$search_key = 'template_list_search';
+		$this->session->remove($search_key);
+		$this->listAction(1,10);
+		$this->view->partial('template/list');
 	}
 	
 	public function listAction($page = 1 , $pageSize = 10){
 		$search_key = 'template_list_search';
-		$isClear = $this->request->getQuery('action');
-		if($isClear == 'list'){
-			$this->session->set($search_key,array());
-		}
 		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$this->session->set($search_key, $params);
 		}
 		$where = array();
+		
 		if($this->session->has($search_key)){
 			$where = $this->session->get($search_key);
 			$this->view->where  = $where;
@@ -29,6 +31,7 @@ class TemplateController extends ControllerBase
 				}
 			}
 		}
+		$where['division_id'] = $this->division_id;
 		
 		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$list = Template::getList($this->modelsManager , $where , $appendix);
@@ -38,13 +41,23 @@ class TemplateController extends ControllerBase
 		$this->view->page = $page;
 	}
 	public function editAction($id = 0){
+		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$last_id = Template::insert($params);
+			$isError = true ;
 			if(is_numeric($last_id)){
-				$this->view->message_info = array('success'=>$id ? '修改成功' : '添加成功');
+				$message_info = array('success'=>isset($params['id']) ? '修改成功' : '添加成功');
+				$isSuccess = false ; 
 			}else{
-				$this->view->message_info = $last_id;
+				$message_info = $last_id;
+			}
+			if(isset($params['ajax']) && $params['ajax']==1){
+				echo json_encode(array('status'=>$isError,'msg'=> !isset($message_info['success']) ?   '添加失败' : implode(',', $message_info)));
+				$this->view->disable();
+			
+			}else{
+				$this->view->message_info = message_info;
 			}
 		}
 		if($id>0){
@@ -211,6 +224,16 @@ class TemplateController extends ControllerBase
 			}
 			return $this->response->redirect("/template/category");
 		}
+	}
+	
+	public function contentAction($id = 0){
+	
+		if($id){
+			$info = Template::findFirst('id='.$id);
+			echo $info->content;
+			$this->view->disable();
+		}
+		exit();
 	}
 }
 ?>
