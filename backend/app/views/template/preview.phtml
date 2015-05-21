@@ -11,7 +11,14 @@
 				<li><a href="#">模板预览</a></li>
 				<li>
 			</ul>
-
+			<?php if(isset($message_info)) :?>
+			<div class="alert alert-<?php echo isset($message_info['success']) ? 'success' : 'error'?>">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<?php foreach($message_info as $k=>$v):?>
+			<?php echo $v ?><br />
+			<?php endforeach ;?>
+			</div>
+			<?php endif ;?>
 			<div class="row-fluid sortable">		
 				<div class="box span12">
 					<div class="box-header" data-original-title>
@@ -42,13 +49,13 @@
                                 	模板：<?php 
                                 	echo \Phalcon\Tag::selectStatic(array(
                                 			"template_id",
-                                			Template::find('status= \'Enabled\' AND type= \''.$type.'\''),
+                                			Template::find('status= \'Enabled\''.( isset($type) ?  ' AND type= \''.$type .'\'' : '') ),
                                 			"using" => array("id", "name"),
                                 			"value"=>$getData['template_id']
                                 	));
                                 	
                                 	?>
-                                <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary')) ?>
+                                <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -69,7 +76,7 @@
 			
 			<script>
 			$(document).ready(function(){
-				$('.btn-primary').click(function(){
+				$('#submit').click(function(){
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 					if(!template_id){
@@ -82,20 +89,11 @@
 						$('#myModal').modal('show');
 						return false;
 					}
+					$('#loading').html('正在载入..');
 					var url = "<?php echo $url ?>";
 					url = url.replace(':template_id',template_id)
 								.replace(':category_id',category_id);
-					/**
-					$.ajax({
-				        type: "POST",
-				        url: url,
-				        data: {},
-				        async:false,
-				        success: function(data){
-				        	$('#loading').html(data);
-				    	}
-				    });
-					**/
+					
 					$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
 					return false;
 				})

@@ -179,7 +179,10 @@ try {
         $obj = new Tree();
         return $obj;
     });
-   
+    
+    $di->set('templateDir', function() use ($config) {	
+    	return $config->application->templateDir;
+    });
 	/**
 	 * Handle the request
 	 */

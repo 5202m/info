@@ -71,16 +71,35 @@ class TemplateController extends ControllerBase
 		}
 		
 	}
-	public function previewAction($type='category',$template_id = 0, $category_id = 0){
+	public function previewAction($template_id = 0, $category_id = 0){
+		$message_info = array();
+		$preview_url= '';
+		if(!is_numeric($template_id)){
+			$message_info[]='分类不存在';
+		}
+		if(!is_numeric($template_id)){
+			$message_info[]='模板不存在 ';
+			
+		}elseif($template_id){
+			
+			$info = Template::findFirst("id={$template_id}");
+			if(isset($info->type)){
+				$type = strtolower($info->type);
+				if(isset($this->templateDir->preview->$type)){
+					$preview_url = $this->templateDir->preview->$type;
+				}else{
+					$message_info[] = array('模板预览配置不存在');
+				}
+				$this->view->type = $info->type;
+			}else{
+				$message_info[] = '无效的模板';
+			}
+		}
+		$this->view->url = $preview_url;
+		if($message_info){
+			$this->view->message_info = $message_info;
+		}
 		
-		$preview_maps = array(
-			'category'=>'http://inf.hx9999.com/category/html/:template_id/:category_id.html',
-			'list'=>'http://inf.hx9999.com/list/html/:template_id/:category_id.html',
-			'detail'=>'http://inf.hx9999.com/detail/html/:template_id/:category_id/:article_id.html'
-		);
-		
-		$this->view->url = $preview_maps[$type];
-		$this->view->type = strtoupper($type);
 		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id);
 	}
 	public function deleteAction($id = 0){
