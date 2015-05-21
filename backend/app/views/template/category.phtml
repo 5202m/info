@@ -97,20 +97,15 @@
 				        async:false,
 				        dataType: "json",
 				        success: function(data){
-				        	if(!data.status){
-				        		$('#myModal>.modal-body>p').html('分类模板关联保存成功');
-				        	}else{
-				        		$('#myModal>.modal-body>p').html(data.msg);
-				        	}
+				        	$('#myModal>.modal-body>p').html(data.msg);
 				        	$('#myModal').modal('show');
 				        	loadtable();
-				        	
 				    	}
 				    });
 					return false;
 				})
 
-				$('#category_id').change(function(){
+				$('#category_id').live('change',function(){
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 					$.ajax({
@@ -118,20 +113,10 @@
 				        url: '/template/ajaxtemplate',
 				        data: {'ajax':1,'template_id':template_id,'category_id':category_id},
 				        async:false,
-				       dataType: "json",
 				        success: function(data){
-				        	$('#template_id').html(data.option);
-				        	$.each($(".chzn-choices li"), function(){  
-				        	    if($(this).attr('class')=='search-choice'){
-				        	    	$(this).find('a').trigger("click");
-				        		}
-				        	});
-				        	//$('.chzn-results').html(data.result);
+					        $('#ajaxtemplate').html(data);
 				    	}
 				    });
-					
-					//$('.chzn-choices').find('li.search-choice').remove();
-					//$('#template_id_chzn_o_4').hide();
 				})
 			});
 			function loadtable(){

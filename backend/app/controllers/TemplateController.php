@@ -86,31 +86,43 @@ class TemplateController extends ControllerBase
 		if($this->request->isPost()){
 			$msg = null;
 			$params = $this->request->getPost();
-			$category_ht = new CategoryHasTemplate;
+			
 			if(isset($params['category_id']) && is_numeric($params['category_id'])){
-				$category_ht->category_id = $params['category_id'];
 				if(isset($params['template_id']) && is_array($params['template_id'])){
 					
 					try {
 						$transactionManager = new \Phalcon\Mvc\Model\Transaction\Manager();
 						$transaction = $transactionManager->get();
-						$category_ht->setTransaction($transaction);
-						$hasError = false ;
+						$hasErrors = 0 ;
+						$isCommit = false;
+						$i=0;
 						foreach($params['template_id'] as $k=>$v){
-							if($hasError === false){
+							$category_ht = new CategoryHasTemplate;
+							$category_ht->setTransaction($transaction);
+							$category_ht->category_id = $params['category_id'];
+							if($hasErrors === 0){
 								$category_ht->template_id = $v;
 								if(!$category_ht->count("template_id='{$category_ht->template_id}' AND category_id='{$category_ht->category_id}'")){
 									if(!$category_ht->save()){
-										$hasError +=1 ;
+										$hasErrors +=1 ;
+									}else{
+										$isCommit =  true ;
+										$i+=1;
 									}
 								}else{
-									#$hasError = true ;
-									$msg = '该分类模板已经关联';
+									$msg = '关联已存在 ';
 								}
 							}
 						}
-						if($hasError === false){
-							$transaction->commit();
+						if(count($params['template_id']) === $hasErrors){
+							$isCommit = false;
+						}elseif($hasErrors){
+							$msg = '忽略已经关联的模板 ';
+						}
+						
+						if($isCommit === true){
+							 $msg = $msg.($transaction->commit() ? $i.'模板关联成功' : '模板关联失败');
+							
 						}else{
 							$category_ht->getMessages();
 							$msg = $msg ? $msg : $category_ht->getMessages();
@@ -123,11 +135,11 @@ class TemplateController extends ControllerBase
 					}
 					
 				}else{
-					$hasError = true ;
+					$hasErrors = 1 ;
 					$msg = '模板不存在';
 				}
 			}else{
-				$hasError = true ;
+				$hasErrors = 1 ;
 				$msg = '分类不存在';
 			}
 			if(isset($params['ajax']) && $params['ajax']==1){
@@ -137,7 +149,7 @@ class TemplateController extends ControllerBase
 					$list = categorylistAction();
 				}
 				
-				echo json_encode(array('status'=>$hasError,'list'=>$list,'msg'=>$msg));
+				echo json_encode(array('status'=>$hasErrors ? true : false ,'list'=>$list,'msg'=>$msg));
 				return ;
 			}
 		}
@@ -156,37 +168,22 @@ class TemplateController extends ControllerBase
 		}
 	}
 	public function ajaxtemplateAction(){
+		
+		
 		if($this->request->isPost()){
 			$category_id = $this->request->getPost('category_id'); 
 			$template_id = $this->request->getPost('template_id'); 
 			$sql="SELECT id,name FROM template WHERE id NOT 
 					in(SELECT template_id FROM category_has_template WHERE category_id = '{$category_id}')";
 			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
-			$option = '';
-			$results = '';
-			if(isset($list) && $list)
-			{
-				foreach($list as $k=>$v){
-					$option.='<option value="'.$v['id'].'">'.$v['name']."</option>";
-					$results.= '<li id="template_id_chzn_o_'+$k+'" class="active-result" style="">'.$v['name'].'</li>';
-				}
+			$new_list = array();
+			foreach($list as $k=>$v){
+				$new_list[$v['id']]=$v['name'];
 			}
-			//echo json_encode(array('option'=>$option,'result'=>$results));
-			echo $option.'####$$'.$results;
+			$this->view->list = $new_list;
+			
 		}
-		
-		/**
-		echo \Phalcon\Tag::selectStatic(array(
-				"template_id[]",
-				Template::find('status= \'Enabled\''),
-				"using" => array("id", "name"),
-				"value"=>'',
-				"id"=>'template_id',
-				"multiple"=>'multiple',
-				"data-rel"=>'chosen'
-		));
-		**/
-		
+		$this->view->partial('template/ajaxtemplate');
 		
 		$this->view->disable();
 	}
@@ -205,7 +202,7 @@ class TemplateController extends ControllerBase
 					}
 			}else{
 				$status = true ;
-				$msg = '关联不存在';
+				$msg = '关联已经删除或不存在';
 			}
 			if($this->request->getQuery('ajax')==1){
 				$this->view->disable();
