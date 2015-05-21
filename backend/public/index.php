@@ -25,6 +25,12 @@ try {
 		)
 	)->register();
 
+	$loader->registerNamespaces(array(
+			'Phalcon' => __DIR__.'/../../Library/Phalcon/'
+	));
+	
+	$loader->register();		
+		
 	/**
 	 * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
 	 */
@@ -79,33 +85,49 @@ try {
 	 */
     
 	$di->set('db', function() use ($config) {
-                $eventsManager = new EventsManager();
+		$eventsManager = new EventsManager();
+        $logger = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
 
-                $logger = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+        //Listen all the database events
+        $eventsManager->attach('db', function($event, $connection) use ($logger) {
+        	if ($event->getType() == 'beforeQuery') {
+            	$logger->log($connection->getSQLStatement(), Logger::INFO);
+            }
+        });
+        $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+        	"host" => $config->database->host,
+            "username" => $config->database->username,
+            "password" => $config->database->password,
+            "dbname" => $config->database->dbname
+        ));
 
-                //Listen all the database events
-                $eventsManager->attach('db', function($event, $connection) use ($logger) {
-                    if ($event->getType() == 'beforeQuery') {
-                        $logger->log($connection->getSQLStatement(), Logger::INFO);
-                    }
-                });
-                $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-                    "host" => $config->database->host,
-                    "username" => $config->database->username,
-                    "password" => $config->database->password,
-                    "dbname" => $config->database->dbname
-                ));
+        //Assign the eventsManager to the db adapter instance
+        $connection->setEventsManager($eventsManager);
 
-                //Assign the eventsManager to the db adapter instance
-                $connection->setEventsManager($eventsManager);
-
-                return $connection;
+        return $connection;
 //		return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
 //			"host" => $config->database->host,
 //			"username" => $config->database->username,
 //			"password" => $config->database->password,
 //			"dbname" => $config->database->dbname
 //		));
+	});
+
+	/**
+	 * Start the session the first time some component request the session service
+	 */
+//  	$di->set('session', function() {
+//  		$session = new \Phalcon\Session\Adapter\Files();
+//  		$session->start();
+//  		return $session;
+//  	});
+
+	$di->set('session', function() use ($config) {
+		$session = new Phalcon\Session\Adapter\Redis(array(
+				'path' => sprintf("tcp://%s:%s?weight=1",$config->redis->host, $config->redis->port)
+		));
+		$session->start();
+		return $session;
 	});
 
 	/**
@@ -118,24 +140,16 @@ try {
 		} else {
 			return new \Phalcon\Mvc\Model\Metadata\Memory();
 		}
-	});
+	});	
 	
 	/**
 	 * If the configuration specify the use of metadata adapter use it or use memory otherwise
 	 */
 	$di->set('modelsManager', function() {
-          return new Phalcon\Mvc\Model\Manager();
-     });
-	
-	
-	/**
-	 * Start the session the first time some component request the session service
-	 */
-	$di->set('session', function() {
-		$session = new \Phalcon\Session\Adapter\Files();
-		$session->start();
-		return $session;
+		return new Phalcon\Mvc\Model\Manager();
 	});
+			
+	
 //objToArray
     $di->set('objToArray', function() {
         $l = DIRECTORY_SEPARATOR;

@@ -20,6 +20,10 @@ return new \Phalcon\Config(array(
 		'imagesUri'		 => 'http://inf.hx9999.com/images/',
 		'baseUri'        => '',
 	),
+	'redis' => array(
+		'host' => '192.168.6.1',
+		'port' => '6379'
+	),
 	'models' => array(
 		'metadata' => array(
 			'adapter' => 'Memory'

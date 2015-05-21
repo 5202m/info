@@ -56,13 +56,13 @@ try {
 		));
 	});
 
-		//Set the models cache service
-		$di->set('cache', function() use ($config) {
-		
-			//Cache data for one day by default
-			$frontCache = new \Phalcon\Cache\Frontend\Data(array(
-					"lifetime" => 86400
-			));
+	//Set the models cache service
+	$di->set('cache', function() use ($config) {
+	
+		//Cache data for one day by default
+		$frontCache = new \Phalcon\Cache\Frontend\Data(array(
+				"lifetime" => 86400
+		));
 			
 			//Memcached connection settings
 // 			$cache = new BackendMemcache($frontCache, array(
@@ -70,16 +70,16 @@ try {
 // 					"port" => "11211"
 // 			));
 
-			//Create the Cache setting redis connection options
-			$cache = new Phalcon\Cache\Backend\Redis($frontCache, array(
-					'host' => $config->redis->host,
-					'port' => $config->redis->port,
+		//Create the Cache setting redis connection options
+		$cache = new Phalcon\Cache\Backend\Redis($frontCache, array(
+				'host' => $config->redis->host,
+				'port' => $config->redis->port,
 // 					'auth' => $config->redis->auth,
-					'persistent' => true
-			));
-		
-			return $cache;
-		});	
+				'persistent' => true
+		));
+	
+		return $cache;
+	});
 	
 	/**
 	 * If the configuration specify the use of metadata adapter use it or use memory otherwise

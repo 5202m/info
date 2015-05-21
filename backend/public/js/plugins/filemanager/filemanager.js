@@ -70,12 +70,20 @@ KindEditor.plugin('filemanager', function(K) {
 		viewTypeBox = K('[name="viewType"]', div),
 		orderTypeBox = K('[name="orderType"]', div);
 		function reloadPage(path, order, func) {
-			var param = 'path=' + path + '&order=' + order + '&dir=' + dirName;
+			//var param = 'path=' + path + '&order=' + order + '&dir=' + dirName;
 			dialog.showLoading(self.lang('ajaxLoading'));
-			K.ajax(K.addParam(fileManagerJson, param + '&' + new Date().getTime()), function(data) {
-				dialog.hideLoading();
-				func(data);
-			});
+			//K.ajax(K.addParam(fileManagerJson, param + '&' + new Date().getTime()), function(data) {
+			$.post(fileManagerJson,
+					{
+						'path':path,
+						'order':order,
+						'dir':dirName,
+					},
+					function(data){
+						dialog.hideLoading();
+						func(data);
+					},
+				'json');
 		}
 		var elList = [];
 		function bindEvent(el, result, data, createFunc) {

@@ -74,7 +74,8 @@ class DetailController extends ControllerBase
     		mkdir(dirname($article_file), 0755, TRUE);
     	}
     	file_put_contents($article_file, $content);
-    	 
+    	
+    	$this->response->setHeader('Cache-Control', 'max-age=60');
     	print($content);    	
     	
     }
