@@ -5,6 +5,13 @@ return array(
 			'list'=>'http://inf.hx9999.com/list/html/:template_id/:category_id.html',
 			'detail'=>'http://inf.hx9999.com/detail/html/:template_id/:category_id/:article_id.html'
 		),
+		
+		'purge'=>array(
+				'category'=>'http://inf.hx9999.com/category/purge/:template_id/:parent_id.html',
+				'list'=>'http://inf.hx9999.com/list/purge/:template_id/:parent_id.html',
+				'detail'=>'http://inf.hx9999.com/detail/purge/:template_id/:parent_id.html'
+		),
+		
 		'template_list'=>array(
 					/**
 					 * url: ajax动态调用模板,优先级1
