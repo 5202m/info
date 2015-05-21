@@ -20,31 +20,30 @@
 					</div>
 					<div class="box-content">
 						<div class="row-fluid">
-							 
 							<div class="span11">
 							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
 								<div class="dataTables_filter">
-								分类：<select name="category_id" id="category_id">
+								分类：
+								<?php echo $getData['category_id'];?>
+								<select name="category_id" id="category_id">
 								<option value="">--</option>
 							  <?php 
                                    $cates_arr = $this->objToArray->ohYeah(Category::find());
                                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
                                    foreach ($items as $vs) :?>
                                         <option value="<?php echo $vs['id'];?>" 
-                                        <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
+                                        <?php echo ($getData['category_id']==$vs['id']) ? 'selected' : '' ?>>
                                              <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
-                                                 <?php echo $vs['name'];?>
+                                                 <?php $vs['name'];?>
                                               </option>
                                             <?php endforeach;?>
                                 </select>
-                                	
                                 	模板：<?php 
-                                	
                                 	echo \Phalcon\Tag::selectStatic(array(
                                 			"template_id",
                                 			Template::find('status= \'Enabled\' AND type= \''.$type.'\''),
                                 			"using" => array("id", "name"),
-                                			"value"=>''
+                                			"value"=>$getData['template_id']
                                 	));
                                 	
                                 	?>

@@ -1,0 +1,15 @@
+<?php echo \Phalcon\Tag::selectStatic(array(
+					"template_id[]",
+					$list,
+					"using" => array("id", "name"),
+					"value"=>'',
+					"id"=>'template_id',
+					"multiple"=>'multiple',
+					"data-rel"=>'chosen'
+			));
+			?>
+					<script src="/js/jquery.chosen.min.js"></script>
+					<script>
+					$('[data-rel="chosen"],[rel="chosen"]').chosen();
+					</script>
+					

@@ -4,28 +4,96 @@
 		class="icon-angle-right"></i></li>
 	<li><a href="#">文章分类迁移</a></li>
 </ul>
+<div class="row-fluid sortable">
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span>分类迁移</h2>
+						<div class="box-icon">
+							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+						</div>
+					</div>
+					<div class="box-content">
+						<form class="form-horizontal" method="post" action="" name="moveForm" id="moveForm">
+						  <fieldset>
+							<div class="control-group">
+								<label class="control-label" for="typeahead">原来分类</label>
+								<div class="controls">
+									<select id="ori_division_category_id" name="ori_division_category_id">
+										<option value="">请选择</option>
+										<?php
+					                    $cates_arr = $this->objToArray->ohYeah($divisionCategory);
+					                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+					                    foreach ($items as $vs) :
+					                        ?>
+										<option value="<?php echo $vs['id'];?>">
+										<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
+	    								<?php echo $vs['name']; ?>
+	    								</option>
+										<?php endforeach;?>
+									</select>
+									<span id="ori_division_category_id_msg" class="help-inline"></span>
+								</div>
+							</div>
+							
+							
+							<div class="control-group">
+								<label class="control-label" for="typeahead">目标分类</label>
+								<div class="controls">
+									<select id="new_division_category_id" name="new_division_category_id">
+										<option value="">请选择</option>
+										<?php
+					                    foreach ($items as $vs) :
+					                        ?>
+										<option value="<?php echo $vs['id'];?>">
+										<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
+	    								<?php echo $vs['name']; ?>
+	    								</option>
+										<?php endforeach;?>
+									</select>
+									<span id="new_division_category_id_msg" class="help-inline"></span>
+								</div>
+							</div>
+							
+							<div class="form-actions">
+							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
+							  <!--button type="reset" class="btn">取消</button-->
+							</div>
+						  </fieldset>
+						</form>   
 
-<div class="control-group">
-	<label class="control-label" for="typeahead">原来分类</label>
-	<div class="controls">
-		<select id="selectError3" name="engine">
-			<option value="PHP">最近新闻</option>
-			<option value="Smarty">Smarty</option>
-			<option value="Volt">Volt</option>
+					</div>
+				</div><!--/span-->
 
-		</select>
-	</div>
-</div>
-
-
-<div class="control-group">
-	<label class="control-label" for="typeahead">目标分类</label>
-	<div class="controls">
-		<select id="selectError3" name="engine">
-			<option value="PHP">黄金评论</option>
-			<option value="Smarty">Smarty</option>
-			<option value="Volt">Volt</option>
-
-		</select>
-	</div>
-</div>
+			</div><!--/row-->
+			<script type="text/javascript">
+			$(document).ready(function(){
+				$('#moveForm').submit(function(){
+					var error_count = 0;
+					if($('#ori_division_category_id').val()==''){
+						error_count++;
+						$('#ori_division_category_id').parent().parent().addClass('error');
+						$('#ori_division_category_id_msg').text('请选择原来分类');
+					}
+					else{
+						$('#ori_division_category_id').parent().parent().removeClass('error');
+						$('#ori_division_category_id_msg').text('');
+					}
+					if($('#new_division_category_id').val()==''){
+						error_count++;
+						$('#new_division_category_id').parent().parent().addClass('error');
+						$('#new_division_category_id_msg').text('请选择目标分类');
+					}
+					else{
+						$('#new_division_category_id').parent().parent().removeClass('error');
+						$('#new_division_category_id_msg').text('');
+					}
+					if(error_count>0){
+						$('body,html').animate({scrollTop:0},1000); 
+						return false;
+					}
+					return true;
+				});
+			})
+			</script>

@@ -1,0 +1,154 @@
+			<?php
+			$cates_arr = $this->objToArray->ohYeah(Category::find());
+			$items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+			
+			
+			if(!isset($isPartView)):?>
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="/">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li><a href="#">模板管理</a><i class="icon-angle-right"></i></li>
+				<li><a href="#">分类关联列表</a></li>
+				<li>
+			</ul>
+			<div class="row-fluid sortable">		
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon align-justify"></i><span class="break"></span>分类关联列表</h2>
+						<div class="box-icon">
+							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+						</div>
+					</div>
+					<div class="box-content">
+						<div class="row-fluid">
+							 
+							<div class="span11">
+							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
+								<div class="dataTables_filter">
+                                	
+                       			     分类：<select id="category_id" name="category_id"><?php 
+                                  
+                                   foreach ($items as $vs):?>
+                                        <option value="<?php echo $vs['id'];?>"
+                                        <?php echo (isset($info->category_id) && $info->category_id==$vs['id']) ? 'selected' : '' ?>>
+                                             <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
+                                                 <?php echo $vs['name'];?>
+                                              </option>
+                                            <?php endforeach?>
+                                </select>
+								
+                                	 
+                                	<?php 
+                                	/**
+                                	echo '模板：';
+                                	echo \Phalcon\Tag::selectStatic(array(
+                                			"template_id",
+                                			Template::find('status= \'Enabled\''),
+                                			"using" => array("id", "name"),
+                                			"value"=>'',
+                                			"id"=>'template_id',
+											'class'=>'span2'
+                                	));
+                                	**/
+                                	 echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary')) ?>
+								</div>
+							</div>
+							<?php echo \Phalcon\Tag::endForm()?>
+							
+							
+						</div>
+						<?php endif ;?>
+						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+						  <thead>
+							  <tr>
+			
+								  <th width="16%">分类</th>
+								  <th width="16%">模板</th>
+								  <th width="16%">操作</th>
+							  </tr>
+						  </thead>   
+						  <tbody>
+						 
+						  <?php foreach ($items as $item):?>
+						    <?php if(isset($list[$item['id']])): ?>
+						    <?php foreach($list[$item['id']] as $k=>$info) :?>
+							<tr>
+								<td>
+
+								<?php if($k==0):?>
+								<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$item['level']);?>
+                                                 <?php echo $item['name'];?>
+                                      <?php endif ;?>           
+                                                 </td>
+								<td><?php echo $info['tname']?></td>
+								
+								<td>
+									<a class="btn btn-success" href="/template/preview/category/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
+										<i class="halflings-icon white zoom-in"></i>  
+									</a>
+									<a class="btn btn-info" href="/template/edit/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
+										<i class="halflings-icon white edit"></i>  
+									</a>
+									<a class="btn btn-danger deleteAction" href="/template/deleteHasCategory/<?php echo $info['id']?>">
+										<i class="halflings-icon white trash"></i> 
+									</a>
+								</td>
+							</tr>
+							<?php endforeach ;?>
+							<?php else:?>
+							<tr>
+								<td> <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$item['level']);?>
+                                                 <?php echo $item['name'];?></td>
+								<td>--</td>
+								
+								<td>
+									
+								</td>
+							</tr>
+							<?php endif ;?>
+							
+							<?php endforeach;?>
+						</tbody>
+					  </table> 
+					     <?php if(!isset($isPartView)):?>       
+					</div>
+				</div><!--/span-->
+			
+			</div><!--/row-->
+			<?php endif ;?>
+			<script>
+			
+			$(document).ready(function(){
+				$('a.deleteAction').live('click',function(){
+					var href= $(this).attr('href');
+					var deleteSuccess = 0;
+					$.ajax({
+				        type: "GET",
+				        url: href,
+				        data: {'ajax':1},
+				        async:false,
+				        dataType: "json",
+				        success: function(data){
+				        	$('#myModal>.modal-body>p').html(data.msg);
+				        	$('#myModal').modal('show');
+				        	if(!data.status){
+				        		deleteSuccess = 1;
+				        	}
+				        
+				    	}
+				    });
+					if(deleteSuccess==1){
+						$(this).parent().html('');
+					}
+					return false;
+				});
+				
+			});
+			
+
+			</script>
