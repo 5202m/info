@@ -25,6 +25,12 @@ try {
 		)
 	)->register();
 
+	$loader->registerNamespaces(array(
+			'Phalcon' => __DIR__.'../../Library/Phalcon/'
+	));
+	
+	$loader->register();		
+		
 	/**
 	 * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
 	 */
@@ -110,11 +116,12 @@ try {
 	/**
 	 * Start the session the first time some component request the session service
 	 */
-// 	$di->set('session', function() {
-// 		$session = new \Phalcon\Session\Adapter\Files();
-// 		$session->start();
-// 		return $session;
-// 	});
+//  	$di->set('session', function() {
+//  		$session = new \Phalcon\Session\Adapter\Files();
+//  		$session->start();
+//  		return $session;
+//  	});
+
 	$di->set('session', function() use ($config) {
 		$session = new Phalcon\Session\Adapter\Redis(array(
 				'path' => sprintf("tcp://%s:%s?weight=1",$config->redis->host, $config->redis->port)
