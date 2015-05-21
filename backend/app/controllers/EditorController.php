@@ -1,11 +1,10 @@
 <?php
 class EditorController extends ControllerBase
 {
-	public function uploadAction(){
+	public function uploadAction($dir){
     	/*//返回json格式数据*/
     	$response = new Phalcon\Http\Response();
-    	/*$response->setJsonContent(array('status' => 'OK'));
-    	return $response;*/
+    	//$dir = $this->request->getPost('dir');
 		$savePath = $this->imagesPath;
     	if(php_uname('s')=='Windows NT'){//本地测试时使用
     		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/';
@@ -23,7 +22,7 @@ class EditorController extends ControllerBase
 		//最大文件大小
 		$maxSize = 1000000;
 		//检查目录名
-		$dirName = empty($_GET['dir']) ? 'image' : trim($_GET['dir']);
+		$dirName = empty($dir) ? 'image' : trim($dir);
 		if (empty($extArr[$dirName])) {
 			$this->alert("目录名不正确。");
 		}
@@ -79,6 +78,9 @@ class EditorController extends ControllerBase
 	
 	public function fileManagerAction(){
 		$response = new Phalcon\Http\Response();
+		$path = $this->request->getPost('path');
+	    $order = $this->request->getPost('order');//'NAME', 
+	    $dir = $this->request->getPost('dir');
 		//根目录路径，可以指定绝对路径，比如 /var/www/attached/
 		$rootPath = $this->imagesPath;
 		//根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
@@ -89,7 +91,7 @@ class EditorController extends ControllerBase
     	//图片扩展名
     	$extArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 		//目录名
-		$dirName = empty($_GET['dir']) ? '' : trim($_GET['dir']);
+		$dirName = empty($dir) ? '' : trim($dir);
 		if (!in_array($dirName, array('', 'image', 'flash', 'media', 'file'))) {
 			echo "Invalid Directory name.";
 			exit;
@@ -103,19 +105,19 @@ class EditorController extends ControllerBase
 		}
 		
 		//根据path参数，设置各路径和URL
-		if (empty($_GET['path'])) {
+		if (empty($path)) {
 			$currentPath = realpath($rootPath) . '/';
 			$currentUrl = $rootUrl;
 			$currentDirPath = '';
 			$moveupDirPath = '';
 		} else {
-			$currentPath = realpath($rootPath) . '/' . $_GET['path'];
-			$currentUrl = $rootUrl . $_GET['path'];
-			$currentDirPath = $_GET['path'];
+			$currentPath = realpath($rootPath) . '/' . $path;
+			$currentUrl = $rootUrl . $path;
+			$currentDirPath = $path;
 			$moveupDirPath = preg_replace('/(.*?)[^\/]+\/$/', '$1', $currentDirPath);
 		}
 		//排序形式，name or size or type
-		$order = empty($_GET['order']) ? 'name' : strtolower($_GET['order']);
+		$order = empty($order) ? 'name' : strtolower($order);
 		
 		//不允许使用..移动到上一级目录
 		if (preg_match('/\.\./', $currentPath)) {

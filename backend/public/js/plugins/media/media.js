@@ -97,7 +97,8 @@ KindEditor.plugin('media', function(K) {
 					button : K('.ke-upload-button', div)[0],
 					fieldName : filePostName,
 					extraParams : extraParams,
-					url : K.addParam(uploadJson, 'dir=media'),
+					//url : K.addParam(uploadJson, 'dir=media'),
+					url : uploadJson + '/media',
 					afterUpload : function(data) {
 						dialog.hideLoading();
 						if (data.error === 0) {
