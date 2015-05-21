@@ -11,10 +11,10 @@ return array(
 					 * content:编辑内容,优先级2
 					 * image:显示的图片
 					 */				
-					array('url'=>'','content'=>'模板内容1','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','content'=>'模板内容2','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','content'=>'模板内容3','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','content'=>'模板内容3','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字','content'=>'模板内容1','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字','content'=>'模板内容2','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字','content'=>'模板内容3','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字','content'=>'模板内容3','image'=>'/img/gallery/photo10.jpg'),
 				),
 		
 	);

@@ -43,6 +43,12 @@ class TemplateController extends ControllerBase
 	}
 	public function editAction($id = 0){
 		
+		if(isset($this->templateDir->template_list)){
+			$this->view->template_list = $this->templateDir->template_list;
+		}else{
+			$this->view->message_info = array('默认模板配置不存在');
+		}
+		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$last_id = Template::insert($params);
