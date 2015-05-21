@@ -36,7 +36,11 @@ class CategoryController extends ControllerBase
 					mkdir(dirname($template_file), 0755, TRUE);
 				}
 				file_put_contents($template_file , $template->content);
-			}
+			}else{
+    			$this->response->setStatusCode(404, 'Template Not Found');
+    			echo 'Template Not Found';
+    			return;
+    		}
 		}
 		
 		$conditions = 'parent_id = :parent_id: AND visibility = :visibility:';
@@ -50,24 +54,29 @@ class CategoryController extends ControllerBase
     			"bind" => $parameters
 		));
 		
-		$view = new \Phalcon\Mvc\View();
-		$view->setViewsDir($this->basedir.'/template');
-		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
-		$view->setVar('categorys',$categorys);
-		$view->start();
-		$view->render("category","$template_id");
-		$view->finish();
-		
-		$content =  $view->getContent();
-		
-		if($content){
-			if(!is_dir(dirname($categroy_file))){
-				mkdir(dirname($categroy_file), 0755, TRUE);
+		if(count($categorys) == 0){
+			$this->response->setStatusCode(404, 'Article Category Not Found');
+			echo 'Article Category Not Found';
+		}else{
+			$view = new \Phalcon\Mvc\View();
+			$view->setViewsDir($this->basedir.'/template');
+			$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+			$view->setVar('categorys',$categorys);
+			$view->start();
+			$view->render("category","$template_id");
+			$view->finish();
+			
+			$content =  $view->getContent();
+			
+			if($content){
+				if(!is_dir(dirname($categroy_file))){
+					mkdir(dirname($categroy_file), 0755, TRUE);
+				}
+				file_put_contents($categroy_file, $content);
 			}
-			file_put_contents($categroy_file, $content);
+			print($content);
 		}
-		print($content);
-		
+
 	}
 	public function jsonAction($parent_id){
 		$result = array();

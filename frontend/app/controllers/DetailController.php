@@ -19,6 +19,7 @@ class DetailController extends ControllerBase
     	$article_id = intval($article_id);
     	 
     	if(empty($category_id) || empty($template_id) || empty($article_id)){
+    		$this->response->setStatusCode(404, 'Not Found');
     		echo '404';
     	}
     	    	 
@@ -42,6 +43,10 @@ class DetailController extends ControllerBase
     				mkdir(dirname($template_file), 0755, TRUE);
     			}
     			file_put_contents($template_file , $template->content);
+    		}else{
+    			$this->response->setStatusCode(404, 'Template Not Found');
+    			echo 'Template Not Found';
+    			return;
     		}
     	}    	
     	
@@ -58,25 +63,29 @@ class DetailController extends ControllerBase
     			"bind" => $parameters
     	));
  
+		if($article){
 
-    	
-    	$view = new \Phalcon\Mvc\View();
-    	$view->setViewsDir($this->basedir.'/template');
-    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
-    	$view->setVar('article',$article);
-    	$view->start();
-    	$view->render("detail","$template_id");
-    	$view->finish();
-    	 
-    	$content =  $view->getContent();
-    	 
-    	if(!is_dir(dirname($article_file))){
-    		mkdir(dirname($article_file), 0755, TRUE);
-    	}
-    	file_put_contents($article_file, $content);
-    	
-    	$this->response->setHeader('Cache-Control', 'max-age=60');
-    	print($content);    	
+	    	$view = new \Phalcon\Mvc\View();
+	    	$view->setViewsDir($this->basedir.'/template');
+	    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+	    	$view->setVar('article',$article);
+	    	$view->start();
+	    	$view->render("detail","$template_id");
+	    	$view->finish();
+	    	 
+	    	$content =  $view->getContent();
+	    	 
+	    	if(!is_dir(dirname($article_file))){
+	    		mkdir(dirname($article_file), 0755, TRUE);
+	    	}
+	    	file_put_contents($article_file, $content);
+	    	
+	    	$this->response->setHeader('Cache-Control', 'max-age=60');
+	    	print($content);   
+		}else{
+			$this->response->setStatusCode(404, 'Article Not Found');
+			echo 'Article Not Found';
+		} 	
     	
     }
     public function jsonAction($template_id, $category_id, $article_id){
