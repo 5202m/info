@@ -26,7 +26,7 @@ try {
 	)->register();
 
 	$loader->registerNamespaces(array(
-			'Phalcon' => __DIR__.'../../Library/Phalcon/'
+			'Phalcon' => __DIR__.'/../../Library/Phalcon/'
 	));
 	
 	$loader->register();		
