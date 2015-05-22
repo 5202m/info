@@ -8,12 +8,7 @@
 					<a href="/">Home</a> 
 					<i class="icon-angle-right"></i>
 				</li>
-				<li>
-					<i class="icon-home"></i>
-					<a href="">缓存管理</a> 
-					<i class="icon-angle-right"></i>
-				</li>
-				<li><a href="#">清空缓存</a></li>
+				<li><a href="#">缓存管理</a></li>
 				<li>
 			</ul>
 			<?php if(isset($message_info)) :?>
@@ -51,16 +46,18 @@
                                               </option>
                                             <?php endforeach;?>
                                 </select>
+                                <span id="ajaxtemplate">
                                 	模板：<?php 
                                 	echo \Phalcon\Tag::selectStatic(array(
                                 			"template_id",
-                                			Template::find('status= \'Enabled\''.( isset($type) ?  ' AND type= \''.$type .'\'' : '') ),
+                                			Template::find('status= \'Enabled\''.($type ?  ' AND type= \''.$type .'\'' : '') ),
                                 			"using" => array("id", "name"),
                                 			"value"=>$getData['template_id']
-                                	));
+                                	));?>
                                 	
-                                	?>
-                                <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+                                </span>
+                                <span id="ajaxarticle"></span>
+                                <?php echo \Phalcon\Tag::submitButton(array("清空",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -82,6 +79,7 @@
 			<script>
 			$(document).ready(function(){
 				$('#submit').click(function(){
+					
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 					if(!template_id){
@@ -94,25 +92,114 @@
 						$('#myModal').modal('show');
 						return false;
 					}
-					$('#loading').html('正在载入..');
-					var url = "<?php echo $url ?>";
-					url = url.replace(':template_id',template_id)
-								.replace(':category_id',category_id);
 					
-					$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+					var urlAll ='<?php echo json_encode($urlAll);?>';
+					urlAll = $.parseJSON(urlAll);
+					var type = $('#template_id option:selected').attr('data-type');
+					type = type.toLowerCase();
+					var url = '';
+					switch(type){
+						case 'category':
+							url = urlAll.category;
+							break;
+						case 'list':
+							url = urlAll.list;
+							break;
+						case 'detail':
+							url = urlAll.detail;
+							window.template_article_id = $('#article_id_input').val();
+							
+							if($('#ajaxarticle').html()==''){
+								getarticle();
+								return false;
+							}else{
+								if(!window.template_article_id){
+									//$('#myModal>.modal-body>p').html('请选择文章');
+									//$('#myModal').modal('show');
+									return false;
+								}
+							}
+							break;
+					}
+					
+					previewiframe(template_id,category_id,url,type,1);
+					
 					return false;
 				})
-				$('#template_id').change(function(){
-					$(".btn-primary").trigger("click");
+				$('#template_id').live('change',function(){
+					
+					$("#submit").trigger("click");
+				});
+				
+				$('#template_id').live('change',function(){
+					$("#submit").trigger("click");
 				});
 
-				var url = "<?php echo $url ?>";
-				url = url.replace(':template_id',<?php echo $getData['template_id']?>)
-							.replace(':category_id',<?php echo $getData['category_id']?>);
-
-				$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+				$('#article_id').live('change',function(){
+					$("#article_id_input").val($(this).val());
+					$("#submit").trigger("click");
+				});
 				
+				
+
+				$('#category_id').live('change',function(){
+					
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					$.ajax({
+				        type: "POST",
+				        url: '/template/ajaxtemplate',
+				        data: {'ajax':1,'template_id':template_id,'category_id':category_id,'relation':1},
+				        async:false,
+				        success: function(data){
+					        $('#ajaxtemplate').html(data);
+					        $("#template_id").val(template_id);
+				    	}
+				    });
+				})
+				//默认载入
+				var template_id = <?php echo $getData['template_id']?>;
+				var category_id = <?php echo $getData['category_id']?>;
+				if(category_id){
+					$("#category_id").trigger("change");
+				}
+				var url = "<?php echo $url ?>";
+				var type ="<?php echo $type?>";
+				window.template_article_id = <?php echo $getData['article_id']?>;
+				if(window.template_article_id){
+					getarticle();
+				}
+				previewiframe(template_id,category_id,url,type,0);
 				
 			});
+			function previewiframe(template_id,category_id ,url , type , show_error){
+				
+				if(url){
+					url = url.replace(':template_id',template_id)
+								.replace(':parent_id',category_id);
+					if(url.indexOf(':article_id')!=-1){
+						url = url.replace(':article_id',window.template_article_id);
+					}
+					var url_html='<div class="alert alert-success">模板类型：'+type+'  地址 :<a href="'+url+'" target="_blank"><strong>'+url+'</strong></a></div>';
+					$('#loading').html(url_html+'<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+				}else if(show_error == 1){
+					$('#loading').html('<div class="alert alert-error">'+type+'类型的模板数据不存在</div>');
+				}
+			}
+			function getarticle(){
+				var template_id = $('#template_id').val();
+				var category_id = $('#category_id').val();
+				
+				$.ajax({
+			        type: "POST",
+			        url: '/template/ajaxarticle',
+			        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id},
+			        async:false,
+			        success: function(data){
+				        $('#ajaxarticle').html(data);
+				        $("#article_id").val(window.template_article_id);
+			    	}
+			    });
+			}
 			
 			</script>

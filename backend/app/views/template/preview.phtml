@@ -57,7 +57,7 @@
                                 	
                                 </span>
                                 <span id="ajaxarticle"></span>
-                                <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+                                <?php echo \Phalcon\Tag::submitButton(array("预览",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -143,7 +143,7 @@
 				
 
 				$('#category_id').live('change',function(){
-					
+					$('#ajaxarticle').html('');
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 					$.ajax({

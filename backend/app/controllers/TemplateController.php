@@ -113,10 +113,10 @@ class TemplateController extends ControllerBase
 		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
 		
 	}
-	
-	public function purgeAction($template_id = 0, $category_id = 0){
+	public function purgeAction($template_id = 0, $category_id = 0 , $article_id = 0){
 		$message_info = array();
 		$preview_url= '';
+		$type = '';
 		if(!is_numeric($template_id)){
 			$message_info[]='分类不存在';
 		}
@@ -131,24 +131,23 @@ class TemplateController extends ControllerBase
 				if(isset($this->templateDir->purge->$type)){
 					$preview_url = $this->templateDir->purge->$type;
 				}else{
-					$message_info[] = array('清空缓存配置不存在');
+					$message_info[] = array('模板预览配置不存在');
 				}
-				$this->view->type = $info->type;
+				$type = $info->type;
 			}else{
 				$message_info[] = '无效的模板';
 			}
 		}
+		$this->view->type = $type;
 		$this->view->url = $preview_url;
+		$this->view->urlAll = isset($this->templateDir->purge) ? $this->templateDir->purge : array();
 		if($message_info){
 			$this->view->message_info = $message_info;
 		}
 	
-		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id);
+		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
+	
 	}
-	
-	
-	
-	
 	public function deleteAction($id = 0){
 		if($id){
 			$template = new Template();
