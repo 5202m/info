@@ -19,6 +19,7 @@ return new \Phalcon\Config(array(
 		'imagesDir'		 => '/www/hx9999.com/inf.hx9999.com/images/',
 		'imagesUri'		 => 'http://inf.hx9999.com/images/',
 		'baseUri'        => '',
+		'templateDir'=> include('template.php'),
 	),
 	'redis' => array(
 		'host' => '192.168.6.1',
@@ -28,5 +29,6 @@ return new \Phalcon\Config(array(
 		'metadata' => array(
 			'adapter' => 'Memory'
 		)
-	)
+	),
+	
 ));

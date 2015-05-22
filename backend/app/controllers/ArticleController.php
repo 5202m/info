@@ -1,7 +1,13 @@
 <?php
-class ArticleController extends ControllerBase
-{
+class ArticleController extends ControllerBase {
 
+	//protected $divisionId;
+
+    public function initialize() {
+    	//$division = new Division();
+        //$this->divisionId = Division::getID();
+    }
+    
 	/**
 	 * 默认页，显示文章列表
 	 */
@@ -31,6 +37,7 @@ class ArticleController extends ControllerBase
 				}
 			}
 		}
+		$where['division_id'] = $this->Division_id;//Division::getID();
 		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
 		
 		/*$builder = $this->modelsManager->createBuilder()
@@ -117,6 +124,7 @@ class ArticleController extends ControllerBase
             //$category_id = $this->request->getPost('category_id');
             //$article->status = $this->request->getPost('status');
             $article->division_category_id = $this->request->getPost('division_category_id');
+            $article->division_id = $this->Division_id;
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
             /*if(!$form->isValid($this->request->getPost())){
@@ -127,11 +135,14 @@ class ArticleController extends ControllerBase
             }*/
             if($article->save()){
             	//$form->clear();
-            	$this->response->redirect('/article');
+            	//$this->response->redirect('/article');
+            	$this->view->successMessage = $this->tipsToRedirect->modalSuccessTips('修改成功', '/article');
             }
-            
-            foreach ($article->getMessages() as $message) {
-                $this->flash->error($message);
+            else{
+	            $this->view->errorMessage = $article->getMessages();
+	            /*foreach ($article->getMessages() as $message) {
+	                $this->flash->error($message);
+	            }*/
             }
 		}
 		$divisionCategory = $this->getDivisionCategory();
@@ -157,6 +168,7 @@ class ArticleController extends ControllerBase
             //$category_id = $this->request->getPost('category_id');
             //$article->status = $this->request->getPost('status');
             $article->division_category_id = $this->request->getPost('division_category_id');
+            $article->division_id = $this->Division_id;//
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
 			/*if(!$form->isValid($this->request->getPost())){
@@ -178,23 +190,29 @@ class ArticleController extends ControllerBase
 				$images->save();
 				
             	//$form->clear();
-				$this->response->redirect('/article');
+				//$this->response->redirect('/article');
+            	$this->view->successMessage = $this->tipsToRedirect->modalSuccessTips('添加成功', '/article');
             }
-            /*$images = new Images();
-			$images->article_id = $article->id;
-			$images->url = $this->uploadImage($article->id, $oriPath);
-			
-			if($images->create() == false){
-				$this->db->rollback();
-				foreach ($images->getMessages() as $message) {
+            else{
+	            /*$images = new Images();
+				$images->article_id = $article->id;
+				$images->url = $this->uploadImage($article->id, $oriPath);
+				
+				if($images->create() == false){
+					$this->db->rollback();
+					foreach ($images->getMessages() as $message) {
+		                $this->flash->error($message);
+		            }
+	            	return;
+				}*/
+				//$this->db->commit();
+	            //$this->response->redirect('/article');
+	            $this->view->errorMessage = $article->getMessages();
+	            //print_r($article->getMessages());exit;
+	            /*foreach ($article->getMessages() as $key => $message) {
 	                $this->flash->error($message);
-	            }
-            	return;
-			}*/
-			//$this->db->commit();
-            //$this->response->redirect('/article');
-            foreach ($article->getMessages() as $message) {
-                $this->flash->error($message);
+	                //echo $key,'<br>';
+	            }*/
             }
 		}
 		
@@ -231,11 +249,12 @@ class ArticleController extends ControllerBase
 	public function deleteAction(){
 		if($this->request->isAjax()){
 			$ids = $this->request->getPost('ids', 'trim');
+			$status = $this->request->getPost('act', 'trim');
 			if(!empty($ids)){
-				$status = Article::deleteArticle($this->modelsManager, $ids);
+				$status = Article::deleteArticle($this->modelsManager, $ids, $status);
 				$response = new Phalcon\Http\Response();
 				if ($status->success() == true) {
-			        $response->setJsonContent(array('status' => true));
+			        $response->setJsonContent(array('status' => true, 'message'=>'修改成功'));
 			    } else {
 			        //Change the HTTP status
 			        $response->setStatusCode(409, "Conflict");
@@ -299,9 +318,9 @@ class ArticleController extends ControllerBase
 	 * Enter description here ...
 	 */
 	private function getDivisionCategory(){
-		$divisionId = Division::getID();
+		//$this->divisionId = Division::getID();
 		return $divisionCategory = Category::find(
-            "division_id = {$divisionId}"
+            "division_id = {$this->Division_id}"
         );
 	}
 	

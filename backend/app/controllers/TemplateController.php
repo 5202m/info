@@ -2,7 +2,8 @@
 class TemplateController extends ControllerBase
 {
 	public function initialize(){
-		$this->division_id = 3 ;//Division::getID();
+		parent::initialize();
+		$this->division_id = $this->Division_id;
 		$this->view->division_id = $this->division_id;
 		
 	}
@@ -43,6 +44,12 @@ class TemplateController extends ControllerBase
 	}
 	public function editAction($id = 0){
 		
+		if(isset($this->templateDir->sample)){
+			$this->view->template_list = $this->templateDir->sample;
+		}else{
+			$this->view->message_info = array('默认模板配置不存在');
+		}
+		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$last_id = Template::insert($params);
@@ -71,17 +78,75 @@ class TemplateController extends ControllerBase
 		}
 		
 	}
-	public function previewAction($type='category',$template_id = 0, $category_id = 0){
+	public function previewAction($template_id = 0, $category_id = 0 , $article_id = 0){
+		$message_info = array();
+		$preview_url= '';
+		$type = '';
+		if(!is_numeric($template_id)){
+			$message_info[]='分类不存在';
+		}
+		if(!is_numeric($template_id)){
+			$message_info[]='模板不存在 ';
+			
+		}elseif($template_id){
+			
+			$info = Template::findFirst("id={$template_id}");
+			if(isset($info->type)){
+				$type = strtolower($info->type);
+				if(isset($this->templateDir->preview->$type)){
+					$preview_url = $this->templateDir->preview->$type;
+				}else{
+					$message_info[] = array('模板预览配置不存在');
+				}
+				$type = $info->type;
+			}else{
+				$message_info[] = '无效的模板';
+			}
+		}
+		$this->view->type = $type;
+		$this->view->url = $preview_url;
+		$this->view->urlAll = isset($this->templateDir->preview) ? $this->templateDir->preview : array();
+		if($message_info){
+			$this->view->message_info = $message_info;
+		}
 		
-		$preview_maps = array(
-			'category'=>'http://inf.hx9999.com/category/html/:template_id/:category_id.html',
-			'list'=>'http://inf.hx9999.com/list/html/:template_id/:category_id.html',
-			'detail'=>'http://inf.hx9999.com/detail/html/:template_id/:category_id/:article_id.html'
-		);
+		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
 		
-		$this->view->url = $preview_maps[$type];
-		$this->view->type = strtoupper($type);
-		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id);
+	}
+	public function purgeAction($template_id = 0, $category_id = 0 , $article_id = 0){
+		$message_info = array();
+		$preview_url= '';
+		$type = '';
+		if(!is_numeric($template_id)){
+			$message_info[]='分类不存在';
+		}
+		if(!is_numeric($template_id)){
+			$message_info[]='模板不存在 ';
+				
+		}elseif($template_id){
+				
+			$info = Template::findFirst("id={$template_id}");
+			if(isset($info->type)){
+				$type = strtolower($info->type);
+				if(isset($this->templateDir->purge->$type)){
+					$preview_url = $this->templateDir->purge->$type;
+				}else{
+					$message_info[] = array('模板预览配置不存在');
+				}
+				$type = $info->type;
+			}else{
+				$message_info[] = '无效的模板';
+			}
+		}
+		$this->view->type = $type;
+		$this->view->url = $preview_url;
+		$this->view->urlAll = isset($this->templateDir->purge) ? $this->templateDir->purge : array();
+		if($message_info){
+			$this->view->message_info = $message_info;
+		}
+	
+		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
+	
 	}
 	public function deleteAction($id = 0){
 		if($id){
@@ -184,24 +249,66 @@ class TemplateController extends ControllerBase
 	}
 	public function ajaxtemplateAction(){
 		
-		
 		if($this->request->isPost()){
 			$category_id = $this->request->getPost('category_id'); 
 			$template_id = $this->request->getPost('template_id'); 
-			$sql="SELECT id,name FROM template WHERE id NOT 
+			
+			$relation = $this->request->getPost('relation'); 
+			
+			$not = $relation ? '' : ' NOT ';
+			$sql="SELECT id,name,`type` FROM template WHERE id {$not} 
 					in(SELECT template_id FROM category_has_template WHERE category_id = '{$category_id}')";
 			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
 			$new_list = array();
 			foreach($list as $k=>$v){
 				$new_list[$v['id']]=$v['name'];
 			}
-			$this->view->list = $new_list;
-			
+			$this->view->list = array($new_list,$list);
+			$this->view->relation = $relation;
 		}
 		$this->view->partial('template/ajaxtemplate');
 		
 		$this->view->disable();
 	}
+	
+	public function ajaxcategoryAction(){
+	
+		if($this->request->isPost()){
+			$category_id = $this->request->getPost('category_id');
+			$template_id = $this->request->getPost('template_id');
+				
+			$relation = $this->request->getPost('relation');
+				
+			$not = $relation ? '' : ' NOT ';
+			$sql="SELECT id,name,`path` FROM category WHERE id {$not}
+			in(SELECT category_id FROM category_has_template WHERE template_id = '{$template_id}')";
+			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
+			$new_list = array();
+			foreach($list as $k=>$v){
+			$new_list[$v['id']]=$v['name'];
+			}
+				$this->view->list = array($new_list,$list);
+				$this->view->relation = $relation;
+		}
+		$this->view->partial('template/ajaxcategory');
+	
+		$this->view->disable();
+	}
+	
+	
+	public function ajaxarticleAction($category_id = 0){
+	
+		if($this->request->isPost()){
+			$category_id = $this->request->getPost('category_id');
+			$article_id = $this->request->getPost('article_id');
+		}
+		$this->view->category_id = $category_id;
+		$this->view->article_id = $article_id;
+		$this->view->partial('template/ajaxarticle');
+	
+		$this->view->disable();
+	}
+	
 	public function deleteHasCategoryAction($id = 0){
 		$status = false;
 		$msg = 0;

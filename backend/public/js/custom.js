@@ -139,7 +139,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('#btnDelete').click(function(){
+	$('#btnHidden').click(function(){
 		var ids = '';
 		$('.table tbody input[type="checkbox"]').each(function(){
 			if($(this).is(':checked')){
@@ -150,25 +150,29 @@ $(document).ready(function(){
 			}
 		});
 		if(ids!=''){
-			$.post($(this).attr('url'),
-					{
-						ids: ids
-					},
-					function(data){
-						if(data!=null){
-							if(data.status){
-								//alert('');
-								location.href=location.href;
-							}
-							else{
-								alert(data.messages);
-							}
-						}
-					},
-					'json');
+			modifyArticleStatus($(this).attr('url'), ids, 'hidden');
 		}
 		else{
-			alert('请选择要删除的文章');
+			$("#myModal>.modal-body>p").html('请选择要隐藏的文章');
+			$("#successModal").modal("show");
+		}
+	});
+	$('#btnShow').click(function(){
+		var ids = '';
+		$('.table tbody input[type="checkbox"]').each(function(){
+			if($(this).is(':checked')){
+				if(ids!=''){
+					ids += ',';
+				}
+				ids += $(this).val();
+			}
+		});
+		if(ids!=''){
+			modifyArticleStatus($(this).attr('url'), ids, 'show');
+		}
+		else{
+			$("#myModal>.modal-body>p").html('请选择要显示的文章');
+			$("#successModal").modal("show");
 		}
 	});
 	/*批量删除	end*/
@@ -2325,4 +2329,30 @@ function widthFunctions(e) {
 		
 	}
 
+}
+
+function modifyArticleStatus(url, ids, act){
+	$.post(url,
+			{
+				ids: ids,
+				act: act
+			},
+			function(data){
+				if(data!=null){
+					if(data.status){
+						//alert('');
+						//location.href=location.href;
+						$("#successModal>.modal-body>p").html(data.message);
+						$("#successModal>.modal-header>.success,#successModal>.modal-footer>.success").click(function(){
+						    location.href = location.href;
+						});
+						$("#successModal").modal("show");
+					}
+					else{
+						$("#myModal>.modal-body>p").html(data.message);
+						$("#successModal").modal("show");
+					}
+				}
+			},
+			'json');
 }

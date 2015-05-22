@@ -3,6 +3,9 @@
 <head>
 	
 	<!-- start: Meta -->
+	<?php if(isset($times) && isset($url)):?>
+	<meta http-equiv="refresh" content="<?php echo $times;?>;url=<?php echo $url;?>">
+	<?php endif;?>
 	<meta charset="utf-8" />
 	<title>资讯管理后台</title>
 	<meta name="description" content="Bootstrap Metro Dashboard" />
@@ -389,15 +392,8 @@
 							</ul>
 						</li>
 						
-						<li>
-							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><strong class="hidden-tablet bold"> 模板预览 </strong></a>
-							<ul>
-								<li><a class="submenu" href="/template/preview/category"><i class="icon-file-alt"></i><span class="hidden-tablet"> 分类页预览 </span></a></li>
-								<li><a class="submenu" href="/template/preview/list"><i class="icon-file-alt"></i><span class="hidden-tablet"> 列表页预览 </span></a></li>
-								<li><a class="submenu" href="/template/preview/detail"><i class="icon-file-alt"></i><span class="hidden-tablet"> 内容页预览</span></a></li>
-							</ul>	
-						</li>
-						<li><a href="calendar.html"><i class="icon-calendar"></i><strong class="hidden-tablet"> 缓存管理 </strong></a></li>
+						<li><a href="/template/preview"><i class="icon-file-alt"></i><strong class="hidden-tablet">页面预览 </strong></a></li>
+						<li><a href="/template/purge"><i class="icon-calendar"></i><strong class="hidden-tablet"> 缓存管理 </strong></a></li>
 						<!-- 
 						
 						<li><a href="file-manager.html"><i class="icon-folder-open"></i><span class="hidden-tablet"> File Manager</span></a></li>
@@ -437,6 +433,19 @@
 		</div>
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal">关闭</a>
+		</div>
+	</div>
+	
+	<div class="modal hide fade" id="successModal">
+		<div class="modal-header">
+			<button type="button" class="close success" data-dismiss="modal">×</button>
+			<h3>提示信息</h3>
+		</div>
+		<div class="modal-body">
+			<p></p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn success" data-dismiss="modal">确定</a>
 		</div>
 	</div>
 	

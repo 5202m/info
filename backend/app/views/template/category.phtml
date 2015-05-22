@@ -1,4 +1,6 @@
-			<ul class="breadcrumb">
+<?php $cates_arr = $this->objToArray->ohYeah(Category::find('division_id='.$division_id));
+			$items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0); 
+?><ul class="breadcrumb">
 				<li>
 					<i class="icon-home"></i>
 					<a href="/">Home</a> 
@@ -28,9 +30,7 @@
 								<select name="category_id" id="category_id">
 								<option value="">--</option>
 							  <?php 
-                                   $cates_arr = $this->objToArray->ohYeah(Category::find());
-                                   $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
-                                   foreach ($items as $vs) :?>
+                                    foreach ($items as $vs) :?>
                                         <option value="<?php echo $vs['id'];?>" 
                                         <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
                                              <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
@@ -111,7 +111,7 @@
 					$.ajax({
 				        type: "POST",
 				        url: '/template/ajaxtemplate',
-				        data: {'ajax':1,'template_id':template_id,'category_id':category_id},
+				        data: {'ajax':1,'template_id':template_id,'category_id':category_id,'relation':0},
 				        async:false,
 				        success: function(data){
 					        $('#ajaxtemplate').html(data);
