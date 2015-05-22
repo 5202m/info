@@ -2,7 +2,7 @@
 class TemplateController extends ControllerBase
 {
 	public function initialize(){
-		$this->division_id = 3 ;//Division::getID();
+		$this->division_id = $this->Division_id;//Division::getID();
 		$this->view->division_id = $this->division_id;
 		
 	}
