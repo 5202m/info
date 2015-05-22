@@ -30,9 +30,7 @@
 							<div class="span11">
 							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
 								<div class="dataTables_filter">
-                                	
                        			     分类：<select id="category_id" name="category_id"><?php 
-                                  
                                    foreach ($items as $vs):?>
                                         <option value="<?php echo $vs['id'];?>"
                                         <?php echo (isset($info->category_id) && $info->category_id==$vs['id']) ? 'selected' : '' ?>>
@@ -41,8 +39,6 @@
                                               </option>
                                             <?php endforeach?>
                                 </select>
-								
-                                	 
                                 	<?php 
                                 	/**
                                 	echo '模板：';
@@ -78,14 +74,22 @@
 						    <?php if(isset($list[$item['id']])): ?>
 						    <?php foreach($list[$item['id']] as $k=>$info) :?>
 							<tr>
-								<td>
-
-								<?php if($k==0):?>
+								<td><?php if($k==0):?>
 								<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$item['level']);?>
                                                  <?php echo $item['name'];?>
-                                      <?php endif ;?>           
-                                                 </td>
-								<td><?php echo $info['tname']?></td>
+                                      
+                                      <?php if($item['visibility']=='Hidden'):?>
+                                      <span class="label label-error">隐藏</span>
+                                      <?php endif ;?>
+                                      <?php if($item['status']=='Disabled'):?>
+                                      <span class="label label-error">关闭</span>
+                                      <?php endif ;?>
+                                      
+                                      <?php endif ;?>
+                                 </td>
+								<td><?php echo $info['tname']?><?php if($info['tstatus']=='Disabled'):?>
+                                <span class="label label-error">关闭</span>
+                                <?php endif ;?></td>
 								
 								<td>
 									<a title="预览" class="btn btn-success" href="/template/preview/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
@@ -103,7 +107,14 @@
 							<?php else:?>
 							<tr>
 								<td> <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$item['level']);?>
-                                                 <?php echo $item['name'];?></td>
+                                                 <?php echo $item['name'];?><?php if($item['visibility']=='Hidden'):?>
+                                      <span class="label label-error">隐藏</span>
+                                      <?php endif ;?>
+                                      <?php if($item['status']=='Disabled'):?>
+                                      <span class="label label-error">关闭</span>
+                                      <?php endif ;?>
+                                                 
+                                                 </td>
 								<td>--</td>
 								
 								<td>

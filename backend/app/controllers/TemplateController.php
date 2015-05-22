@@ -43,8 +43,8 @@ class TemplateController extends ControllerBase
 	}
 	public function editAction($id = 0){
 		
-		if(isset($this->templateDir->template_list)){
-			$this->view->template_list = $this->templateDir->template_list;
+		if(isset($this->templateDir->sample)){
+			$this->view->template_list = $this->templateDir->sample;
 		}else{
 			$this->view->message_info = array('默认模板配置不存在');
 		}

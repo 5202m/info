@@ -55,16 +55,19 @@
 							  <label class="control-label" for="select_countent">选择模板</label>
 							  <div class="controls" id="select_countent">
 								<?php if(isset($template_list)) :?>
-								<?php foreach($template_list as $k=>$v) :?>
+								<?php foreach($template_list as $k=>$v) :
+								
+									if($v['path']){
+										$v['content'] = file_exists($v['path']) ? file_get_contents($v['path']) : '模板文件不存在';
+									}
+								?>
 								<div style="float:left;width:120px">
 								<a class="selecta" href="<?php echo $v['url']?>" id="content_v<?php echo $k ?>">
 								<img src="<?php echo $v['image']?>" width="100px">
 								</a>
 								<div align="center"><?php echo $v['name'] ?></div>
 								</div>
-								<textarea class="hide" id="content_v<?php echo $k ?>_textarea">
-								<?php echo $v['content']?>
-								</textarea>
+								<textarea class="hide" id="content_v<?php echo $k ?>_textarea"><?php echo $v['content']?></textarea>
 								<?php endforeach ;?>
 								<?php endif ;?>
 								<a href="/template/content" id="getcontent" class="btn btn-small btn-primary">更多</a>

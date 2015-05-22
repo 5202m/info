@@ -12,16 +12,16 @@ return array(
 				'detail'=>'http://inf.hx9999.com/detail/purge/:template_id/:parent_id.html'
 		),
 		
-		'template_list'=>array(
+		'sample'=>array(
 					/**
 					 * url: ajax动态调用模板,优先级1
 					 * content:编辑内容,优先级2
 					 * image:显示的图片
 					 */				
-					array('url'=>'','name'=>'名字1','content'=>'模板内容1','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'名字2','content'=>'模板内容2','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'名字3','content'=>'模板内容3','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'名字4','content'=>'模板内容3','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字1','content'=>'模板内容1','path'=>'xxxx','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字2','content'=>'模板内容2','path'=>'','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字3','content'=>'模板内容3','path'=>'','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'名字4','content'=>'模板内容3','path'=>'','image'=>'/img/gallery/photo10.jpg'),
 				),
 		
 	);

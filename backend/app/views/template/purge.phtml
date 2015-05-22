@@ -1,0 +1,118 @@
+<?php
+		$cates_arr = $this->objToArray->ohYeah(Category::find('division_id='.$division_id));
+		$items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+			?>
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="/">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li>
+					<i class="icon-home"></i>
+					<a href="">缓存管理</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li><a href="#">清空缓存</a></li>
+				<li>
+			</ul>
+			<?php if(isset($message_info)) :?>
+			<div class="alert alert-<?php echo isset($message_info['success']) ? 'success' : 'error'?>">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<?php foreach($message_info as $k=>$v):?>
+			<?php echo $v ?><br />
+			<?php endforeach ;?>
+			</div>
+			<?php endif ;?>
+			<div class="row-fluid sortable">		
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon align-justify"></i><span class="break"></span>清空缓存</h2>
+						<div class="box-icon">
+							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+						</div>
+					</div>
+					<div class="box-content">
+						<div class="row-fluid">
+							<div class="span11">
+							<?php echo \Phalcon\Tag::form(array("", "method" => "post",'class'=>'form-horizontal')); ?>
+								<div class="dataTables_filter">
+								分类：
+								<select name="category_id" id="category_id">
+								<option value="">--</option>
+							  <?php 
+                                   foreach ($items as $vs) :?>
+                                        <option value="<?php echo $vs['id'];?>" 
+                                        <?php echo ($getData['category_id']==$vs['id']) ? 'selected' : '' ?>>
+                                             <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
+                                                 <?php echo $vs['name'];?>
+                                              </option>
+                                            <?php endforeach;?>
+                                </select>
+                                	模板：<?php 
+                                	echo \Phalcon\Tag::selectStatic(array(
+                                			"template_id",
+                                			Template::find('status= \'Enabled\''.( isset($type) ?  ' AND type= \''.$type .'\'' : '') ),
+                                			"using" => array("id", "name"),
+                                			"value"=>$getData['template_id']
+                                	));
+                                	
+                                	?>
+                                <?php echo \Phalcon\Tag::submitButton(array("查询",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+								</div>
+							</div>
+							<?php echo \Phalcon\Tag::endForm()?>
+							
+							
+						</div>
+						<div id="loading" class="loading">
+						
+						
+						</div>
+						
+					  </table> 
+					            
+					</div>
+				</div><!--/span-->
+			
+			</div><!--/row-->
+			
+			<script>
+			$(document).ready(function(){
+				$('#submit').click(function(){
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					if(!template_id){
+						$('#myModal>.modal-body>p').html('请选择模板');
+						$('#myModal').modal('show');
+						return false;
+					}
+					if(!category_id){
+						$('#myModal>.modal-body>p').html('请选择分类');
+						$('#myModal').modal('show');
+						return false;
+					}
+					$('#loading').html('正在载入..');
+					var url = "<?php echo $url ?>";
+					url = url.replace(':template_id',template_id)
+								.replace(':category_id',category_id);
+					
+					$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+					return false;
+				})
+				$('#template_id').change(function(){
+					$(".btn-primary").trigger("click");
+				});
+
+				var url = "<?php echo $url ?>";
+				url = url.replace(':template_id',<?php echo $getData['template_id']?>)
+							.replace(':category_id',<?php echo $getData['category_id']?>);
+
+				$('#loading').html('<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
+				
+				
+			});
+			
+			</script>
