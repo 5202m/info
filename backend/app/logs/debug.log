@@ -4582,3 +4582,205 @@
 [Thu, 21 May 15 11:36:37 +0200][INFO] DESCRIBE `category`
 [Thu, 21 May 15 11:36:37 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
 >>>>>>> 076c1c26aac542d82cd52f6fed52ad9308f0021d
+[Fri, 22 May 15 04:13:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:13:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:13:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:14:54 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:14:54 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:14:54 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = '3' LIMIT :1
+[Fri, 22 May 15 04:14:54 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:14:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:14:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:14:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = 'img' LIMIT :1
+[Fri, 22 May 15 04:14:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:14:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:14:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:14:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = 'img' LIMIT :1
+[Fri, 22 May 15 04:14:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:15:00 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:15:00 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:15:00 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:15:04 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:15:04 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:15:04 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:15:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:15:25 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:15:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:15:25 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:15:25 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:34:14 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:34:14 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:34:14 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:34:14 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:34:14 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:34:18 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:34:18 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:34:18 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:34:18 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:34:18 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:35:05 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:35:05 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:35:05 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:35:09 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:35:09 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:35:09 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:35:09 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:35:09 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:35:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:35:27 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:35:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:35:27 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:35:27 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:38:46 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:38:46 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:40:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:40:23 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:40:23 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:41:39 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:41:39 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:41:39 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:41:51 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:41:51 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:41:51 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:41:51 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:41:51 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:42:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:42:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:42:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:42:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:42:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:43:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:43:25 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:43:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:43:25 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:43:25 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:46:32 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:46:32 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:46:32 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:46:32 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:46:32 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:49:11 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:49:11 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:49:11 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:49:11 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:49:11 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:50:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:50:23 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:53:07 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:53:07 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:53:07 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:53:10 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:53:10 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:53:10 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:57:58 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:57:58 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:57:58 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:57:58 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 04:57:58 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 04:58:18 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 04:58:18 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:04:22 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:04:22 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:04:22 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:04:51 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:04:51 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:04:51 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:05:21 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='division'
+[Fri, 22 May 15 05:05:21 +0200][INFO] DESCRIBE `division`
+[Fri, 22 May 15 05:05:21 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT :3
+[Fri, 22 May 15 05:05:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:05:27 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:05:27 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:05:31 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:05:31 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:05:31 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:08:43 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:08:43 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:08:43 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:08:53 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:08:53 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:08:53 +0200][INFO] INSERT INTO `category` (`division_id`, `name`, `description`, `visibility`, `status`, `parent_id`, `path`, `mtime`) VALUES (?, ?, ?, ?, ?, ?, ?, null)
+[Fri, 22 May 15 05:08:53 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:08:53 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:08:53 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:13:09 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:13:09 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:13:09 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:13:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:13:23 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:13:23 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:13:23 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:13:23 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:14:32 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:14:32 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:14:32 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:14:32 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:14:32 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:17:28 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:17:28 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:17:28 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:17:50 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:17:50 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:17:50 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:18:16 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:18:16 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:18:16 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:18:54 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:18:54 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:18:54 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:19:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:19:25 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:19:25 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:19:40 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:19:40 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:19:40 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:19:46 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:19:46 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:19:46 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:20:20 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:20:20 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:20:20 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:22:27 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:22:27 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:22:27 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:22:34 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:22:34 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:22:34 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:26:25 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:26:25 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:26:25 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = ''
+[Fri, 22 May 15 05:27:49 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:27:49 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:27:49 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:27:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:27:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:27:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:28:06 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:06 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:06 +0200][INFO] INSERT INTO `category` (`division_id`, `name`, `description`, `visibility`, `status`, `parent_id`, `path`, `mtime`) VALUES (?, ?, ?, ?, ?, ?, ?, null)
+[Fri, 22 May 15 05:28:06 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:06 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:06 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:28:34 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:34 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:34 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = '5' LIMIT :1
+[Fri, 22 May 15 05:28:35 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:35 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:35 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = 'img' LIMIT :1
+[Fri, 22 May 15 05:28:35 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:35 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:35 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = 'img' LIMIT :1
+[Fri, 22 May 15 05:28:47 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:47 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:47 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:28:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:28:55 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:28:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = '37' LIMIT :1
+[Fri, 22 May 15 05:28:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'
+[Fri, 22 May 15 05:29:11 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:29:11 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:29:11 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = :0 LIMIT :2
+[Fri, 22 May 15 05:29:11 +0200][INFO] UPDATE `category` SET `division_id` = ?, `name` = ?, `description` = ?, `visibility` = ?, `status` = ?, `parent_id` = ?, `path` = ?, `mtime` = ? WHERE `id` = ?
+[Fri, 22 May 15 05:29:11 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='category'
+[Fri, 22 May 15 05:29:11 +0200][INFO] DESCRIBE `category`
+[Fri, 22 May 15 05:29:11 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = '3'

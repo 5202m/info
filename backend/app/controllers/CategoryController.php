@@ -2,7 +2,7 @@
 class CategoryController extends ControllerBase
 {
     public function indexAction(){
-        $id = Division::getID();
+        $id = $this->Division_id;
         $category = Category::find(
             "division_id = '{$id}'"
         );
@@ -10,7 +10,7 @@ class CategoryController extends ControllerBase
     }
     //编辑分类页面
     public function editAction($id){
-        $Division_id = Division::getID();
+        $Division_id = $this->Division_id;
         $cates = Category::findFirst(
             "id = '{$id}'"
         );
@@ -22,7 +22,7 @@ class CategoryController extends ControllerBase
     }
     //添加分类页面
     public function addAction(){
-        $id = Division::getID();
+        $id = $this->Division_id;
         $category = Category::find(
             "division_id = '{$id}'"
         );
@@ -37,7 +37,7 @@ class CategoryController extends ControllerBase
     }
     //处理编辑分类
     public function editHandleAction(){
-        $Division_id = Division::getID();
+        $Division_id = $this->Division_id;
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
         }
@@ -72,7 +72,7 @@ class CategoryController extends ControllerBase
     }
     //处理添加分类
     public function addHandleAction(){
-        $Division_id = Division::getID();
+        $Division_id = $this->Division_id;
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
         }
@@ -103,5 +103,6 @@ class CategoryController extends ControllerBase
         $form->clear();
         return $this->response->redirect("index");
     }
+    
 }
 
