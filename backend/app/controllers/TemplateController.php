@@ -2,7 +2,8 @@
 class TemplateController extends ControllerBase
 {
 	public function initialize(){
-		$this->division_id = $this->Division_id;//Division::getID();
+		parent::initialize();
+		$this->division_id = $this->Division_id;
 		$this->view->division_id = $this->division_id;
 		
 	}
@@ -110,6 +111,7 @@ class TemplateController extends ControllerBase
 		}
 		
 		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
+		
 	}
 	
 	public function purgeAction($template_id = 0, $category_id = 0){
