@@ -270,6 +270,32 @@ class TemplateController extends ControllerBase
 		
 		$this->view->disable();
 	}
+	
+	public function ajaxcategoryAction(){
+	
+		if($this->request->isPost()){
+			$category_id = $this->request->getPost('category_id');
+			$template_id = $this->request->getPost('template_id');
+				
+			$relation = $this->request->getPost('relation');
+				
+			$not = $relation ? '' : ' NOT ';
+			$sql="SELECT id,name,`path` FROM category WHERE id {$not}
+			in(SELECT category_id FROM category_has_template WHERE template_id = '{$template_id}')";
+			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
+			$new_list = array();
+			foreach($list as $k=>$v){
+			$new_list[$v['id']]=$v['name'];
+			}
+				$this->view->list = array($new_list,$list);
+				$this->view->relation = $relation;
+		}
+		$this->view->partial('template/ajaxcategory');
+	
+		$this->view->disable();
+	}
+	
+	
 	public function ajaxarticleAction($category_id = 0){
 	
 		if($this->request->isPost()){

@@ -8,7 +8,7 @@
 					<a href="/">Home</a> 
 					<i class="icon-angle-right"></i>
 				</li>
-				<li><a href="#">缓存管理</a></li>
+				<li><a href="#">清空缓存</a></li>
 				<li>
 			</ul>
 			<?php if(isset($message_info)) :?>
@@ -57,7 +57,7 @@
                                 	
                                 </span>
                                 <span id="ajaxarticle"></span>
-                                <?php echo \Phalcon\Tag::submitButton(array("清空",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+                                <?php echo \Phalcon\Tag::submitButton(array("预览",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -127,11 +127,7 @@
 					return false;
 				})
 				$('#template_id').live('change',function(){
-					
-					$("#submit").trigger("click");
-				});
-				
-				$('#template_id').live('change',function(){
+					$('#ajaxarticle').html('');
 					$("#submit").trigger("click");
 				});
 
@@ -143,7 +139,7 @@
 				
 
 				$('#category_id').live('change',function(){
-					
+					$('#ajaxarticle').html('');
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 					$.ajax({
@@ -172,15 +168,17 @@
 				previewiframe(template_id,category_id,url,type,0);
 				
 			});
+			
+			
 			function previewiframe(template_id,category_id ,url , type , show_error){
 				
 				if(url){
 					url = url.replace(':template_id',template_id)
-								.replace(':parent_id',category_id);
+								.replace(':category_id',category_id);
 					if(url.indexOf(':article_id')!=-1){
 						url = url.replace(':article_id',window.template_article_id);
 					}
-					var url_html='<div class="alert alert-success">模板类型：'+type+'  地址 :<a href="'+url+'" target="_blank"><strong>'+url+'</strong></a></div>';
+					var url_html='<div class="alert alert-success">引用地址 :<a href="'+url+'" target="_blank"><strong>'+url+'</strong></a></div>';
 					$('#loading').html(url_html+'<iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">');
 				}else if(show_error == 1){
 					$('#loading').html('<div class="alert alert-error">'+type+'类型的模板数据不存在</div>');

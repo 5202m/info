@@ -52,13 +52,13 @@
 							</div>
 							
 							<div class="control-group">
-							  <label class="control-label" for="select_countent">选择模板</label>
+							  <label class="control-label" for="select_countent">样本模板</label>
 							  <div class="controls" id="select_countent">
 								<?php if(isset($template_list)) :?>
 								<?php foreach($template_list as $k=>$v) :
 								
 									if($v['path']){
-										$v['content'] = file_exists($v['path']) ? file_get_contents($v['path']) : '模板文件不存在';
+										$v['content'] = file_exists($v['path']) ? file_get_contents($v['path']) : ('模板文件不存在:'.$v['path']);
 									}
 								?>
 								<div style="float:left;width:120px">

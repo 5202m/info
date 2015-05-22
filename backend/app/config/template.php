@@ -18,10 +18,10 @@ return array(
 					 * content:编辑内容,优先级2
 					 * image:显示的图片
 					 */				
-					array('url'=>'','name'=>'名字1','content'=>'模板内容1','path'=>'xxxx','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'名字2','content'=>'模板内容2','path'=>'','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'名字3','content'=>'模板内容3','path'=>'','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'名字4','content'=>'模板内容3','path'=>'','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'分类','content'=>'','path'=>__DIR__ . '/../../public/template/category.html','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'列表','content'=>'','path'=>__DIR__ . '../../public/template/list.html','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'内容','content'=>'','path'=>__DIR__ . '/../../public/template/detail.html','image'=>'/img/gallery/photo10.jpg'),
+					
 				),
 		
 	);

@@ -1,0 +1,14 @@
+文章ID：
+<?php echo \Phalcon\Tag::textField(array("article_id_input", "class" => "span1 typeahead" , "value"=>$article_id,'onkeyup'=>"value=value.replace(/[^0-9]/g,'')")) ?>
+选择文章：
+<?php 
+echo \Phalcon\Tag::selectStatic(array(
+    "article_id",
+    Article::find(array("visibility='Visible' AND division_id='{$division_id}' AND division_category_id='{$category_id}'",'limit'=>20,'order'=>'id DESC')),
+    "using" => array("id", "title"),
+    "value"=>'',
+	'useEmpty' => true,
+	'emptyText' => '--',
+	'emptyValue' => '',
+	"class"=>'span2'
+));?>
