@@ -87,7 +87,9 @@
                                       
                                       <?php endif ;?>
                                  </td>
-								<td><?php echo $info['tname']?><?php if($info['tstatus']=='Disabled'):?>
+								<td><?php echo $info['tname']?>
+								<span class="label"><?php echo $info['ttype']?></span>
+								<?php if($info['tstatus']=='Disabled'):?>
                                 <span class="label label-error">关闭</span>
                                 <?php endif ;?></td>
 								

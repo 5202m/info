@@ -77,9 +77,10 @@ class TemplateController extends ControllerBase
 		}
 		
 	}
-	public function previewAction($template_id = 0, $category_id = 0){
+	public function previewAction($template_id = 0, $category_id = 0 , $article_id = 0){
 		$message_info = array();
 		$preview_url= '';
+		$type = '';
 		if(!is_numeric($template_id)){
 			$message_info[]='分类不存在';
 		}
@@ -96,17 +97,19 @@ class TemplateController extends ControllerBase
 				}else{
 					$message_info[] = array('模板预览配置不存在');
 				}
-				$this->view->type = $info->type;
+				$type = $info->type;
 			}else{
 				$message_info[] = '无效的模板';
 			}
 		}
+		$this->view->type = $type;
 		$this->view->url = $preview_url;
+		$this->view->urlAll = isset($this->templateDir->preview) ? $this->templateDir->preview : array();
 		if($message_info){
 			$this->view->message_info = $message_info;
 		}
 		
-		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id);
+		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
 	}
 	
 	public function purgeAction($template_id = 0, $category_id = 0){
@@ -245,24 +248,40 @@ class TemplateController extends ControllerBase
 	}
 	public function ajaxtemplateAction(){
 		
-		
 		if($this->request->isPost()){
 			$category_id = $this->request->getPost('category_id'); 
 			$template_id = $this->request->getPost('template_id'); 
-			$sql="SELECT id,name FROM template WHERE id NOT 
+			
+			$relation = $this->request->getPost('relation'); 
+			
+			$not = $relation ? '' : ' NOT ';
+			$sql="SELECT id,name,`type` FROM template WHERE id {$not} 
 					in(SELECT template_id FROM category_has_template WHERE category_id = '{$category_id}')";
 			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
 			$new_list = array();
 			foreach($list as $k=>$v){
 				$new_list[$v['id']]=$v['name'];
 			}
-			$this->view->list = $new_list;
-			
+			$this->view->list = array($new_list,$list);
+			$this->view->relation = $relation;
 		}
 		$this->view->partial('template/ajaxtemplate');
 		
 		$this->view->disable();
 	}
+	public function ajaxarticleAction($category_id = 0){
+	
+		if($this->request->isPost()){
+			$category_id = $this->request->getPost('category_id');
+			$article_id = $this->request->getPost('article_id');
+		}
+		$this->view->category_id = $category_id;
+		$this->view->article_id = $article_id;
+		$this->view->partial('template/ajaxarticle');
+	
+		$this->view->disable();
+	}
+	
 	public function deleteHasCategoryAction($id = 0){
 		$status = false;
 		$msg = 0;

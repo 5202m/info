@@ -111,7 +111,7 @@
 					$.ajax({
 				        type: "POST",
 				        url: '/template/ajaxtemplate',
-				        data: {'ajax':1,'template_id':template_id,'category_id':category_id},
+				        data: {'ajax':1,'template_id':template_id,'category_id':category_id,'relation':0},
 				        async:false,
 				        success: function(data){
 					        $('#ajaxtemplate').html(data);
