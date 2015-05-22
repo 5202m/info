@@ -1,7 +1,7 @@
 <?php
 class ArticleController extends ControllerBase {
 
-	protected $divisionId;
+	//protected $divisionId;
 
     public function initialize() {
     	//$division = new Division();
@@ -37,7 +37,7 @@ class ArticleController extends ControllerBase {
 				}
 			}
 		}
-		$where['division_id'] = Division::getID();
+		$where['division_id'] = $this->Division_id;//Division::getID();
 		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
 		
 		/*$builder = $this->modelsManager->createBuilder()
@@ -124,7 +124,7 @@ class ArticleController extends ControllerBase {
             //$category_id = $this->request->getPost('category_id');
             //$article->status = $this->request->getPost('status');
             $article->division_category_id = $this->request->getPost('division_category_id');
-            $article->division_id = Division::getID();//$this->divisionId;
+            $article->division_id = $this->Division_id;
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
             /*if(!$form->isValid($this->request->getPost())){
@@ -168,7 +168,7 @@ class ArticleController extends ControllerBase {
             //$category_id = $this->request->getPost('category_id');
             //$article->status = $this->request->getPost('status');
             $article->division_category_id = $this->request->getPost('division_category_id');
-            $article->division_id = Division::getID();//$this->divisionId;
+            $article->division_id = $this->Division_id;//
             $article->author = $this->request->getPost('author', 'trim');
             $article->share = $this->request->getPost('share');
 			/*if(!$form->isValid($this->request->getPost())){
@@ -318,9 +318,9 @@ class ArticleController extends ControllerBase {
 	 * Enter description here ...
 	 */
 	private function getDivisionCategory(){
-		$this->divisionId = Division::getID();
+		//$this->divisionId = Division::getID();
 		return $divisionCategory = Category::find(
-            "division_id = {$this->divisionId}"
+            "division_id = {$this->Division_id}"
         );
 	}
 	
