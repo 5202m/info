@@ -8,7 +8,8 @@ class LoginController extends \Phalcon\Mvc\Controller
     {
         $this->session->set('auth', array(
             'id' => $user->id,
-            'name' => $user->username
+            'name' => $user->username,
+            'url'=> $user->url
         ));
     }
     public function startAction(){
