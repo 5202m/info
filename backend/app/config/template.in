@@ -1,15 +1,15 @@
 ﻿<?php 
 return array(
 		'preview'=>array(
-			'category'=>'http://inf.hx9999.com/category/html/:template_id/:category_id.html',
-			'list'=>'http://inf.hx9999.com/list/html/:template_id/:category_id.html',
-			'detail'=>'http://inf.hx9999.com/detail/html/:template_id/:category_id/:article_id.html'
+			'category'=>':url/category/html/:template_id/:category_id.html',
+			'list'=>':url/list/html/:template_id/:category_id.html',
+			'detail'=>':url/detail/html/:template_id/:category_id/:article_id.html'
 		),
 		
 		'purge'=>array(
-				'category'=>'http://inf.hx9999.com/category/purge/:template_id/:parent_id.html',
-				'list'=>'http://inf.hx9999.com/list/purge/:template_id/:parent_id.html',
-				'detail'=>'http://inf.hx9999.com/detail/purge/:template_id/:parent_id.html'
+				'category'=>':url/category/purge/:template_id/:parent_id.html',
+				'list'=>':url/list/purge/:template_id/:parent_id.html',
+				'detail'=>':url/detail/purge/:template_id/:parent_id.html'
 		),
 		
 		'sample'=>array(

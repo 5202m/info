@@ -5,7 +5,7 @@ class TemplateController extends ControllerBase
 		parent::initialize();
 		$this->division_id = $this->Division_id;
 		$this->view->division_id = $this->division_id;
-		
+		$this->view->frontend_baseUrl = $this->url;
 	}
 	public function indexAction()
 	{
