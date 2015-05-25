@@ -72,6 +72,10 @@ class CategoryController extends ControllerBase
     }
     //处理添加分类
     public function addHandleAction(){
+        $setoff = $this->request->getPost('setoff');
+        if($setoff == "setoff"){
+            return $this->response->redirect("index");
+        }
         $Division_id = $this->Division_id;
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
