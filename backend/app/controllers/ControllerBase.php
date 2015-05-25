@@ -3,6 +3,7 @@
 class ControllerBase extends \Phalcon\Mvc\Controller
 {
     public $Division_id;
+    public $url;
     public function initialize(){
         if (!$this->session->has("auth")) {
             return $this->response->redirect('/login/index');
@@ -10,6 +11,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
             $name = $this->session->get("auth");
             $id = $name['id'];
             $this->Division_id = $id;
+            $this->url = $name['url'];
         }
     }
     
