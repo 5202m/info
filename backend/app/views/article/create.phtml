@@ -44,10 +44,13 @@
 							  <label class="control-label" for="language">语言 </label>
 							  <div class="controls">
 								<select name="language" id="language">
-									<!--option value="">请选择</option-->
+									<!--option value="">请选择</option>
 									<option value="cn">CN</option>
 									<option value="tw">TW</option>
-									<option value="en">EN</option>
+									<option value="en">EN</option-->
+									<?php foreach($language as $k => $v):?>
+									<option value="<?php echo $k;?>"><?php echo $v;?></option>
+									<?php endforeach;?>
 								</select>
 								<span id="language_msg" class="help-inline"></span>
 							  </div>
@@ -62,7 +65,7 @@
 				                    $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
 				                    foreach ($items as $vs) :
 				                        ?>
-									<option value="<?php echo $vs['id'];?>">
+									<option value="<?php echo $vs['id'];?>"<?php if($vs['id']==$cateId):?> selected="selected"<?php endif;?>>
 									<?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
     								<?php echo $vs['name']; ?>
     								</option>
@@ -159,7 +162,7 @@
 							  </div>
 							</div>
 							<div class="form-actions">
-							  <button id="submit" type="submit" class="btn btn-primary">保存</button>
+							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
 							  <button type="reset" class="btn">取消</button>
 							</div>
 						  </fieldset>

@@ -175,6 +175,15 @@ $(document).ready(function(){
 			$("#successModal").modal("show");
 		}
 	});
+	$('#btnAdd').click(function(){
+		var cateId = $('#division_category_id').val();
+		if(cateId==''){
+			location.href='/article/create';
+		}
+		else{
+			location.href='/article/create/'+$('#division_category_id').val();
+		}
+	});
 	/*批量删除	end*/
 });
 

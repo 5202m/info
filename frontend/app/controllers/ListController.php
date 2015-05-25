@@ -79,7 +79,7 @@ class ListController extends ControllerBase
     		echo 'Article List Not Found';
     	}else{
     		$pages = $this->paginator($category_id, $limit, $page);
-    		print_r($pages);
+    		
     		$view = new \Phalcon\Mvc\View();
     		$view->setViewsDir($this->basedir.'/template');
     		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);

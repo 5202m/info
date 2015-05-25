@@ -3,6 +3,7 @@ class ArticleController extends ControllerBase {
 
 	//protected $divisionId;
 
+	private $language = array('cn'=>'简体', 'tw'=>'繁体', 'en'=>'英语');
     public function initialize() {
     	//$division = new Division();
         //$this->divisionId = Division::getID();
@@ -15,6 +16,7 @@ class ArticleController extends ControllerBase {
     public function indexAction(){
 		$this->removeSearchSession();
 		$this->listAction(1, 10);
+		$this->view->partial('article/list');
     }
     
     /**
@@ -72,6 +74,7 @@ class ArticleController extends ControllerBase {
         
         $this->view->divisionCategory = $divisionCategory;
 		$page->pageSize = $appendix['pageSize'];
+		$this->view->language = $this->language;
 		$this->view->page = $page;
 	}
 	
@@ -150,12 +153,13 @@ class ArticleController extends ControllerBase {
         $this->view->divisionCategory = $divisionCategory;
 		$this->view->article = $article;
 		$this->view->images = $images;
+        $this->view->language = $this->language;
 	}
 	
 	/**
 	 * 添加文章
 	 */
-	public function createAction(){
+	public function createAction($cateId = ''){
 		if ($this->request->isPost()) {
 			//$this->db->begin();
 			//$form = new ArticleForm();
@@ -217,8 +221,10 @@ class ArticleController extends ControllerBase {
             }
 		}
 		
+		$this->view->cateId = $cateId;
 		$divisionCategory = $this->getDivisionCategory();
         $this->view->divisionCategory = $divisionCategory;
+        $this->view->language = $this->language;
 	}
 	
 	/**

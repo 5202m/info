@@ -48,6 +48,9 @@
 									<option value="cn"<?php if($article->language=='cn'):?> selected="selected"<?php endif;?>>CN</option>
 									<option value="tw"<?php if($article->language=='tw'):?> selected="selected"<?php endif;?>>TW</option>
 									<option value="en"<?php if($article->language=='en'):?> selected="selected"<?php endif;?>>EN</option>
+									<?php foreach($language as $k => $v):?>
+									<option value="<?php echo $k;?>"<?php if($article->language==$k):?> selected="selected"<?php endif;?>><?php echo $v;?></option>
+									<?php endforeach;?>
 								</select>
 								<span id="language_msg" class="help-inline"></span>
 							  </div>
@@ -160,7 +163,7 @@
 							</div>
 							<div class="form-actions">
 							  <input type="hidden" name="id" value="<?php echo $article->id;?>" />
-							  <button id="submit" type="submit" class="btn btn-primary">保存</button>
+							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
 							  <button type="reset" class="btn">取消</button>
 							</div>
 						  </fieldset>
