@@ -162,7 +162,8 @@
 				var url = "<?php echo $url ?>";
 				var type ="<?php echo $type?>";
 				window.template_article_id = <?php echo $getData['article_id']?>;
-				if(window.template_article_id){
+	
+				if(type == 'Detail'){
 					getarticle();
 				}
 				previewiframe(template_id,category_id,url,type,0);
