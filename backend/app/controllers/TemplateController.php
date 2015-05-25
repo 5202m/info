@@ -55,7 +55,7 @@ class TemplateController extends ControllerBase
 			$last_id = Template::insert($params);
 			$isError = true ;
 			if(is_numeric($last_id)){
-				$message_info = array('success'=>isset($params['id']) ? '修改成功' : '添加成功');
+				$message_info = array('success'=>(isset($params['id']) && $params['id']) ? '修改成功' : '添加成功');
 				$isSuccess = false ; 
 			}else{
 				$message_info = $last_id;
