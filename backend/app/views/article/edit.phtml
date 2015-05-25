@@ -44,10 +44,10 @@
 							  <label class="control-label" for="language">语言 </label>
 							  <div class="controls">
 								<select name="language" id="language">
-									<!--option value="">请选择</option-->
+									<!--option value="">请选择</option>
 									<option value="cn"<?php if($article->language=='cn'):?> selected="selected"<?php endif;?>>CN</option>
 									<option value="tw"<?php if($article->language=='tw'):?> selected="selected"<?php endif;?>>TW</option>
-									<option value="en"<?php if($article->language=='en'):?> selected="selected"<?php endif;?>>EN</option>
+									<option value="en"<?php if($article->language=='en'):?> selected="selected"<?php endif;?>>EN</option-->
 									<?php foreach($language as $k => $v):?>
 									<option value="<?php echo $k;?>"<?php if($article->language==$k):?> selected="selected"<?php endif;?>><?php echo $v;?></option>
 									<?php endforeach;?>
@@ -164,7 +164,7 @@
 							<div class="form-actions">
 							  <input type="hidden" name="id" value="<?php echo $article->id;?>" />
 							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
-							  <button type="reset" class="btn">取消</button>
+							  <input type="button" id="reset" class="btn" value="取消" />
 							</div>
 						  </fieldset>
 						</form>   
@@ -256,6 +256,10 @@
 							return false;
 						}
 						return true;
+					});
+					$('#reset').click(function(){
+						$('input[type="text"],#division_category_id,#content').val('');
+						editor.html('');
 					});
 					<?php if(isset($successMessage)):
 						echo $successMessage;
