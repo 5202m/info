@@ -26,8 +26,11 @@ class Article extends \Phalcon\Mvc\Model
 				if($k=='title'){
 					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
 				}
-				elseif($k=='ctime'){
-					$strWhere[] = "article.{$k} LIKE '{$v}%'";
+				elseif($k=='bctime'){
+					$strWhere[] = "article.ctime >= '{$v} 00:00:00'";
+				}
+				elseif($k=='ectime'){
+					$strWhere[] = "article.ctime <= '{$v} 23:59:59'";
 				}
 				else{
 					$strWhere[]  =  "article.{$k} = '{$v}'";

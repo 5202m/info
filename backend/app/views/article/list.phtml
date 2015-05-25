@@ -45,6 +45,13 @@
 	    								</option>
 										<?php endforeach;?>
 									</select>
+									语言：
+									<select name="language" id="language" style="width:auto;">
+										<option value="">全部</option>
+										<?php foreach($language as $k => $v):?>
+										<option value="<?php echo $k;?>"<?php if(isset($where['language']) && $where['language']==$k):?> selected="selected"<?php endif;?>><?php echo $v;?></option>
+										<?php endforeach;?>
+									</select>
 									可见性：
 									<select name="visibility" id="visibility" style="width:auto;">
 										<option value="">全部</option>
@@ -57,11 +64,22 @@
 										<option value="Y"<?php if(isset($where['share']) && $where['share']=='Y'):?> selected="selected"<?php endif;?>>是</option>	
 										<option value="N"<?php if(isset($where['share']) && $where['share']=='N'):?> selected="selected"<?php endif;?>>否</option>		
 									</select>-->
-									日期：<input type="text" name="ctime" id="ctime" class="datepicker" value="<?php echo isset($where['ctime'])?$where['ctime']:'';?>" />
-									<input id="submit" type="submit" value="确定" class="btn btn-primary btn-search" />
-									<input id="btnHidden" type="button" value="隐藏" class="btn btn-primary btn-search" url="/article/delete" />
-									<input id="btnShow" type="button" value="显示" class="btn btn-primary btn-search" url="/article/delete" />
+									开始时间：<input type="text" name="bctime" id="bctime" class="datepicker" value="<?php echo isset($where['bctime'])?$where['bctime']:'';?>" style="width:80px;" />
+									结束时间：<input type="text" name="ectime" id="ectime" class="datepicker" value="<?php echo isset($where['ectime'])?$where['ectime']:'';?>" style="width:80px;" />
+									<input id="submit" type="submit" value="查询" class="btn btn-primary btn-search" />
+									<input id="btnAdd" type="button" value="添加文章" class="btn btn-primary btn-search" />
 									</form>
+								</div>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="">
+								<div class="" id="" style="border:1px solid #eee;margin:5px 0;">
+									<span style="display:inline-block;padding:5px;">
+										批量操作：
+										<input id="btnShow" type="button" value="显示" class="btn btn-primary btn-search" url="/article/delete" />
+										<input id="btnHidden" type="button" value="隐藏" class="btn btn-primary btn-search" url="/article/delete" />
+									</span>
 								</div>
 							</div>
 						</div>
@@ -86,7 +104,7 @@
 								<td><?php echo $item->title;?></td>
 								<!--td class="center"><?php //echo $item->cname;?></td-->
 								<td class="center"><?php echo $item->author;?></td>
-								<td><?php echo $item->language;?></td>
+								<td><?php echo $language[$item->language];?></td>
 								<td><?php echo $item->share=='N'?'<span class="label label-error">否</span>':'<span class="label label-success">是</span>';?></td>
 								<td class="center">
 									<?php echo $item->visibility=='Visible'?'<span class="label label-success">显示</span>':'<span class="label label-error">隐藏</span>';?>
@@ -96,7 +114,7 @@
 									<!--a class="btn btn-success" href="#">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a-->
-									<a class="btn btn-info" href="/article/edit/<?php echo $item->id;?>">
+									<a title="编辑文章" class="btn btn-info" href="/article/edit/<?php echo $item->id;?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
 									<!--a class="btn btn-danger" href="#">
