@@ -25,7 +25,8 @@ class Template extends \Phalcon\Mvc\Model
 		
 		$builder = $modelsManager->createBuilder()
 					->columns('template.*')
-					->from('template');
+					->from('template')
+					->orderBy('template.id DESC');
 		$strWhere = null;
 		if($where){
 			
