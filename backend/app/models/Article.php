@@ -4,7 +4,7 @@ class Article extends \Phalcon\Mvc\Model
 {
 	public function initialize(){
 		//$this->hasOne('id', 'Category', 'division_category_id');
-		$this->skipAttributes(array('from', 'status', 'ctime'));
+		$this->skipAttributes(array('from', 'status', 'ctime', 'mtime'));
 	}
 	
 	/**
