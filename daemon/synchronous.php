@@ -5,46 +5,56 @@ class SynchronousWorker extends Worker {
 	// $this->logger = $logger;
 	// }
 	
-	// protected $logger;
-	protected static $dbh_in, $dbh_out;
-	public function __construct() {
+	protected $config;
+	protected static $dbh_export, $dbh_import;
+	public function __construct($config) {
+		$this->config = $config;
 	}
 	public function run() {
-		$dbhost = '192.168.6.1'; // 数据库服务器
-		$dbuser = 'inf'; // 数据库用户名
-		$dbpass = 'inf'; // 数据库密码
-		$dbname = 'inf'; // 数据库名
-		
-		self::$dbh_out = new PDO ( "mysql:host=$dbhost;port=3306;dbname=$dbname", $dbuser, $dbpass, array (
-				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-				PDO::MYSQL_ATTR_COMPRESS => true,
-				PDO::ATTR_PERSISTENT => true 
-		) );
-		
-		$dbhost = 'localhost'; // 数据库服务器
-		$dbuser = 'gwfx'; // 数据库用户名
-		$dbpass = 'gwfx'; // 数据库密码
-		$dbname = 'whdata';
-		self::$dbh_in = new PDO ( "mysql:host=$dbhost;port=3307;dbname=$dbname", $dbuser, $dbpass, array (
-				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-				PDO::MYSQL_ATTR_COMPRESS => true 
-		) );
+		try {
+			$dbhost = $this->config['import']['dbhost'];
+			$dbuser = $this->config['import']['dbuser'];
+			$dbpass = $this->config['import']['dbpass'];
+			$dbname = $this->config['import']['dbname'];
+			
+			self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=3306;dbname=$dbname", $dbuser, $dbpass, array (
+					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+					PDO::MYSQL_ATTR_COMPRESS => true,
+					PDO::ATTR_PERSISTENT => true 
+			) );
+				
+			$dbhost1 = $this->config['export']['dbhost'];
+			$dbuser1 = $this->config['export']['dbuser'];
+			$dbpass1 = $this->config['export']['dbpass'];
+			$dbname1 = $this->config['export']['dbname'];
+			self::$dbh_export = new PDO ( "mysql:host=$dbhost1;port=3306;dbname=$dbname1", $dbuser1, $dbpass1, array (
+					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+					PDO::MYSQL_ATTR_COMPRESS => true 
+			) );
+
+			//$this->logger ( 'DB', 'connected' );
+		} catch ( PDOException $e ) {
+                        $this->logger ( 'Exception real_news', $e->getMessage( ) );
+                } catch ( Exception $e ) {
+                        $this->logger ( 'Exception real_news', $e->getMessage( ) );
+                }
+
 	}
 	protected function getInstance($io) {
-		if ($io == 'in') {
-			return self::$dbh_in;
+		if ($io == 'export' ){
+			return self::$dbh_export;
 		} else {
-			return self::$dbh_out;
+			return self::$dbh_import;
 		}
 	}
-	public function logging($type, $message) {
+	public function logger($type, $message) {
 		$log = sprintf ( "%s\t%s\t%s\t%s\n", date ( 'Y-m-d H:i:s' ), $this->getThreadId (), $type, $message );
-		file_put_contents ( "debug.log", $log, FILE_APPEND );
+		file_put_contents ( sprintf("debug.%s.log", date ( 'Y-m-d' )), $log, FILE_APPEND );
 	}
 	public function savepoints($division_id, $category_id, $type, $position) {
-		$dbo = $this->getInstance ( 'out' );
+		$db = $this->getInstance ( 'import' );
 		$sql = "REPLACE INTO `synchronous` (`division_id`, `category_id`, `type`, `position`) VALUES (:division_id, :category_id, :type, :position);";
-		$sth = $dbo->prepare ( $sql );
+		$sth = $db->prepare ( $sql );
 		$sth->bindValue ( ':division_id', $division_id );
 		$sth->bindValue ( ':category_id', $category_id );
 		$sth->bindValue ( ':type', $type );
@@ -52,9 +62,9 @@ class SynchronousWorker extends Worker {
 		return $sth->execute ();
 	}
 	public function getpoints($division_id, $category_id, $type) {
-		$dbo = $this->getInstance ( 'out' );
+		$db = $this->getInstance ( 'import' );
 		$sql = "select position from `synchronous` where division_id=:division_id and category_id=:category_id and type=:type";
-		$sth = $dbo->prepare ( $sql );
+		$sth = $db->prepare ( $sql );
 		$sth->bindValue ( ':division_id', $division_id );
 		$sth->bindValue ( ':category_id', $category_id );
 		$sth->bindValue ( ':type', $type );
@@ -69,20 +79,19 @@ class SynchronousWorker extends Worker {
 	}
 }
 
-/* the collectable class implements machinery for Pool::collect */
-class Work extends Stackable {
+class RealNewsWork extends Stackable {
 	public $division_id = 5;
 	public function __construct($lang, $dbmaps) {
 		$this->dbmaps = $dbmaps;
 		$this->lang = $lang;
 	}
 	public function run() {
-		// $this->worker->logger->log("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId() );
+		//$this->worker->logger('real_news', sprintf("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId()));
 		try {
-			$dbi = $this->worker->getInstance ( 'in' );
-			$dbo = $this->worker->getInstance ( 'out' );
-			$dbi->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$dbo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$db_export = $this->worker->getInstance ( 'export' );
+			$db_import = $this->worker->getInstance ( 'import' );
+			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
@@ -91,13 +100,13 @@ class Work extends Stackable {
 				$position = $this->worker->getpoints ( $division_id, $category_id, $type, $position );
 				
 				$sql = "SELECT no as id, name as title, content, if(language='zh','cn',language) as language, newstime as ctime, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description FROM real_news WHERE LANGUAGE = '" . $this->lang . "' AND TYPE='" . $type . "' AND no > '" . $position . "' ORDER BY no asc";
-				$query = $dbi->query ( $sql );
-				$this->worker->logging ( 'SQL', $query->queryString );
+				$query = $db_export->query ( $sql );
+				//$this->worker->logger ( 'SQL', $query->queryString );
 				
 				while ( $line = $query->fetch ( PDO::FETCH_OBJ ) ) {
 					
 					$sql = "insert into article (`division_id`, `division_category_id`,  `title`,  `content`, `author`,  `keyword`,  `description`,  `image`,  `language`,  `source`,  `share`,  `visibility`,  `status`,  `ctime`,  `mtime`) values(:division_id, :division_category_id, :title, :content, :author, :keyword, :description, :image,  :language, :source, :share, :visibility, :status, :ctime, :mtime)";
-					$sth = $dbo->prepare ( $sql );
+					$sth = $db_import->prepare ( $sql );
 					$sth->bindValue ( ':division_id', $this->division_id );
 					$sth->bindValue ( ':division_category_id', $division_category_id );
 					$sth->bindValue ( ':title', $line->title );
@@ -115,7 +124,7 @@ class Work extends Stackable {
 					$sth->bindValue ( ':mtime', null );
 					$sth->execute ();
 					
-					$this->worker->logging ( 'real_news', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title ) );
+					$this->worker->logger ( 'real_news', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title ) );
 					if ($line->id) {
 						$position = $line->id;
 					}
@@ -123,9 +132,9 @@ class Work extends Stackable {
 				}
 			}
 		} catch ( PDOException $e ) {
-			$this->worker->logging ( 'Exception real_news', $e );
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
 		} catch ( Exception $e ) {
-			$this->worker->logging ( 'Exception real_news', $e );
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
 		}
 	}
 	public function import() {
@@ -134,36 +143,246 @@ class Work extends Stackable {
 	}
 }
 
-$pool = new Pool ( 16, \SynchronousWorker::class, [ ] );
+class NewsWork extends Stackable {
+	public $division_id = 5;
+	public function __construct($lang, $dbmaps) {
+		$this->dbmaps = $dbmaps;
+		$this->lang = $lang;
+	}
+	public function run() {
+		//$this->worker->logger('Thread - news', "%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId() );
+		try {
+			$db_import = $this->worker->getInstance ( 'import' );
+			$db_export = $this->worker->getInstance ( 'export' );
+			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$position = 1;
+			foreach ( $this->dbmaps as $division_category_id => $type ) {
+				$division_id = $this->division_id;
+				$category_id = $division_category_id;
+				
+				$position = $this->worker->getpoints ( $division_id, $category_id, $type, $position );
+				
+				$sql = "SELECT no as id, title, description as content, author, if(language='zh','cn',language) as language, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description, publish as ctime, updatetime as mtime, image_b1, image_b2, image_b3, image_b4, image_s1, image_s2, image_s3, image_s4,video FROM news WHERE kind='".$type."' AND NO IS  NOT NULL  AND display = 0 AND  LANGUAGE = '".$this->lang."' AND  (equipment IS NULL OR  equipment!='mobile') AND no > '" . $position . "' ORDER BY NO asc";
+				$query = $db_export->query ( $sql );
+				//$this->worker->logger ( 'SQL', $query->queryString );
+				
+				while ( $line = $query->fetch ( PDO::FETCH_OBJ ) ) {
+					
+					$sql = "insert into article (`division_id`, `division_category_id`,  `title`,  `content`, `author`,  `keyword`,  `description`,  `image`,  `language`,  `source`,  `share`, `attribute`, `visibility`,  `status`,  `ctime`,  `mtime`) values(:division_id, :division_category_id, :title, :content, :author, :keyword, :description, :image,  :language, :source, :share, :attribute, :visibility, :status, :ctime, :mtime)";
+					$sth = $db_import->prepare ( $sql );
 
-// foreach (range(0, 100) as $number) {
-// $pool->submit(new Work($number));
-// }
+					$attribute = serialize ( array(
+						'image_b1' => $line->image_b1, 
+						'image_b2' => $line->image_b2, 
+						'image_b3' => $line->image_b2, 
+						'image_b4' => $line->image_b4, 
+						'image_s1' => $line->image_s1, 
+						'image_s2' => $line->image_s2, 
+						'image_s3' => $line->image_s3, 
+						'image_s4' => $line->image_s4,
+						'video' => $line->video
+						));
 
-// print_r($dbh);
+					$sth->bindValue ( ':division_id', $this->division_id );
+					$sth->bindValue ( ':division_category_id', $division_category_id );
+					$sth->bindValue ( ':title', $line->title );
+					$sth->bindValue ( ':content', $line->content );
+					$sth->bindValue ( ':author', $line->author );
+					$sth->bindValue ( ':keyword', $line->keyword );
+					$sth->bindValue ( ':description', $line->description );
+					$sth->bindValue ( ':image', null );
+					$sth->bindValue ( ':language', $line->language );
+					$sth->bindValue ( ':source', 'GWFX' );
+					$sth->bindValue ( ':share', 'N' );
+					$sth->bindValue ( ':attribute', $attribute );
+					$sth->bindValue ( ':visibility', 'Visible' );
+					$sth->bindValue ( ':status', 'Enabled' );
+					$sth->bindValue ( ':ctime', $line->ctime );
+					$sth->bindValue ( ':mtime', $line->mtime );
+					$sth->execute ();
+					
+					$this->worker->logger ( 'news', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title ) );
+					if ($line->id) {
+						$position = $line->id;
+					}
+					$this->worker->savepoints ( $division_id, $category_id, $type, $position );
+				}
+			}
+		} catch ( PDOException $e ) {
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
+		} catch ( Exception $e ) {
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
+		}
+	}
+	public function import() {
+	}
+	public function export() {
+	}
+}
 
-// $order = $account['order'];
-// printf("%s\n",$order);
-// print_r($members);
-$dbmaps = array (
-		'1' => '1',
-		'2' => '2',
-		'3' => '3',
-		'4' => '4',
-		'5' => '5' 
-);
 
-$pool->submit ( new Work ( 'zh', $dbmaps ) );
-$pool->submit ( new Work ( 'tw', array (
-		'20' => '1',
-		'21' => '2',
-		'22' => '3',
-		'23' => '4',
-		'24' => '5' 
-) ) );
-// unset($account['order']);
 
-$pool->shutdown ();
 
+class Synchronous {
+	/* config */
+	const LISTEN = "tcp://192.168.2.15:5555";
+	const MAXCONN = 32;
+	const pidfile = __CLASS__;
+	const uid	= 80;
+	const gid	= 80;
+	const config	= array (
+		'export' => array (
+			'dbhost' => '127.0.0.1',
+			'dbport' => '3306',
+			'dbuser' => 'gwfx',
+			'dbpass' => 'gwfx',
+			'dbname' => 'whdata'
+		),
+		'import' => array (
+                        'dbhost' => '192.168.6.1',
+                        'dbport' => '3306',
+                        'dbuser' => 'inf',
+                        'dbpass' => 'inf',
+                        'dbname' => 'inf'
+		)
+		);
+	const sleep	= 5;
+	
+	protected $pool = NULL;
+
+	public function __construct() {
+		$this->pidfile = '/var/run/'.self::pidfile.'.pid';
+	}
+	private function daemon(){
+		if (file_exists($this->pidfile)) {
+			echo "The file $this->pidfile exists.\n";
+			exit();
+		}
+		
+		$pid = pcntl_fork();
+		if ($pid == -1) {
+			 die('could not fork');
+		} else if ($pid) {
+			 // we are the parent
+			 //pcntl_wait($status); //Protect against Zombie children
+			exit($pid);
+		} else {
+			// we are the child
+			file_put_contents($this->pidfile, getmypid());
+			posix_setuid(self::uid);
+			posix_setgid(self::gid);
+			return(getmypid());
+		}
+	}
+	private function start(){
+		$pid = $this->daemon();
+		for(;;){
+			$pool = new Pool ( self::MAXCONN , \SynchronousWorker::class, array(self::config) );
+		
+	
+			$pool->submit ( new RealNewsWork ( 'zh', array(
+					'1' => '1',
+                                        '2' => '2',
+                                        '3' => '3',
+                                        '4' => '4',
+                                        '5' => '5'
+			)));
+			$pool->submit ( new RealNewsWork ( 'tw', array (
+					'20' => '1',
+					'21' => '2',
+					'22' => '3',
+					'23' => '4',
+					'24' => '5' 
+			) ) );
+	
+		 	$pool->submit ( new NewsWork ('zh', array (
+	                                '20' => '00',
+	                                '20' => '01',
+	                                '21' => '02',
+	                                '22' => '03',
+	                                '23' => '04',
+	                                '24' => '05',
+	                                '24' => '06',
+	                                '24' => '07',
+	                                '24' => '08',
+	                                '24' => '09',
+	                                '24' => '10'
+	                )));	
+			
+			$pool->submit ( new NewsWork ('tw', array (
+	                                '20' => '00',
+	                                '20' => '01',
+	                                '21' => '02',
+	                                '22' => '03',
+	                                '23' => '04',
+	                                '24' => '05',
+	                                '24' => '06',
+	                                '24' => '07',
+	                                '24' => '08',
+	                                '24' => '09',
+	                                '24' => '10'
+	                )));	
+                        $pool->submit ( new NewsWork ('en', array (
+                                        '20' => '00',
+                                        '20' => '01',
+                                        '21' => '02',
+                                        '22' => '03',
+                                        '23' => '04',
+                                        '24' => '05',
+                                        '24' => '06',
+                                        '24' => '07',
+                                        '24' => '08',
+                                        '24' => '09',
+                                        '24' => '10'
+                        )));
+
+			$pool->shutdown ();
+	
+
+			sleep(self::sleep);	
+		}
+	}
+	private function stop(){
+
+		if (file_exists($this->pidfile)) {
+			$pid = file_get_contents($this->pidfile);
+			posix_kill($pid, 9); 
+			unlink($this->pidfile);
+		}
+	}
+	private function status(){	
+		if (file_exists($this->pidfile)) {
+			$pid = file_get_contents($this->pidfile);
+			system(sprintf("ps ax | grep %s | grep -v grep", $pid));
+		}
+	}
+	private function help($proc){
+		printf("%s start | stop | restart | status | help \n", $proc);
+	}
+	public function main($argv){
+
+		if(count($argv) < 2){
+			$this->help($argv[0]);
+			printf("please input help parameter\n");
+			exit();
+		}
+		if($argv[1] === 'stop'){
+			$this->stop();
+		}else if($argv[1] === 'start'){
+			$this->start();
+                }else if($argv[1] === 'restart'){
+			$this->stop();
+                        $this->start();
+		}else if($argv[1] === 'status'){
+			$this->status();
+		}else{
+			$this->help($argv[0]);
+		}
+	}
+}
+
+$synchronous = new Synchronous();
+$synchronous->main($argv);
 ?>
 
