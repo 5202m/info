@@ -44,7 +44,7 @@
 							  <label class="control-label" for="language">语言 </label>
 							  <div class="controls">
 								<select name="language" id="language">
-									<option value="">请选择</option>
+									<!--option value="">请选择</option-->
 									<option value="cn"<?php if($article->language=='cn'):?> selected="selected"<?php endif;?>>CN</option>
 									<option value="tw"<?php if($article->language=='tw'):?> selected="selected"<?php endif;?>>TW</option>
 									<option value="en"<?php if($article->language=='en'):?> selected="selected"<?php endif;?>>EN</option>
@@ -93,12 +93,12 @@
 							<div class="control-group">
 								<label class="control-label">可见性</label>
 								<div class="controls">
-								  <label class="radio">
-									<input name="visibility" type="radio" value="Visible"<?php if($article->visibility=='Visible'):?> checked="checked"<?php endif;?> /> 可见
+								  <label class="radio" style="display:inline-block;width:100px;">
+									<input name="visibility" type="radio" value="Visible"<?php if($article->visibility=='Visible'):?> checked="checked"<?php endif;?> /> 显示
 								  </label>
-								  <div style="clear:both"></div>
-								  <label class="radio">
-									<input name="visibility" type="radio" value="Hidden"<?php if($article->visibility=='Hidden'):?> checked="checked"<?php endif;?> /> 不可见
+								  <!--div style="clear:both"></div-->
+								  <label class="radio" style="display:inline-block;width:100px;">
+									<input name="visibility" type="radio" value="Hidden"<?php if($article->visibility=='Hidden'):?> checked="checked"<?php endif;?> /> 隐藏
 								  </label>
 								  <span id="visibility_msg" class="help-inline"></span>
 								</div>
@@ -106,11 +106,11 @@
 							<div class="control-group">
 								<label class="control-label">分享</label>
 								<div class="controls">
-								  <label class="radio">
+								  <label class="radio" style="display:inline-block;width:100px;">
 									<input name="share" type="radio" value="Y"<?php if($article->share=='Y'):?> checked="checked"<?php endif;?> /> 是
 								  </label>
-								  <div style="clear:both"></div>
-								  <label class="radio">
+								  <!--div style="clear:both"></div-->
+								  <label class="radio" style="display:inline-block;width:100px;">
 									<input name="share" type="radio" value="N"<?php if($article->share=='N'):?> checked="checked"<?php endif;?> /> 否
 								  </label>
 								  <span id="share_msg" class="help-inline"></span>
@@ -136,7 +136,7 @@
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="content">文章内容</label>
 							  <div class="controls">
-								<textarea class="cleditor" id="content" name="content" rows="8" style="width:700px;height:300px;"><?php echo $article->content;?></textarea>
+								<textarea class="cleditor" id="content" name="content" rows="8" style="width:100%;height:500px;"><?php echo $article->content;?></textarea>
 							  	<span id="content_msg" class="help-inline"></span>
 							  </div>
 							</div>         
