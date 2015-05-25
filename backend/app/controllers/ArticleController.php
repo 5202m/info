@@ -6,6 +6,7 @@ class ArticleController extends ControllerBase {
     public function initialize() {
     	//$division = new Division();
         //$this->divisionId = Division::getID();
+        parent::initialize();
     }
     
 	/**
