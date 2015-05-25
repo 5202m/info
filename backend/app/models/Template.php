@@ -3,7 +3,7 @@ class Template extends \Phalcon\Mvc\Model
 {
 	public function initialize()
 	{
-		$this->skipAttributes(array('ctime'));
+		$this->skipAttributes(array('ctime','mtime'));
 	}
 	static function insert($params = null){
 		
