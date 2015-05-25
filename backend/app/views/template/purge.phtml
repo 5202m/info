@@ -57,7 +57,7 @@
                                 	
                                 </span>
                                 <span id="ajaxarticle"></span>
-                                <?php echo \Phalcon\Tag::submitButton(array("预览",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+                                <?php echo \Phalcon\Tag::submitButton(array("清空",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -173,6 +173,7 @@
 			function previewiframe(template_id,category_id ,url , type , show_error){
 				
 				if(url){
+					url = url.replace(':url','<?php echo $frontend_baseUrl ?>');
 					url = url.replace(':template_id',template_id)
 								.replace(':parent_id',category_id);
 					if(url.indexOf(':article_id')!=-1){

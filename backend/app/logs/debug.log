@@ -4781,3 +4781,41 @@
 [Mon, 25 May 15 05:08:31 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
 [Mon, 25 May 15 05:08:31 +0200][INFO] DESCRIBE `category`
 [Mon, 25 May 15 05:08:31 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 05:12:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'article' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 05:12:55 +0200][INFO] DESCRIBE `article`
+[Mon, 25 May 15 05:12:55 +0200][INFO] SELECT `article`.`id`, `article`.`division_id`, `article`.`category_id`, `article`.`division_category_id`, `article`.`title`, `article`.`content`, `article`.`author`, `article`.`keyword`, `article`.`description`, `article`.`image`, `article`.`language`, `article`.`source`, `article`.`share`, `article`.`attribute`, `article`.`visibility`, `article`.`status`, `article`.`ctime`, `article`.`mtime` FROM `article` WHERE `article`.`division_id` = '3' ORDER BY `article`.`id` DESC LIMIT 10
+[Mon, 25 May 15 05:12:55 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` WHERE `article`.`division_id` = '3'
+[Mon, 25 May 15 05:12:55 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 05:12:55 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 05:12:55 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:23:16 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:23:16 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:23:16 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:26:51 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:26:51 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:26:51 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:27:40 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:27:40 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:27:40 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:29:19 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:29:19 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:29:19 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:30:01 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:30:01 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:30:01 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:30:18 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'article' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:30:18 +0200][INFO] DESCRIBE `article`
+[Mon, 25 May 15 08:30:18 +0200][INFO] SELECT `article`.`id`, `article`.`division_id`, `article`.`category_id`, `article`.`division_category_id`, `article`.`title`, `article`.`content`, `article`.`author`, `article`.`keyword`, `article`.`description`, `article`.`image`, `article`.`language`, `article`.`source`, `article`.`share`, `article`.`attribute`, `article`.`visibility`, `article`.`status`, `article`.`ctime`, `article`.`mtime` FROM `article` WHERE `article`.`division_id` = '3' ORDER BY `article`.`id` DESC LIMIT 10
+[Mon, 25 May 15 08:30:18 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` WHERE `article`.`division_id` = '3'
+[Mon, 25 May 15 08:30:18 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:30:18 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:30:18 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Mon, 25 May 15 08:30:26 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'article' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:30:26 +0200][INFO] DESCRIBE `article`
+[Mon, 25 May 15 08:30:26 +0200][INFO] SELECT `article`.`id`, `article`.`division_id`, `article`.`category_id`, `article`.`division_category_id`, `article`.`title`, `article`.`content`, `article`.`author`, `article`.`keyword`, `article`.`description`, `article`.`image`, `article`.`language`, `article`.`source`, `article`.`share`, `article`.`attribute`, `article`.`visibility`, `article`.`status`, `article`.`ctime`, `article`.`mtime` FROM `article` WHERE `article`.`id` = :0 LIMIT 1
+[Mon, 25 May 15 08:30:26 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'images' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:30:26 +0200][INFO] DESCRIBE `images`
+[Mon, 25 May 15 08:30:26 +0200][INFO] SELECT `images`.`id`, `images`.`article_id`, `images`.`url`, `images`.`ctime` FROM `images` WHERE `images`.`article_id` = :0 LIMIT 1
+[Mon, 25 May 15 08:30:26 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Mon, 25 May 15 08:30:26 +0200][INFO] DESCRIBE `category`
+[Mon, 25 May 15 08:30:26 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3

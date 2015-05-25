@@ -44,7 +44,7 @@
 							  <label class="control-label" for="language">语言 </label>
 							  <div class="controls">
 								<select name="language" id="language">
-									<option value="">请选择</option>
+									<!--option value="">请选择</option-->
 									<option value="cn">CN</option>
 									<option value="tw">TW</option>
 									<option value="en">EN</option>
@@ -93,12 +93,12 @@
 							<div class="control-group">
 								<label class="control-label">可见性</label>
 								<div class="controls">
-								  <label class="radio">
-									<input name="visibility" type="radio" value="Visible" /> 可见
+								  <label class="radio" style="display:inline-block;width:100px;">
+									<input name="visibility" type="radio" value="Visible" /> 显示
 								  </label>
-								  <div style="clear:both"></div>
-								  <label class="radio">
-									<input name="visibility" type="radio" value="Hidden" /> 不可见
+								  <!--div style="clear:both"></div-->
+								  <label class="radio" style="display:inline-block;width:100px;">
+									<input name="visibility" type="radio" value="Hidden" checked="checked" /> 隐藏
 								  </label>
 								  <span id="visibility_msg" class="help-inline"></span>
 								</div>
@@ -106,12 +106,12 @@
 							<div class="control-group">
 								<label class="control-label">分享</label>
 								<div class="controls">
-								  <label class="radio">
+								  <label class="radio" style="display:inline-block;width:100px;">
 									<input name="share" type="radio" value="Y" /> 是
 								  </label>
-								  <div style="clear:both"></div>
-								  <label class="radio">
-									<input name="share" type="radio" value="N" /> 否
+								  <!--div style="clear:both"></div-->
+								  <label class="radio" style="display:inline-block;width:100px;">
+									<input name="share" type="radio" value="N" checked="checked" /> 否
 								  </label>
 								  <span id="share_msg" class="help-inline"></span>
 								</div>
@@ -136,7 +136,7 @@
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="content">文章内容</label>
 							  <div class="controls">
-								<textarea class="cleditor" id="content" name="content" rows="8" style="width:700px;height:300px;"></textarea>
+								<textarea class="cleditor" id="content" name="content" rows="8" style="width:100%;height:500px;"></textarea>
 								<span id="content_msg" class="help-inline"></span>
 							  </div>
 							</div>         
