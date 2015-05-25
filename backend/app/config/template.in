@@ -19,7 +19,7 @@ return array(
 					 * image:显示的图片
 					 */				
 					array('url'=>'','name'=>'分类','content'=>'','path'=>__DIR__ . '/../../public/template/category.html','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'列表','content'=>'','path'=>__DIR__ . '../../public/template/list.html','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'列表','content'=>'','path'=>__DIR__ . '/../../public/template/list.html','image'=>'/img/gallery/photo10.jpg'),
 					array('url'=>'','name'=>'内容','content'=>'','path'=>__DIR__ . '/../../public/template/detail.html','image'=>'/img/gallery/photo10.jpg'),
 					
 				),
