@@ -94,7 +94,8 @@
                                 <?php endif ;?></td>
 								
 								<td>
-									<a title="预览" class="btn btn-success" href="/template/preview/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
+								<?php $type = strtolower($info['ttype']) ;?>
+									<a title="预览" class="btn btn-success" target="_blank" href="<?php echo str_replace(array(':url',':category_id',':template_id'),array($frontend_baseUrl,$info['category_id'],$info['template_id']), $urlAll->$type)  ?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
 									<a title="清空缓存" class="btn btn-info" href="/template/purge/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">

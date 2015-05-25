@@ -108,7 +108,7 @@
 							  <label class="control-label" for="status">模板状态</label>
 							  <div class="controls">
 								  <?php 
-								  echo \Phalcon\Tag::selectStatic(array("status", array('Enabled' => '启用', 'Disabled' => '关闭'),"value"=>$info->status));
+								  echo \Phalcon\Tag::selectStatic(array("status", array('Enabled' => '启用', 'Disabled' => '未启用'),"value"=>$info->status));
 								  ?>
 								</div>
 							</div>
@@ -169,6 +169,7 @@
 				var href=$(this).attr('href');
 				var id=$(this).attr('id');
 				var content = '';
+				
 				if(href && href.indexOf('javascript')==-1){
 					$.ajax({
 				        type: "POST",
@@ -183,9 +184,10 @@
 					content = $('#'+id+'_textarea').val();
 				}
 				$(this).find('img').css('border','2px solid #0cf');
-				$('#content_source').html(content);
+				$('#content_source').val(content);
+				
 				return false;
-			})
+			});
 			$('#getcontent').click(function(){
 				var href=$(this).attr('href');
 				$.ajax({
@@ -201,7 +203,7 @@
 				return false;
 			});
 			$('#clearcontent').click(function(){
-				$('#content_source').html('');
+				$('#content_source').val('');
 			});
 			
 			

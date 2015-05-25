@@ -48,7 +48,7 @@
 								<?php 
                                 	echo \Phalcon\Tag::selectStatic(array(
                                 			"template_id[]",
-                                			Template::find('status= \'Enabled\''),
+                                			Template::find("status= 'Enabled' AND division_id='{$division_id}'"),
                                 			"using" => array("id", "name"),
                                 			"value"=>'',
 											"id"=>'template_id',

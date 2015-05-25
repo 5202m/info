@@ -240,7 +240,6 @@ class TemplateController extends ControllerBase
 		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$this->view->list =  CategoryHasTemplate::getList($this->db , $where , $appendix);
 		
-		
 		if($isPartView){
 			$this->view->partial('template/categorylist');
 			$this->view->isPartView = 1;
@@ -256,7 +255,7 @@ class TemplateController extends ControllerBase
 			$relation = $this->request->getPost('relation'); 
 			
 			$not = $relation ? '' : ' NOT ';
-			$sql="SELECT id,name,`type` FROM template WHERE id {$not} 
+			$sql="SELECT id,name,`type` FROM template WHERE division_id = '{$this->division_id}' AND id {$not} 
 					in(SELECT template_id FROM category_has_template WHERE category_id = '{$category_id}')";
 			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
 			$new_list = array();
