@@ -51,7 +51,7 @@ class CategoryController extends ControllerBase
         $category->name = $this->request->getPost('name');
         $category->division_id = $Division_id;
         $category->visibility = $this->request->getPost('visibility');
-        $category->mtime = date("Y-m-d H:i:s",  time());
+        //$category->mtime = date("Y-m-d H:i:s",  time());
         $category->parent_id = $this->request->getPost('parent_id');
         $category->description = $this->request->getPost('description');
          if (!$form->isValid($_POST)) {
