@@ -239,6 +239,7 @@ class TemplateController extends ControllerBase
 		$where = array();
 		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$this->view->list =  CategoryHasTemplate::getList($this->db , $where , $appendix);
+		$this->view->urlAll = isset($this->templateDir->preview) ? $this->templateDir->preview : array();
 		
 		if($isPartView){
 			$this->view->partial('template/categorylist');
