@@ -22,6 +22,16 @@ class Article extends \Phalcon\Mvc\Model
 					->from("article");
 		$strWhere = null;
 		if($where){
+			$divisionCategoryId = array();
+			if(isset($where['division_category_id']) && $where['division_category_id']){
+				$phql = "SELECT category.id FROM category where category.parent_id={$where['division_category_id']}";
+				$categoryId = $modelsManager->executeQuery($phql);
+				//echo '<pre>';
+				foreach ($categoryId as $category){
+					$divisionCategoryId[] = $category->id;
+				}
+				//print_r($divisionCategoryId);exit;
+			}
 			foreach($where as $k=>$v){
 				if($k=='title'){
 					$strWhere[]  =  "article.{$k} LIKE  '%{$v}%'";
@@ -31,6 +41,14 @@ class Article extends \Phalcon\Mvc\Model
 				}
 				elseif($k=='ectime'){
 					$strWhere[] = "article.ctime <= '{$v} 23:59:59'";
+				}
+				elseif($k=='division_category_id'){
+					$categoryIdStr = implode(',', $divisionCategoryId);
+					$str = "article.division_category_id={$v}";
+					if($categoryIdStr){
+						$str = "({$str} or article.division_category_id in ({$categoryIdStr}))";
+					}
+					$strWhere[] = $str;
 				}
 				else{
 					$strWhere[]  =  "article.{$k} = '{$v}'";
