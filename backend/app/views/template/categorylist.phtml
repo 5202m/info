@@ -171,7 +171,7 @@
 				        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id},
 				        async:false,
 				        success: function(data){
-				        	$('#myModal>.modal-body>p').html('<div class="box-content"><div class="row-fluid"><div class="span11">'+data+'<div id="loadding"></div></div></div></div>');
+				        	$('#myModal>.modal-body>p').html('<div class="span5"><div class="box-content"><div class="row-fluid"><div class="span11">'+data+'<div id="loadding"></div></div></div></div></span>');
 				        	$('#myModal').modal('show');
 				    	}
 				    });
