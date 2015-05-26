@@ -24,7 +24,7 @@ $('[data-rel="chosen"],[rel="chosen"]').chosen();
 
 <?php if($relation == 1) :
 ?>
-模板 :<select id="template_id" name="template_id">
+模板 :<select id="template_id" name="template_id" class='span2'>
 	<option value=''>--</option>
 	<?php foreach($list[1] as $k=>$v):?>
 	<option value="<?php echo $v['id'] ?>" data-type="<?php echo $v['type'] ?>"><?php echo $v['name'] ?></option>
