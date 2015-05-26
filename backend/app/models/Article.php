@@ -4,7 +4,7 @@ class Article extends \Phalcon\Mvc\Model
 {
 	public function initialize(){
 		//$this->hasOne('id', 'Category', 'division_category_id');
-		$this->skipAttributes(array('from', 'status', 'ctime', 'mtime'));
+		$this->skipAttributes(array('from', 'ctime', 'mtime'));
 	}
 	
 	/**
@@ -73,18 +73,20 @@ class Article extends \Phalcon\Mvc\Model
 	 * @param unknown_type $modelsManager
 	 * @param unknown_type $ids
 	 */
-	static function deleteArticle($modelsManager, $ids, $status){
+	static function deleteArticle($modelsManager, $ids, $act){
 		if(!empty($ids)){
 			//$parameters = array('id'=>$ids);
 			$phql = '';
-			if($status=='hidden'){
-				$phql = "UPDATE article SET article.visibility='Hidden', article.status='Disabled' WHERE article.id in ({$ids})";
+			if($act=='hidden'){
+				$phql = "UPDATE article SET article.visibility='Hidden' WHERE article.id in ({$ids})";
 			}
-			elseif($status=='show'){
-				$phql = "UPDATE article SET article.visibility='Visible', article.status='Enabled' WHERE article.id in ({$ids})";
+			elseif($act=='show'){
+				$phql = "UPDATE article SET article.visibility='Visible' WHERE article.id in ({$ids})";
+			}
+			elseif($act=='delete'){
+				$phql = "UPDATE article SET article.status='Disabled' WHERE article.id in ({$ids})";
 			}
 			$status = $modelsManager->executeQuery($phql);
-		    //print_r($status);exit;
 		    return $status;
 		}
 		return false;

@@ -115,7 +115,22 @@ class DetailController extends ControllerBase
     public function pageAction(){
     	 
     }
-    public function purgeAction(){
+    public function purgeAction($template_id, $category_id, $article_id){
+    	$template_id = intval($template_id);
+    	$category_id = intval($category_id);
+    	$article_id  = intval($article_id);
+    	 
+    	$template_file = $this->basedir."/template/detail/".$template_id.".phtml";
+    	 
+    	unlink($template_file);
+    	 
+    	if($article_id > 0){
+    		$article_path = $this->basedir."/static/detail/html/$template_id/$category_id/$article_id.html";
+    	}else{
+    		$article_path = $this->basedir."/static/detail/html/$template_id/$category_id/*.html";
+    	}
+    	 
+    	array_map('unlink', glob($article_path));    	
     }
 }
 

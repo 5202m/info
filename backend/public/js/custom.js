@@ -154,7 +154,7 @@ $(document).ready(function(){
 		}
 		else{
 			$("#myModal>.modal-body>p").html('请选择要隐藏的文章');
-			$("#successModal").modal("show");
+			$("#myModal").modal("show");
 		}
 	});
 	$('#btnShow').click(function(){
@@ -172,7 +172,27 @@ $(document).ready(function(){
 		}
 		else{
 			$("#myModal>.modal-body>p").html('请选择要显示的文章');
-			$("#successModal").modal("show");
+			$("#myModal").modal("show");
+		}
+	});
+	$('#btnDelete').click(function(){
+		var ids = '';
+		$('.table tbody input[type="checkbox"]').each(function(){
+			if($(this).is(':checked')){
+				if(ids!=''){
+					ids += ',';
+				}
+				ids += $(this).val();
+			}
+		});
+		if(ids!=''){
+			if(confirm('确定要删除选中的文章吗？')){
+				modifyArticleStatus($(this).attr('url'), ids, 'delete');
+			}
+		}
+		else{
+			$("#myModal>.modal-body>p").html('请选择要删除的文章');
+			$("#myModal").modal("show");
 		}
 	});
 	$('#btnAdd').click(function(){
