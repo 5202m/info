@@ -79,6 +79,7 @@
 										批量操作：
 										<input id="btnShow" type="button" value="显示" class="btn btn-primary btn-search" url="/article/delete" />
 										<input id="btnHidden" type="button" value="隐藏" class="btn btn-primary btn-search" url="/article/delete" />
+										<input id="btnDelete" type="button" value="删除" class="btn btn-primary btn-search" url="/article/delete" />
 									</span>
 								</div>
 							</div>
@@ -130,13 +131,13 @@
 							  <div class="dataTables_paginate paging_bootstrap pagination">
 						  	  	  <span class="page_text">共有 <?php echo $page->total_items;?> 条记录, 每页显示 <?php echo $page->pageSize;?> 条, 当前<?php echo $page->current;?>/<?php echo $page->total_pages;?> 页:</span>
 								  <ul>
-								  	  <li class="prev"><a href="/article/list">First</a></li>
-									  <li class="prev"><a href="/article/list/<?php echo $page->before;?>/<?php echo $page->pageSize;?>">← Previous</a></li>
-									  <li class="next"><a href="/article/list/<?php echo $page->next;?>/<?php echo $page->pageSize;?>">Next → </a></li>
-									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">Last</a></li>
+								  	  <li class="prev"><a href="/article/list">首页</a></li>
+									  <li class="prev"><a href="/article/list/<?php echo $page->before;?>/<?php echo $page->pageSize;?>">上一页</a></li>
+									  <li class="next"><a href="/article/list/<?php echo $page->next;?>/<?php echo $page->pageSize;?>">下一页</a></li>
+									  <li class=""><a href="/article/list/<?php echo $page->last;?>/<?php echo $page->pageSize;?>">尾页</a></li>
 								  </ul>
 								  <span class="page_text">每页行数:</span>
-								  <select name="pagesize" size="1" class="pagesize" onchange="location.href='/article/list/1/'+this.value;">
+								  <select name="pagesize" style="width:auto;" class="pagesize" onchange="location.href='/article/list/1/'+this.value;">
 									<option value="10"<?php if($page->pageSize==10):?> selected="selected"<?php endif;?>>10</option>
 									<option value="25"<?php if($page->pageSize==25):?> selected="selected"<?php endif;?>>25</option>
 									<option value="50"<?php if($page->pageSize==50):?> selected="selected"<?php endif;?>>50</option>

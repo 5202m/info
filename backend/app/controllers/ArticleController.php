@@ -41,6 +41,7 @@ class ArticleController extends ControllerBase {
 			}
 		}
 		$where['division_id'] = $this->Division_id;//Division::getID();
+		$where['status'] = 'Enabled';
 		$appendix = array('page'=>$page, 'pageSize'=>$pageSize, 'order'=>'article.id desc');
 		
 		/*$builder = $this->modelsManager->createBuilder()
@@ -126,7 +127,7 @@ class ArticleController extends ControllerBase {
             $article->language = $this->request->getPost('language');
             $article->visibility = $this->request->getPost('visibility');
             //$category_id = $this->request->getPost('category_id');
-            //$article->status = $this->request->getPost('status');
+            $article->status = 'Enabled';
             $article->division_category_id = $this->request->getPost('division_category_id');
             $article->division_id = $this->Division_id;
             $article->author = $this->request->getPost('author', 'trim');
@@ -171,7 +172,7 @@ class ArticleController extends ControllerBase {
             $article->language = $this->request->getPost('language');
             $article->visibility = $this->request->getPost('visibility');
             //$category_id = $this->request->getPost('category_id');
-            //$article->status = $this->request->getPost('status');
+            $article->status = 'Enabled';
             $article->division_category_id = $this->request->getPost('division_category_id');
             $article->division_id = $this->Division_id;//
             $article->author = $this->request->getPost('author', 'trim');
@@ -256,12 +257,12 @@ class ArticleController extends ControllerBase {
 	public function deleteAction(){
 		if($this->request->isAjax()){
 			$ids = $this->request->getPost('ids', 'trim');
-			$status = $this->request->getPost('act', 'trim');
+			$act = $this->request->getPost('act', 'trim');
 			if(!empty($ids)){
-				$status = Article::deleteArticle($this->modelsManager, $ids, $status);
+				$status = Article::deleteArticle($this->modelsManager, $ids, $act);
 				$response = new Phalcon\Http\Response();
 				if ($status->success() == true) {
-			        $response->setJsonContent(array('status' => true, 'message'=>'修改成功'));
+			        $response->setJsonContent(array('status' => true, 'message'=>($act=='delete'?'删除成功':'修改成功')));
 			    } else {
 			        //Change the HTTP status
 			        $response->setStatusCode(409, "Conflict");
