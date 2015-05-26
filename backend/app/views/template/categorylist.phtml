@@ -95,7 +95,7 @@
 								
 								<td>
 								<?php $type = strtolower($info['ttype']) ;?>
-									<a title="预览" class="btn btn-success" target="_blank" href="<?php echo str_replace(array(':url',':category_id',':template_id'),array($frontend_baseUrl,$info['category_id'],$info['template_id']), $urlAll->$type)  ?>">
+									<a title="预览" class="btn btn-success<?php echo $type == 'detail' ? ' go_detail' : ''?>" data-category_id="<?php echo $info['category_id']?>" data-template_id="<?php echo $info['template_id']?>" target="_blank" href="<?php echo str_replace(array(':url',':category_id',':template_id'),array($frontend_baseUrl,$info['category_id'],$info['template_id']), $urlAll->$type)  ?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
 									<a title="清空缓存" class="btn btn-info" href="/template/purge/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
@@ -161,6 +161,36 @@
 					}
 					return false;
 				});
+				$('.go_detail').click(function(){
+					var template_id = $(this).attr('data-template_id');
+					var category_id = $(this).attr('data-category_id ');
+					window.go_detail_href = $(this).attr('href');
+					$.ajax({
+				        type: "POST",
+				        url: '/template/ajaxarticle',
+				        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id},
+				        async:false,
+				        success: function(data){
+				        	$('#myModal>.modal-body>p').html('<div class="box-content"><div class="row-fluid"><div class="span11">'+data+'<div id="loadding"></div></div></div></div>');
+				        	$('#myModal').modal('show');
+				    	}
+				    });
+					return false;
+				});
+				$('#article_id').live('change',function(){
+					$("#article_id_input").val($(this).val());
+					loadding();
+				});
+				
+				$('#article_id_input').live('blur',function(){
+					loadding();
+				});
+				function loadding(){
+					var  url = window.go_detail_href.replace(':article_id',$("#article_id_input").val());
+					var url_html='<div class="alert alert-success">引用地址 :<a href="'+url+'" target="_blank"><strong>'+url+'</strong></a></div><iframe border="0" vspace="0" hspace="0" marginWidth="0" marginHeight="0" frameSpacing="0" frameBorder="0" scrolling="no" width="100%" height="500px" class="form-horizontal" src="'+url+'">';
+					$('#loadding').html(url_html);
+				}
+				
 				
 			});
 			
