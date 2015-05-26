@@ -106,6 +106,9 @@ class TemplateController extends ControllerBase
 		$this->view->type = $type;
 		$this->view->url = $preview_url;
 		$this->view->urlAll = isset($this->templateDir->preview) ? $this->templateDir->preview : array();
+		$this->view->urlAll_purge = isset($this->templateDir->purge) ? $this->templateDir->purge : array();
+		
+		
 		if($message_info){
 			$this->view->message_info = $message_info;
 		}
@@ -344,5 +347,87 @@ class TemplateController extends ControllerBase
 		}
 		exit();
 	}
+	public function hostnodeAction($url = null){
+		if($this->request->isPost()){
+			$url = $this->request->getPost('url');
+		}
+		$error_msg = array();
+		$status = false ;
+		$msg = '';
+		if($this->hostNode){
+			$rs = $this->multipleThreadsRequestAction($url , (array)$this->hostNode);
+			
+			
+			$msg = '缓存更新<br/>';
+			$i = 1;
+			foreach($rs as $k=>$v){
+				$flag = true;
+				if($v['code'] != 200){
+					$error_msg[] = $k.':'.$v['code'];
+					$flag = false;
+				}
+				$msg .= '节点  '.$i .($flag ? '成功' : '失败') .'<br/>';
+				$i+=1;
+			}
+		}
+		echo json_encode(array('status'=>$status,'msg'=>$msg ,'info'=>$error_msg));
+		$this->view->disable();
+	}
+	public function simpleGetContentsAction(){
+		$opts = array(
+				'http'=>array(
+						'method'=>"GET",
+						'header'=>"Host:lh.backend.inf.hx9999.com"
+				)
+		);
+		$context = stream_context_create($opts);
+		$ret = file_get_contents('http://127.0.0.1:81/', false, $context);
+	}
+	/**
+	 * 
+	 * @param unknown $surl
+	 * @param unknown $nodes
+	 * @return multitype:string
+	 * 	#$nodes = array('127.0.0.1');
+		#$this->url = 'http://lh.backend.inf.hx9999.com';
+		#$url = 'http://lh.backend.inf.hx9999.com:81/template/list';
+	 */
+	public function multipleThreadsRequestAction($surl , $nodes){ 
+		
+		$mh = curl_multi_init();
+        $curl_array = array();
+        foreach($nodes as $i => $node)
+        {
+        	$url = str_replace($this->url, $node, 'http://'.$surl);
+            $host = str_ireplace(array('http://'), array(''), $this->url);
+            if(strpos($host,'/')!=false){
+            	$host = strstr($host, '/',true);
+            }
+        	$curl_array[$i] = curl_init($url);
+            curl_setopt($curl_array[$i], CURLOPT_RETURNTRANSFER, true);
+            curl_setopt ($curl_array[$i], CURLOPT_HEADER, 1);
+            curl_setopt($curl_array[$i],CURLOPT_HTTPHEADER,array('Host: '.$host));
+            curl_multi_add_handle($mh, $curl_array[$i]);
+        }
+        $running = NULL;
+        do {
+            usleep(100);
+            curl_multi_exec($mh,$running);
+        } while($running > 0);
+        $res = array();
+        foreach($nodes as $i => $url)
+        {
+             $content = curl_multi_getcontent($curl_array[$i]);
+             $code = preg_replace('/HTTP\/[\d|\.]+\s+?([0-9]+)\s.+/is', '\\1',$content);
+             $res[$url]= array('code'=>$code,'content'=>$content);
+        }
+       
+        foreach($nodes as $i => $url){
+            curl_multi_remove_handle($mh, $curl_array[$i]);
+        }
+        curl_multi_close($mh);       
+        return $res; 
+	}
+	
 }
 ?>

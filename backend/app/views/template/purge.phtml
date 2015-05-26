@@ -184,6 +184,20 @@
 				}else if(show_error == 1){
 					$('#loading').html('<div class="alert alert-error">'+type+'类型的模板数据不存在</div>');
 				}
+				if(show_error){
+					$.ajax({
+				        type: "POST",
+				        url: '/template/hostnode',
+				        data: {'ajax':1,'url':url},
+				        async:false,
+				        dataType:'json',
+				        success: function(data){
+					        
+				        	$('#myModal>.modal-body>p').html(data.msg);
+							$('#myModal').modal('show');
+				    	}
+				    });
+				}
 			}
 			function getarticle(){
 				var template_id = $('#template_id').val();

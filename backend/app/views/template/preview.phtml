@@ -57,6 +57,7 @@
                                 	
                                 </span>
                                 <span id="ajaxarticle"></span>
+                                <?php echo \Phalcon\Tag::submitButton(array("清空缓存",'class'=>'btn btn-small btn-primary','id'=>'submit_purge')) ?>
                                 <?php echo \Phalcon\Tag::submitButton(array("预览",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
 								</div>
 							</div>
@@ -135,7 +136,62 @@
 					$("#article_id_input").val($(this).val());
 					$("#submit").trigger("click");
 				});
-				
+
+				$('#submit_purge').click(function(){
+
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					if(!template_id){
+						$('#myModal>.modal-body>p').html('请选择模板');
+						$('#myModal').modal('show');
+						return false;
+					}
+					if(!category_id){
+						$('#myModal>.modal-body>p').html('请选择分类');
+						$('#myModal').modal('show');
+						return false;
+					}
+					
+					var urlAll ='<?php echo json_encode($urlAll_purge);?>';
+					urlAll = $.parseJSON(urlAll);
+					var type = $('#template_id option:selected').attr('data-type');
+					type = type.toLowerCase();
+					var url = '';
+					switch(type){
+						case 'category':
+							url = urlAll.category;
+							break;
+						case 'list':
+							url = urlAll.list;
+							break;
+						case 'detail':
+							url = urlAll.detail;
+							break;
+					}
+
+					if(url){
+						url = url.replace(':url','<?php echo $frontend_baseUrl ?>');
+						url = url.replace(':template_id',template_id)
+									.replace(':parent_id',category_id);
+						if(url.indexOf(':article_id')!=-1){
+							url = url.replace(':article_id',window.template_article_id);
+						}
+						$.ajax({
+					        type: "POST",
+					        url: '/template/hostnode',
+					        data: {'ajax':1,'url':url},
+					        async:false,
+					        dataType:'json',
+					        success: function(data){
+						        
+					        	$('#myModal>.modal-body>p').html(data.msg);
+								$('#myModal').modal('show');
+					    	}
+					    });
+					}
+					
+					return  false;
+				});
 				
 
 				$('#category_id').live('change',function(){
