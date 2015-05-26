@@ -382,7 +382,13 @@ function template_functions(){
 	//$('.cleditor').cleditor();
 	
 	/* ---------- Datapicker ---------- */
-	$('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+	$('.datepicker').datepicker({ 
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true
+	});
+	//minDate: new Date(2007, 1 - 1, 1)
+	//$('#ectime').datepicker({minDate: new Date($('#bctime').val())});
 	
 	/* ---------- Notifications ---------- */
 	$('.noty').click(function(e){
