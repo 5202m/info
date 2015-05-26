@@ -113,6 +113,10 @@ class CategoryController extends ControllerBase
 		$template_id = intval($template_id);
 		$parent_id = intval($parent_id);
 		
+		$template_file = $this->basedir."/template/category/".$template_id.".phtml";
+		 
+		unlink($template_file);
+		
 		if($parent_id > 0){
 			$categroy_path = $this->basedir."/static/category/html/$template_id/$parent_id.html";
 		}else{
