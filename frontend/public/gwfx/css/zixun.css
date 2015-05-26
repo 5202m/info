@@ -1,0 +1,69 @@
+﻿body{font:12px/1.4 microsoft yahei;color:#333;;background:#1A1A1A;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
+body,p,ol,ul,li,h1,h2,h3,h4,h5,h6,dl,dt,dd,pre,input,table,tr,td,button,textarea{margin:0;padding:0}
+ol,ul,li{list-style:none}
+input,button{border:0 none}
+img{border:0 none}
+.fl{float:left}
+.fr{float:right}
+.vcen{vertical-align:middle}
+a{color:#d7d7d7;text-decoration:none}
+a:hover{text-decoration:none}
+a:active{noOutline:expression(this.onFocus=this.blur())}
+.red{color:#C8310C}
+.blue{color:#0082D5}
+.bold{font-weight:bold}
+:focus{outline:0}
+.hide-t{line-height:9999px;overflow:hidden}
+.clearfix{zoom:1}
+.clearfix:after{clear:both;content:"";display:block;height:0;visibility:hidden}
+.m10{margin-top:10px}
+.m20{margin-top:20px}
+.m25{margin-top:25px}
+.dn{display:none}
+.p0-non{font-size:0;height:0;overflow:hidden}
+
+/* img */
+.left-zxbox .more-btn,.nav-box li,.date-cxbtn,.date-textin{background:url(../images/public.png) no-repeat}
+
+/* left */
+.left-zxbox{background:#1A1A1A}
+.left-zxbox ul{padding:5px}
+.left-zxbox li{border-bottom:solid #363535 1px}
+.left-zxbox a{padding:10px;display:block;cursor:pointer}
+.left-zxbox li:hover{background:#2F2F2F}
+.left-zxbox .li-on,.left-zxbox .li-on:hover{background:#163D3A;border-color:#163D3A}
+.n-img{width:50px;height:50px}
+.n-con{margin-left:60px}
+.comment .n-con{margin-left:0}
+.biaot{line-height:18px;color:#d7d7d7}
+.time{color:#777}
+.left-zxbox .more-btn{margin:8px auto 0;padding:0;display:block;width:82px;height:20px;line-height:20px;text-align:center;color:#ddd;background-color:none}
+.left-zxbox .more-btn:hover{background-position:0 -23px;background-color:none}
+
+/* right */
+.right-box{padding:20px}
+.right-box h2{font-weight:bold;font-size:22px;color:#ddd;text-align:center}
+.source{margin-top:13px;color:#777;text-align:center}
+.newx-conbox{margin-top:20px;padding-top:20px;border-top:solid #363535 1px}
+.newx-conbox p,.video-pinfo p{line-height:28px;color:#d7d7d7;font-size:14px;padding-bottom:25px}
+.video-box{margin:0 auto;width:100%;text-align:center}
+.video-pinfo h3{margin-top:10px;font-weight:normal;color:#d7d7d7}
+.video-pinfo p{text-indent:2em;padding-bottom:0}
+
+/* 财经日历 */
+.rili-box{padding:10px}
+.nav-box{width:749px;border:solid #494949;border-width:1px 0 1px 1px}
+.nav-box li{float:left;width:106px;height:28px;line-height:28px;text-align:center;color:#aaa;border-right:solid #494949 1px;background-position:0 -73px;background-repeat:repeat-x;cursor:pointer}
+.nav-box li:hover{background-position:0 -101px}
+.nav-box .li-on,.nav-box .li-on:hover{color:#fff;font-weight:bold;cursor:default;background-position:0 -130px}
+.qih-box{margin-top:10px}
+.date-t{color:#aaa}
+.date-textin{display:inline-block;*display:inline;*zoom:1;background-color:#4A4A4C;color:#fff;text-indent:5px;width:122px;height:20px;line-height:20px;font-family:arial;background-position:105px -48px;font-size:12px}
+.date-cxbtn{display:inline-block;*display:inline;*zoom:1;width:69px;height:20px;line-height:20px;text-align:center;color:#ddd;background-position:-84px 0;cursor:pointer}
+.date-cxbtn:hover{background-position:-84px -23px}
+.date-tablist{border:solid #363535;border-width:1px 0 0 1px;text-align:center;font-size:14px;color:#fff}
+.date-tablist th{color:#777;font-size:12px;font-weight:normal}
+.date-tablist td,.date-tablist th{line-height:30px;border:solid #363535;border-width:0 1px 1px 0}
+.date-tablist .td-l{text-align:left;padding-left:10px}
+.tr-bg td{background:#202020}
+.sj-box h3{font-weight:bold;font-size:14px;color:#ddd;line-height:32px}
