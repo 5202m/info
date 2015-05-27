@@ -258,8 +258,7 @@
 						return true;
 					});
 					$('#reset').click(function(){
-						$('input[type="text"],#division_category_id,#content').val('');
-						editor.html('');
+						location.href='/article';
 					});
 					<?php if(isset($successMessage)):
 						echo $successMessage;
