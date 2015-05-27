@@ -5531,3 +5531,29 @@
 [Wed, 27 May 15 04:13:22 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
 [Wed, 27 May 15 04:13:22 +0200][INFO] DESCRIBE `category`
 [Wed, 27 May 15 04:13:22 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`language`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Wed, 27 May 15 05:13:01 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:01 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:01 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`division_id` = '3' ORDER BY `template`.`id` DESC LIMIT 50
+[Wed, 27 May 15 05:13:01 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template` WHERE `template`.`division_id` = '3'
+[Wed, 27 May 15 05:13:05 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:05 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:05 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`id` = 6 LIMIT :1
+[Wed, 27 May 15 05:13:08 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:08 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:08 +0200][INFO] SELECT COUNT(*) "rowcount" FROM `template` WHERE `id` = ?
+[Wed, 27 May 15 05:13:08 +0200][INFO] UPDATE `template` SET `division_id` = ?, `name` = ?, `decription` = ?, `content` = ?, `type` = ?, `status` = ?, `engine` = ? WHERE `id` = ?
+[Wed, 27 May 15 05:13:13 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:13 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:13 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`division_id` = '3' ORDER BY `template`.`id` DESC LIMIT 10
+[Wed, 27 May 15 05:13:13 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template` WHERE `template`.`division_id` = '3'
+[Wed, 27 May 15 05:13:24 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:24 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:24 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`id` = 37 LIMIT :1
+[Wed, 27 May 15 05:13:26 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:26 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:26 +0200][INFO] SELECT COUNT(*) "rowcount" FROM `template` WHERE `id` = ?
+[Wed, 27 May 15 05:13:26 +0200][INFO] UPDATE `template` SET `division_id` = ?, `name` = ?, `decription` = ?, `content` = ?, `type` = ?, `status` = ?, `engine` = ? WHERE `id` = ?
+[Wed, 27 May 15 05:13:32 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`='template'
+[Wed, 27 May 15 05:13:32 +0200][INFO] DESCRIBE `template`
+[Wed, 27 May 15 05:13:32 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`division_id` = '3' ORDER BY `template`.`id` DESC LIMIT 10
+[Wed, 27 May 15 05:13:32 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template` WHERE `template`.`division_id` = '3'
