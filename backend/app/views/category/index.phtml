@@ -1,22 +1,5 @@
 <script type="text/javascript">
 
-function ShowMenu(MenuID)
-
-{ 
-
- if(MenuID.style.display=="none"){ 
-
-    MenuID.style.display=""; 
-
- } 
-
- else{ 
-
- MenuID.style.display="none"; 
-
- } 
-
-} 
 
 </script>
 <div class="row-fluid sortable">		
@@ -91,13 +74,13 @@ function ShowMenu(MenuID)
                             <td><?php echo $vs['ctime']; ?></td>
                             <td><?php echo $vs['mtime']; ?></td>
                             <td class="center">
-                                <a class="btn btn-success" href="/category/show/<?php echo $vs['id'];?>">
+                                <a title="查看分类" class="btn btn-success" href="/category/show/<?php echo $vs['id'];?>">
                                     <i class="halflings-icon white zoom-in"></i>  
                                 </a>
-                                <a class="btn btn-info" href="/category/edit/<?php echo $vs['id'];?>">
+                                <a title="编辑分类" class="btn btn-info" href="/category/edit/<?php echo $vs['id'];?>">
                                     <i class="halflings-icon white edit"></i>  
                                 </a>
-                                <a class="btn btn-success" href="/category/add/<?php echo $vs['id'];?>">
+                                <a title="添加分类" class="btn btn-success" href="/category/add/<?php echo $vs['id'];?>">
                                     <i class="halflings-icon plus white zoom-in"></i>  
                                 </a>
                                
