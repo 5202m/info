@@ -50,8 +50,7 @@
                                 	模板：<?php 
                                 	echo \Phalcon\Tag::selectStatic(array(
                                 			"template_id",
-                                			Template::find('status= \'Enabled\''.($type ?  ' AND type= \''.$type .'\'' : '') ),
-                                			"using" => array("id", "name"),
+                                			array(),
                                 			"value"=>$getData['template_id']
                                 	));?>
                                 	

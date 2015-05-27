@@ -55,13 +55,13 @@ class TemplateController extends ControllerBase
 			$last_id = Template::insert($params);
 			$isError = true ;
 			if(is_numeric($last_id)){
-				$message_info = array('success'=>(isset($params['id']) && $params['id']) ? '修改成功' : ('添加成功<b/>  点击到<a href="/template/index">列表页面</a>'));
-				$isSuccess = false ; 
+				$message_info = array('success'=>(isset($params['id']) && $params['id']) ? '修改模板成功' : '添加模板成功');
+				$isError = false ; 
 			}else{
 				$message_info = $last_id;
 			}
 			if(isset($params['ajax']) && $params['ajax']==1){
-				echo json_encode(array('status'=>$isError,'msg'=> !isset($message_info['success']) ?   '添加失败' : implode(',', $message_info)));
+				echo json_encode(array('status'=>$isError,'msg'=> !isset($message_info['success']) ?   '添加模板失败' : implode(',', $message_info)));
 				$this->view->disable();
 			
 			}else{

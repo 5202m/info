@@ -47,7 +47,7 @@
 							<div class="control-group">
 							  <label class="control-label" for="typeahead">模板描述</label>
 							  <div class="controls">
-								<?php echo \Phalcon\Tag::textArea(array("decription", "class" => "span6 typeahead",'rows'=>5,"value"=>$info->decription)) ?>
+								<?php echo \Phalcon\Tag::textArea(array("decription", "class" => "span6 typeahead",'rows'=>1,"value"=>$info->decription)) ?>
 							  </div>
 							</div>
 							
@@ -80,7 +80,7 @@
 							<div class="control-group">
 							  <label class="control-label" for="content">模板内容</label>
 							  <div class="controls">
-								<?php echo \Phalcon\Tag::textArea(array("content", "class" => "span6 typeahead",'rows'=>15 ,'id'=>'content_source', "value"=>$info->content)) ?>
+								<?php echo \Phalcon\Tag::textArea(array("content", "class" => "span11 typeahead",'rows'=>15 ,'id'=>'content_source', "value"=>$info->content)) ?>
 							  </div>
 							</div>
 							
@@ -157,6 +157,10 @@
 			        success: function(data){
 			        	$('#myModal>.modal-body>p').html(data.msg);
 						$('#myModal').modal('show');
+						if(!data.status){
+							$('#myModal>.modal-body>p').append('<p><span id="jumpsec">5</span>秒后跳转到 <a  href="/template/index">列表页面</a>，<a id="nojump" href="javascript:;">取消</a></p>');
+							window.template_jump = setInterval('jumpsec()',1000);
+						}
 			    	}
 			    });
 				
@@ -205,8 +209,28 @@
 			$('#clearcontent').click(function(){
 				$('#content_source').val('');
 			});
+
+			$('#nojump').live('click',function(){
+				if(window.template_jump){
+					 clearInterval(window.template_jump);
+					 $('#myModal').modal('hide');
+				}
+				return false;
+			});
+			
+			
 			
 			
 		});
+		function jumpsec(){
+			var sec = $('#jumpsec').html();
+			sec = parseInt(sec);
+			if(sec>1){
+				sec = sec-1;
+				$('#jumpsec').html(sec);
+			}else{
+				location.href='/template/list/1';
+			}
+		}
 	</script>
 	
