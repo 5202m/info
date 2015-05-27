@@ -1,12 +1,42 @@
 <?php
 class CategoryController extends ControllerBase
 {
+    private $language = array('cn'=>'简体', 'tw'=>'繁体', 'en'=>'英语');
     public function indexAction(){
-        $id = $this->Division_id;
+        $search_key = 'category_list_search';
+		if($this->request->isPost()){
+			$params = $this->request->getPost();
+			$this->session->set($search_key, $params);
+		}
+		$where = array();
+		if($this->session->has($search_key)){
+			$where = $this->session->get($search_key);
+			$this->view->where  = $where;
+			foreach($where as $k=>$v){
+				if(empty($v)){
+					unset($where[$k]);
+				}
+			}
+		}
+                $where['division_id'] = $this->Division_id;
+                if($where){
+			foreach($where as $k=>$v){
+				if($k=='language'){
+					$strWhere[]  =  "Category.{$k} = '{$v}'";
+                                }else{
+                                    $strWhere[]  =  "Category.{$k} = '{$v}'";
+                                }
+			}
+			$strWhere = implode(' AND ', $strWhere);
+		}
+                
+//        $id = $this->Division_id;
         $category = Category::find(
-            "division_id = '{$id}'"
+            "{$strWhere}"
         );
+//        print_r($this->objToArray->ohYeah($category));die;
         $this->view->setVar('pages',$category);
+        $this->view->setVar('language',$this->language);
     }
     //编辑分类页面
     public function editAction($id){
@@ -15,17 +45,21 @@ class CategoryController extends ControllerBase
             "id = '{$id}'"
         );
         $category = Category::find(
-            "division_id = '{$Division_id}'"
+            "division_id = '{$Division_id}' and language = '{$cates->language}'"
         );
         $this->view->setVar('pages',$category);
         $this->view->setVar('cates',$cates);
     }
     //添加分类页面
-    public function addAction(){
+    public function addAction($child_id){
         $id = $this->Division_id;
         $category = Category::find(
             "division_id = '{$id}'"
         );
+        $cates = Category::findFirst(
+            "id = '{$child_id}'"
+        );
+        $this->view->setVar('cates',$cates);
         $this->view->setVar('pages',$category);
     }
     //查看分类
@@ -54,6 +88,13 @@ class CategoryController extends ControllerBase
         //$category->mtime = date("Y-m-d H:i:s",  time());
         $category->parent_id = $this->request->getPost('parent_id');
         $category->description = $this->request->getPost('description');
+        if($this->request->getPost('language') == '简体'){
+            $category->language = 'cn';
+        }elseif($this->request->getPost('language') == '繁体'){
+            $category->language = 'tw';
+        }else{
+            $category->language = 'en';
+        }
          if (!$form->isValid($_POST)) {
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
@@ -86,11 +127,16 @@ class CategoryController extends ControllerBase
         $category->name = $this->request->getPost('name');
         $category->division_id = $Division_id;
         $category->visibility = $this->request->getPost('visibility'); 
+        $category->language = $this->request->getPost('hd_language') != '' ? $this->request->getPost('hd_language') : $this->request->getPost('language'); 
         $category->path = '/';
         $category->status = 'Disabled';
 //        $category->ctime = date("Y-m-d H:i:s",  time());
-        $category->parent_id = $this->request->getPost('parent_id');
-        $category->description = $this->request->getPost('description');
+        if($this->request->getPost('parent_id') == 'NULL'){
+            $category->parent_id = null;
+        }else{
+            $category->parent_id = $this->request->getPost('parent_id');
+        }
+        $category->description = $this->request->getPost('description') != '' ? $this->request->getPost('description') : null;
         if (!$form->isValid($_POST)) {
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
@@ -106,6 +152,20 @@ class CategoryController extends ControllerBase
         }
         $form->clear();
         return $this->response->redirect("index");
+    }
+    //获取顶级分类的语言
+    public function getLangAction(){
+        if (!$this->request->isPost()) {
+            return $this->response->redirect("index");
+        }
+        $id = $this->request->getPost('id'); 
+        $category = Category::findFirstById($id);
+        
+        echo json_encode(array(
+            'message'=>"操作成功",
+            'data'=>$category
+        )) ;
+        exit;
     }
     
 }

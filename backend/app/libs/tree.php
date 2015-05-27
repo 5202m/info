@@ -16,5 +16,23 @@ class Tree
         }
         return $tree;
     }
+    /**
+    * 得到子级数组
+    * @param int
+    * @return array
+    */
+//    function get_child($arr,$parent_id)
+//    {
+//        $a = $newarr = array();
+//        if(is_array($arr))
+//        {
+//            foreach($arr as $id => $a)
+//            {
+//                if($a['parent_id'] == $parent_id) $newarr[$id] = $a;
+//            }
+//        }
+//        return $newarr ? $newarr : false;
+//    }
+   
 }
 

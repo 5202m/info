@@ -77,9 +77,21 @@
 								</div>
 							  </div>-->
                                                           <div class="control-group">
+								<label class="control-label" for="selectError3">语言</label>
+								<div class="controls">
+                                                                    <input class="input-xlarge focused" id="focusedInput" name="name" type="text" readonly="readonly" value="<?php  if($cates->language == 'cn'){
+                                                                        echo '简体';
+                                                                    }elseif($cates->language == 'tw'){
+                                                                        echo '繁体';
+                                                                    }else{
+                                                                        echo '英语';
+                                                                    }?>">
+								</div>
+							  </div>
+                                                          <div class="control-group">
 								<label class="control-label" for="selectError3">可见性</label>
 								<div class="controls">
-                                                                    <input class="input-xlarge focused" id="focusedInput" name="name" type="text" readonly="readonly" value="<?php echo $cates->visibility;?>">
+                                                                    <input class="input-xlarge focused" id="focusedInput" name="name" type="text" readonly="readonly" value="<?php echo ($cates->visibility == 'Visible' ? '显示' : '隐藏');?>">
 								</div>
 							  </div>
                                                           <div class="control-group">
