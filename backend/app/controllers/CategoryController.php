@@ -56,9 +56,12 @@ class CategoryController extends ControllerBase
         $category = Category::find(
             "division_id = '{$id}'"
         );
-        $cates = Category::findFirst(
-            "id = '{$child_id}'"
-        );
+        if($child_id){
+            $cates = Category::findFirst(
+                "id = '{$child_id}'"
+            );
+        }
+        
         $this->view->setVar('cates',$cates);
         $this->view->setVar('pages',$category);
     }

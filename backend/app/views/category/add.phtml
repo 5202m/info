@@ -68,7 +68,7 @@
                                                                                 $cates_arr = $this->objToArray->ohYeah($pages);
                                                                                 $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
                                                                                 foreach ($items as $vs){?>
-                                                                                <option <?php echo ($cates->id==$vs['id']?'selected="selected"':'');?> value="<?php echo $vs['id'];?>">
+                                                                        <option <?php echo (isset($cates->id) && $cates->id==$vs['id']?'selected="selected"':'');?> value="<?php echo $vs['id'];?>">
                                                                                     <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                                                     <?php echo $vs['name'];?>
                                                                                 </option>
@@ -86,7 +86,7 @@
 								<label class="control-label" for="selectError3">语言</label>
 								<div class="controls">
                                                                     <select id="language" name="language">
-                                                                        <?php if($cates->language != ''){?>
+                                                                        <?php if(isset($cates->language) && $cates->language != ''){?>
                                                                         <option <?php echo ($cates->language=='cn'?'selected="selected"':'');?> value="cn">简体</option>
                                                                         <option <?php echo ($cates->language=='tw'?'selected="selected"':'');?> value="tw">繁体</option>
                                                                         <option <?php echo ($cates->language=='en'?'selected="selected"':'');?> value="en">英文</option>
@@ -211,7 +211,7 @@
     
 
 $(function(){
-    var language = '<?php echo $cates->language;?>';
+    var language = '<?php echo isset($cates->language) ? $cates->language : ''?>';
     if( language !== ''){
     $("#hd_language").val(language);
     $("#language").attr("disabled", "true");
