@@ -39,7 +39,7 @@
 							<div class="control-group">
 							  <label class="control-label" for="typeahead">模板名字</label>
 							  <div class="controls">
-								<?php echo \Phalcon\Tag::textField(array("name", "class" => "span6 typeahead" , "value"=>$info->name)) ?>
+								<?php echo \Phalcon\Tag::textField(array("name", "class" => "span6 typeahead" , "value"=>$info->name,'maxlength'=>30)) ?>
 							  </div>
 							</div>
 							
@@ -47,7 +47,7 @@
 							<div class="control-group">
 							  <label class="control-label" for="typeahead">模板描述</label>
 							  <div class="controls">
-								<?php echo \Phalcon\Tag::textArea(array("decription", "class" => "span6 typeahead",'rows'=>1,"value"=>$info->decription)) ?>
+								<?php echo \Phalcon\Tag::textArea(array("decription", "class" => "span6 typeahead",'rows'=>1,"value"=>$info->decription,'maxlength'=>60)) ?>
 							  </div>
 							</div>
 							
@@ -117,7 +117,7 @@
 							<?php echo \Phalcon\Tag::hiddenField(array("ajax","value"=>0));
 							  echo \Phalcon\Tag::submitButton(array("确定",'class'=>'btn btn-primary','id'=>'submit')) ?>
 						
-							  <button type="reset" class="btn">取消</button>
+							  <button type="reset" id="reset" class="btn">取消</button>
 							</div>
 						  </fieldset> 
 						<?php echo \Phalcon\Tag::endForm(); ?>
@@ -135,6 +135,20 @@
 				var content = $('#content_source').val();
 				if(!name){
 					$('#myModal>.modal-body>p').html('模板名称不能为空');
+					$('#myModal').modal('show');
+					return false;
+				}
+				
+				var all_leng = name.length;
+				var name_zh = name.replace(/[•\u4E00-\u9FA5\.\-]/g,'');
+				var length = all_leng +name_zh.length*2;
+				if(length>50){
+					$('#myModal>.modal-body>p').html('模板名称太长');
+					$('#myModal').modal('show');
+					return false;
+				}
+				else if(length<3){
+					$('#myModal>.modal-body>p').html('模板名称太短');
 					$('#myModal').modal('show');
 					return false;
 				}
@@ -216,6 +230,16 @@
 					 $('#myModal').modal('hide');
 				}
 				return false;
+			});
+
+			
+			$('#reset').click(function(){
+				<?php if($info->id) :?>
+				location.href='/template/list/1';
+				return ;
+				<?php endif ;?>
+				$('#content_source').val('');
+				$('#select_countent>div>a.selecta').find('img').css('border','0px');
 			});
 			
 			

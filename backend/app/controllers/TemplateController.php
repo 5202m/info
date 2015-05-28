@@ -282,7 +282,8 @@ class TemplateController extends ControllerBase
 			foreach($list as $k=>$v){
 				$new_list[$v['id']]=$v['name'];
 			}
-			$this->view->list = array($new_list,$list);
+			
+			$this->view->list = empty($category_id) ? array(array(),array()) :  array($new_list,$list);
 			$this->view->relation = $relation;
 		}
 		$this->view->partial('template/ajaxtemplate');

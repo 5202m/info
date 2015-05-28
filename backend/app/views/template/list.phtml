@@ -38,15 +38,20 @@
 							  <tr>
 								  <th width="1%">ID</th>
 								  <th width="6%">模板名字</th>
-								  <th width="11%">模板描述</th>
+								  <th width="9%">模板描述</th>
 								  <th width="3%">模板类型</th><!--  <th width="2%">模板引擎</th>-->
 								  <th width="4%">创建时间</th>
 								  <th width="4%">修改时间</th>
 								  <th width="1%">状态</th>
-								  <th width="2%">操作</th>
+								  <th width="4%">操作</th>
 							  </tr>
 						  </thead>   
 						  <tbody>
+						  <?php $type_name = array(
+						  	'Category'=>'分类',
+						  	'List'=>'列表',
+						  	'Detail'=>'内容页',
+						  );?>
 						  <?php foreach ($page->items as $item):?>
 						  
 							<tr>
@@ -55,7 +60,7 @@
 								<td><?php echo $item->name;?></td>
 								<td><?php echo $item->decription;?></td>
 								
-								<td><?php echo $item->type;?></td><!--  <td><?php echo $item->engine;?></td>-->
+								<td><?php echo isset($type_name[$item->type]) ? $type_name[$item->type] : $item->type;?></td><!--  <td><?php echo $item->engine;?></td>-->
 								<td><?php echo $item->ctime;?></td>
 								<td><?php echo $item->mtime;?></td>
 								<td class="center">
@@ -67,14 +72,14 @@
 								</td>
 								<td class="center">
 									
-									<a class="btn btn-info" href="/template/edit/<?php echo $item->id ?>">
+									<a title="编辑" class="btn btn-info" href="/template/edit/<?php echo $item->id ?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
-									<!--  
-									<a class="btn btn-danger"  href="/template/delete/<?php echo $item->id ?>" onclick='if(!confirm("确定要删除该数据吗？")){return false;}'>
+									 
+									<a title="删除" class="btn btn-danger"  href="/template/delete/<?php echo $item->id ?>" onclick='if(!confirm("确定要删除该数据吗？")){return false;}'>
 										<i class="halflings-icon white trash"></i> 
 									</a>
-									-->
+									
 								</td>
 							</tr>
 							<?php endforeach;?>

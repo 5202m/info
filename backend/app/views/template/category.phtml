@@ -29,7 +29,7 @@
 								<label class="control-label" for=template_id>分类</label>
 								<div class="controls">
 								<select name="category_id" id="category_id">
-								<option value="">--</option>
+								<option value="">全部</option>
 							  <?php 
                                     foreach ($items as $vs) :?>
                                         <option value="<?php echo $vs['id'];?>" 
@@ -48,7 +48,7 @@
 								<?php 
                                 	echo \Phalcon\Tag::selectStatic(array(
                                 			"template_id[]",
-                                			Template::find("status= 'Enabled' AND division_id='{$division_id}'"),
+                                			array(),//Template::find("status= 'Enabled' AND division_id='{$division_id}'"),
                                 			"using" => array("id", "name"),
                                 			"value"=>'',
 											"id"=>'template_id',
