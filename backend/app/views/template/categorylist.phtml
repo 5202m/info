@@ -98,7 +98,7 @@
 									<a title="预览" class="btn btn-success<?php echo $type == 'detail' ? ' go_detail' : ''?>" data-category_id="<?php echo $info['category_id']?>" data-template_id="<?php echo $info['template_id']?>" target="_blank" href="<?php echo str_replace(array(':url',':category_id',':template_id'),array($frontend_baseUrl,$info['category_id'],$info['template_id']), $urlAll->$type)  ?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
-									<a title="清空缓存" class="btn btn-info" href="/template/purge/<?php echo $info['template_id']?>/<?php  echo $info['category_id']?>">
+									<a title="清空缓存" class="btn btn-info" target="_blank" href="<?php echo str_replace(array(':url',':parent_id',':template_id'),array($frontend_baseUrl,$info['category_id'],$info['template_id']), $urlAll_purge->$type)  ?>">
 										<i class="halflings-icon white refresh"></i>  
 									</a>
 									<a title="解除关联" class="btn btn-danger deleteAction" href="/template/deleteHasCategory/<?php echo $info['id']?>">

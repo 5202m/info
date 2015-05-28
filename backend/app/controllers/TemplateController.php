@@ -65,7 +65,7 @@ class TemplateController extends ControllerBase
 				$this->view->disable();
 			
 			}else{
-				$this->view->message_info = message_info;
+				$this->view->message_info = $message_info;
 			}
 		}
 		if($id>0){
@@ -141,6 +141,16 @@ class TemplateController extends ControllerBase
 				$message_info[] = '无效的模板';
 			}
 		}
+		if($this->request->getPost('ajax')){
+			$status = false;
+			$msg = null;
+			$msg = '缓存更新成功';
+			
+			echo json_encode(array('status'=>$status,'msg'=>$msg));
+			$this->view->disable();
+			return;
+		}
+			
 		$this->view->type = $type;
 		$this->view->url = $preview_url;
 		$this->view->urlAll = isset($this->templateDir->purge) ? $this->templateDir->purge : array();
@@ -149,7 +159,7 @@ class TemplateController extends ControllerBase
 		}
 	
 		$this->view->getData = array('template_id'=>$template_id,'category_id'=>$category_id , 'article_id'=>$article_id);
-	
+		
 	}
 	public function deleteAction($id = 0){
 		if($id){
@@ -203,7 +213,11 @@ class TemplateController extends ControllerBase
 						}
 						
 						if($isCommit === true){
-							 $msg = $msg.($transaction->commit() ? $i.'模板关联成功' : '模板关联失败');
+							$successMessage = '关联后立即生效,用户查看相关页面是会根据最新的模板进行展示?<br />';
+							$successMessage .= 	'【<a href="javascript:;" id="clear_cache">确定</a>】';
+							$successMessage .=  '【<a href="javascript:;" id="no_clear_cache">取消</a>】<div id="clear_cache_list"></div>';
+							//$i
+							$msg = $transaction->commit() ? $successMessage : ($msg.' 模板关联失败');
 							
 						}else{
 							$category_ht->getMessages();
@@ -243,6 +257,8 @@ class TemplateController extends ControllerBase
 		$appendix = array('page'=>$page,'pageSize'=>$pageSize);
 		$this->view->list =  CategoryHasTemplate::getList($this->db , $where , $appendix);
 		$this->view->urlAll = isset($this->templateDir->preview) ? $this->templateDir->preview : array();
+		$this->view->urlAll_purge = isset($this->templateDir->purge) ? $this->templateDir->purge : array();
+		
 		
 		if($isPartView){
 			$this->view->partial('template/categorylist');
@@ -354,8 +370,8 @@ class TemplateController extends ControllerBase
 		$error_msg = array();
 		$status = false ;
 		$msg = '';
-		if($this->hostNode){
-			$rs = $this->multipleThreadsRequestAction($url , (array)$this->hostNode);
+		if($this->templateDir->node){
+			$rs = $this->multipleThreadsRequestAction($url , (array)$this->templateDir->node);
 			
 			
 			$msg = '缓存更新<br/>';

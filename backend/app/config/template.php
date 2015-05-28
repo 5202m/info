@@ -23,6 +23,7 @@ return array(
 					array('url'=>'','name'=>'内容','content'=>'','path'=>__DIR__ . '/../../public/template/detail.html','image'=>'/img/gallery/photo10.jpg'),
 					
 				),
+		'node'=>array('127.0.0.1','192.168.4.1'),
 		
 	);
 ?>

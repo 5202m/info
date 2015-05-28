@@ -20,7 +20,6 @@ return new \Phalcon\Config(array(
 		'imagesUri'		 => 'http://inf.hx9999.com/images/',
 		'baseUri'        => '',
 		'templateDir'=> include('template.php'),
-		'hostNode'		=>array('127.0.0.1','192.168.4.1'),
 	),
 	'redis' => array(
 		'host' => '192.168.6.1',

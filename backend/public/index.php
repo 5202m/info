@@ -184,10 +184,6 @@ try {
     	return $config->application->templateDir;
     });
     
-    $di->set('hostNode', function() use ($config) {
-    	return $config->application->hostNode;
-    });
-    
     $di->set('tipsToRedirect', function() {
         $l = DIRECTORY_SEPARATOR;
         if (!class_exists('TipsToRedirect')) {

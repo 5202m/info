@@ -61,6 +61,7 @@
 							  	</div>
 							  	<div class="controls">
                                 <?php echo \Phalcon\Tag::submitButton(array("确定",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+                                <button type="reset" id="reset" class="btn btn-small">重置</button>
 								</div>
 						</fieldset>
 						<?php echo \Phalcon\Tag::endForm()?>
@@ -118,7 +119,34 @@
 					        $('#ajaxtemplate').html(data);
 				    	}
 				    });
-				})
+				});
+				$('#reset').click(function(){
+					$("#category_id").trigger("change");
+				});
+
+				$('#clear_cache').live('click',function(){
+					var template_id = $('#template_id').val();
+					var category_id = $('#category_id').val();
+					$.ajax({
+				        type: "POST",
+				        url: '/template/purge',
+				        data: {'ajax':1,'template_id':template_id,'category_id':category_id,'relation':0},
+				        async:false,
+				        dataType:'json',
+				        success: function(data){
+					        $('#clear_cache_list').html(data.msg);
+					        
+					        setTimeout("$('#myModal').modal('hide')",600);
+				    	}
+				    });
+					
+					
+				});
+				$('#no_clear_cache').live('click',function(){
+					$('#myModal').modal('hide');
+				});
+				
+				
 			});
 			function loadtable(){
 				$.ajax({
