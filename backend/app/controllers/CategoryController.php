@@ -53,14 +53,15 @@ class CategoryController extends ControllerBase
     //添加分类页面
     public function addAction($child_id){
         $id = $this->Division_id;
-        $category = Category::find(
-            "division_id = '{$id}'"
-        );
         if($child_id){
             $cates = Category::findFirst(
                 "id = '{$child_id}'"
             );
         }
+        $category = Category::find(
+            "division_id = '{$id}' and language = '{$cates->language}'"
+        );
+        
         
         $this->view->setVar('cates',$cates);
         $this->view->setVar('pages',$category);
