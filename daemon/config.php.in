@@ -1,0 +1,19 @@
+<?php
+array (
+		'export' => array (
+			'dbhost' => '{{export.dbhost}}',
+			'dbport' => '{{export.dbport}}',
+			'dbuser' => '{{export.dbuser}}',
+			'dbpass' => '{{export.dbpass}}',
+			'dbname' => '{{export.dbname}}'
+		),
+		'import' => array (
+			'dbhost' => '{{import.dbhost}}',
+			'dbport' => '{{import.dbport}}',
+			'dbuser' => '{{import.dbuser}}',
+			'dbpass' => '{{import.dbpass}}',
+			'dbname' => '{{import.dbname}}'
+		)
+	);
+?>
+
