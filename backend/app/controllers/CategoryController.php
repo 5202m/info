@@ -105,13 +105,13 @@ class CategoryController extends ControllerBase
             return $this->response->redirect('edit');
         }
         if ($category->save() == false) {
-            foreach ($category->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-            return $this->response->redirect('edit');
+            echo json_encode(array('status'=>false,'msg'=> '修改分类失败'));
+            exit;
+        }else{
+            echo json_encode(array('status'=>false,'msg'=> '修改分类成功'));
+            exit;
         }
-        $form->clear();
-        return $this->response->redirect("index");
+        exit;
         
     }
     //处理添加分类
@@ -133,7 +133,6 @@ class CategoryController extends ControllerBase
         $category->language = $this->request->getPost('hd_language') != '' ? $this->request->getPost('hd_language') : $this->request->getPost('language'); 
         $category->path = '/';
         $category->status = 'Disabled';
-//        $category->ctime = date("Y-m-d H:i:s",  time());
         if($this->request->getPost('parent_id') == 'NULL'){
             $category->parent_id = null;
         }else{
@@ -146,15 +145,14 @@ class CategoryController extends ControllerBase
             }
             return $this->response->redirect('add');
         }
-        
         if ($category->save() == false) {
-            foreach ($category->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-            return $this->response->redirect('add');
+            echo json_encode(array('status'=>false,'msg'=> '添加分类失败'));
+            exit;
+        }else{
+            echo json_encode(array('status'=>false,'msg'=> '添加分类成功'));
+            exit;
         }
-        $form->clear();
-        return $this->response->redirect("index");
+        exit;
     }
     //获取顶级分类的语言
     public function getLangAction(){

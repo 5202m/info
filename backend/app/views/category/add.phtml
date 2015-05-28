@@ -13,7 +13,7 @@
 					</div>
                                     <!--<div class="alert alert-danger"></div>-->
 					<div class="box-content">
-                                            <form class="form-horizontal" method="post" action="/category/addHandle">
+                                            <form class="form-horizontal" method="post" id="category_post" action="/category/addHandle">
 							<fieldset>
                                                             
 							  
@@ -197,8 +197,8 @@
 								</div>
 							  </div>-->
 							  <div class="form-actions">
-                                                              <button id="submit" type="submit" class="btn btn-primary">添加</button>
-                                                              <button class="btn" type="submit" name="setoff" value="setoff">取消</button>
+                                                              <button id="submit" type="button" class="btn btn-primary">添加</button>
+                                                              <button class="btn" type="submit" id="setoff" name="setoff" value="setoff">取消</button>
 							  </div>
 							</fieldset>
 						  </form>
@@ -213,10 +213,55 @@
 $(function(){
     var language = '<?php echo isset($cates->language) ? $cates->language : ''?>';
     if( language !== ''){
-    $("#hd_language").val(language);
-    $("#language").attr("disabled", "true");
-};
+        $("#hd_language").val(language);
+        $("#language").attr("disabled", "true");
+    };
+    $("#submit").click(function(){
+        var name = $('#name').val();
+        if(!name){
+                $('#myModal>.modal-body>p').html('分类名称不能为空');
+                $('#myModal').modal('show');
+                return false;
+        }
+        if(name.length > 10){
+            $('#myModal>.modal-body>p').html('分类名称长度不能超过10');
+            $('#myModal').modal('show');
+            return false;
+        }
+//        var setoff = $("#setoff").val();
+        var name = $("#name").val();
+        var visibility = $("#visibility").val();
+        var language = $("#language").val();
+        var parent_id = $("#parent_id").val();
+        var description = $("#description").val();
+        $.post('/category/addHandle',{name:name,visibility:visibility,language:language,parent_id:parent_id,description:description},function(data){
+            $('#myModal>.modal-body>p').html(data.msg);
+            $('#myModal').modal('show');
+            if(!data.status){
+                    $('#myModal>.modal-body>p').append('<p><span id="jumpsec">5</span>秒后跳转到 <a  href="/category/index">列表页面</a>，<a id="nojump" href="javascript:;">取消</a></p>');
+                    window.template_jump = setInterval('jumpsec()',1000);
+            }
+        },'json');
+    });
+    $('#nojump').live('click',function(){
+            if(window.template_jump){
+                     clearInterval(window.template_jump);
+                     $('#myModal').modal('hide');
+            }
+            return false;
+    });
 });
+function jumpsec(){
+    var sec = $('#jumpsec').html();
+    sec = parseInt(sec);
+    if(sec>1){
+            sec = sec-1;
+            $('#jumpsec').html(sec);
+    }else{
+            location.href='/category/index';
+    }
+}
+
 $("#parent_id").change(function(){
    var id = $(this).children('option:selected').val();
    $.post('getLang',{id:id},function(data){

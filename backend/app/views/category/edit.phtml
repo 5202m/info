@@ -13,7 +13,7 @@
                                             <form class="form-horizontal" method="post" action="/category/editHandle">
 							<fieldset>
 							  
-                                                            <input type="hidden" name="id" value="<?php echo $cates->id;?>" />
+                                                            <input type="hidden" id="id" name="id" value="<?php echo $cates->id;?>" />
 <!--							  <div class="control-group">
 								<label class="control-label">Uneditable input</label>
 								<div class="controls">
@@ -63,12 +63,15 @@
                                                                         <?php 
                                                                                 $cates_arr = $this->objToArray->ohYeah($pages);
                                                                                 $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
+                                                                                if($cates->parent_id == null){
+                                                                                    echo "<option value='$cates->id'>{$cates->name}</option>";
+                                                                                }else{
                                                                                 foreach ($items as $vs){?>
                                                                         <option <?php echo ($cates->id==$vs['id']?'selected="selected"':'');?> value="<?php echo $vs['id'];?>">
                                                                                     <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                                                     <?php echo $vs['name'];?>
                                                                                 </option>
-                                                                        <?php }?>
+                                                                                <?php }}?>
 								  </select>
 								</div>
 							  </div>
@@ -188,7 +191,7 @@
 								</div>
 							  </div>-->
 							  <div class="form-actions">
-								<button id="submit" type="submit" class="btn btn-primary">修改</button>
+                                                              <button id="submit" type="button" class="btn btn-primary">修改</button>
 								<button class="btn">取消</button>
 							  </div>
 							</fieldset>
@@ -198,5 +201,57 @@
 				</div><!--/span-->
 			
 			</div><!--/row-->
-			
+<script language="javascript" type="text/javascript">
+    
+
+$(function(){
+    $("#submit").click(function(){
+        var name = $('#name').val();
+        if(!name){
+                $('#myModal>.modal-body>p').html('分类名称不能为空');
+                $('#myModal').modal('show');
+                return false;
+        }
+        if(name.length > 10){
+            $('#myModal>.modal-body>p').html('分类名称长度不能超过10');
+            $('#myModal').modal('show');
+            return false;
+        }
+        var id = $("#id").val();
+        var name = $("#name").val();
+        var visibility = $("#visibility").val();
+        var language = $("#language").val();
+        var parent_id = $("#parent_id").val();
+        var description = $("#description").val();
+        $.post('/category/editHandle',{id:id,name:name,visibility:visibility,language:language,parent_id:parent_id,description:description},function(data){
+            
+                $('#myModal>.modal-body>p').html(data.msg);
+                $('#myModal').modal('show');
+                if(!data.status){
+                        $('#myModal>.modal-body>p').append('<p><span id="jumpsec">5</span>秒后跳转到 <a  href="/category/index">列表页面</a>，<a id="nojump" href="javascript:;">取消</a></p>');
+                        window.template_jump = setInterval('jumpsec()',1000);
+                }
+            },'json');
+        });
+        $('#nojump').live('click',function(){
+                if(window.template_jump){
+                         clearInterval(window.template_jump);
+                         $('#myModal').modal('hide');
+                }
+                return false;
+        });
+    });
+    function jumpsec(){
+        var sec = $('#jumpsec').html();
+        sec = parseInt(sec);
+        if(sec>1){
+                sec = sec-1;
+                $('#jumpsec').html(sec);
+        }else{
+                location.href='/category/index';
+        }
+    }
+
+
+</script>				
 
