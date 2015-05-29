@@ -16,7 +16,7 @@
         <div class="box-content">
             <div class="row-fluid">
 							<div class="">
-								<div class="" id="">
+								<div class="" id="" style="float:left">
 									<label></label>
 									<form name="form1" action="/category/index" method="post">
 									
@@ -31,13 +31,15 @@
 									<input id="submit" type="submit" value="查询" class="btn btn-primary btn-search" />
 									</form>
 								</div>
+                                                            <div style="float:right"><a href="/category/add"><input  type="button" value="添加分类" class="btn btn-primary btn-search" /></a></div>
 							</div>
 						</div>
             <table class="table table-striped table-bordered bootstrap-datatable datatable">
                 <thead>
                     <tr>
-                        <!--<th>序号</th>-->
+                        
                         <th>分类名称</th>
+                        <th>层级</th>
                         <th>分类描述</th>
                         <th>语言</th>
                         <th>可见性</th>
@@ -55,11 +57,12 @@
                     foreach ($items as $vs) {
                         ?>
                         <tr>
-
+                            
                             <td  onclick="javascript:ShowMenu(<?php echo $new_id;?>);">
                                 <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
     <?php echo $vs['name']; ?>
                             </td>
+                            <td >第<?php echo $vs['level']+1?>级分类</td>
                             <td><?php echo $vs['description']; ?></td>
                             <td><?php if($vs['language'] == 'cn'){
                                                                         echo '简体';
