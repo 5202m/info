@@ -52,8 +52,6 @@
                     <?php
                     $cates_arr = $this->objToArray->ohYeah($pages);
                     $items = $this->tree->_tree($cates_arr, $parent_id = 0, $level = 0);
-                    $GLOBALS["ID"] = 0;
-                    $new_id = "Menu".$GLOBALS["ID"];
                     foreach ($items as $vs) {
                         ?>
                         <tr language="<?php echo $vs['language'];?>">
@@ -62,7 +60,7 @@
                                 <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
     <?php echo $vs['name']; ?>
                             </td>
-                            <td >第<?php echo $vs['level']+1?>级分类</td>
+                            <td ><?php echo $vs['level']+1?></td>
                             <td><?php echo $vs['description']; ?></td>
                             <td><?php if($vs['language'] == 'cn'){
                                                                         echo '简体';

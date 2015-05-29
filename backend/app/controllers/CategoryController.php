@@ -124,6 +124,17 @@ class CategoryController extends ControllerBase
         }
         $id = $this->request->getPost('id'); 
         $category = Category::findFirstById($id);
+        if($this->request->getPost('language') == '简体'){
+            $language = 'cn';
+        }elseif($this->request->getPost('language') == '繁体'){
+            $language = 'tw';
+        }else{
+            $language = 'en';
+        }
+        if($category->name == $this->request->getPost('name') && $category->visibility == $this->request->getPost('visibility') && $category->language == $language && $category->description == $this->request->getPost('description') && $category->parent_id == $this->request->getPost('parent_id')){
+            echo json_encode(array('status'=>false,'msg'=> '未做任何修改'));
+            exit;
+        }
         if(!$category){
             $this->flash->error("Category does not exist");
             return $this->response->redirect("index");
@@ -176,7 +187,7 @@ class CategoryController extends ControllerBase
         $category->visibility = $this->request->getPost('visibility'); 
         $category->language = $this->request->getPost('hd_language') != '' ? $this->request->getPost('hd_language') : $this->request->getPost('language'); 
         $category->path = '/';
-        $category->status = 'Disabled';
+        $category->status = 'Enabled';
         if($this->request->getPost('parent_id') == 'NULL'){
             $category->parent_id = null;
         }else{
