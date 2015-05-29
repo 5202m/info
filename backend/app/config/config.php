@@ -4,6 +4,7 @@ return new \Phalcon\Config(array(
 	'database' => array(
 		'adapter'  => 'Mysql',
 		'host'     => '192.168.6.1',
+		'port'     => 3306,
 		'username' => 'inf',
 		'password' => 'inf',
 		'dbname'     => 'inf',
