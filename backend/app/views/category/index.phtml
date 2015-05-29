@@ -18,7 +18,7 @@
 							<div class="">
 								<div class="" id="" style="float:left">
 									<label></label>
-									<form name="form1" action="/category/index" method="post">
+									<form name="form1" action="/category/list" method="post">
 									
 									语言：
 									<select name="language" id="language" style="width:auto;">
@@ -28,7 +28,7 @@
 										<?php endforeach;?>
 									</select>
 									
-									<input id="submit" type="submit" value="查询" class="btn btn-primary btn-search" />
+									<!--<input id="submit" type="submit" value="查询" class="btn btn-primary btn-search" />-->
 									</form>
 								</div>
                                                             <div style="float:right"><a href="/category/add"><input  type="button" value="添加分类" class="btn btn-primary btn-search" /></a></div>
@@ -56,7 +56,7 @@
                     $new_id = "Menu".$GLOBALS["ID"];
                     foreach ($items as $vs) {
                         ?>
-                        <tr>
+                        <tr language="<?php echo $vs['language'];?>">
                             
                             <td  onclick="javascript:ShowMenu(<?php echo $new_id;?>);">
                                 <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $vs['level']); ?>
@@ -98,6 +98,19 @@
     </div><!--/span-->
 
 </div><!--/row-->
+<script language="javascript" type="text/javascript">
+    $(function(){
+        $("#language").change(function(){
+            var language = $(this).children('option:selected').val();
+            $('.datatable tbody tr').hide();
+            $('.datatable tbody tr[language="'+language+'"]').show();
+//            $.post('index',{language:language},function(data){
+//                if(!data.status){
+//            },'json');
+        });
+
+      });
+</script>
 
 
 
