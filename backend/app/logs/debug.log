@@ -5557,3 +5557,21 @@
 [Wed, 27 May 15 05:13:32 +0200][INFO] DESCRIBE `template`
 [Wed, 27 May 15 05:13:32 +0200][INFO] SELECT `template`.`id`, `template`.`division_id`, `template`.`name`, `template`.`decription`, `template`.`content`, `template`.`type`, `template`.`status`, `template`.`engine`, `template`.`ctime`, `template`.`mtime` FROM `template` WHERE `template`.`division_id` = '3' ORDER BY `template`.`id` DESC LIMIT 10
 [Wed, 27 May 15 05:13:32 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `template` WHERE `template`.`division_id` = '3'
+[Fri, 29 May 15 05:21:08 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'division' AND `TABLE_SCHEMA` = DATABASE()
+[Fri, 29 May 15 05:21:08 +0200][INFO] DESCRIBE `division`
+[Fri, 29 May 15 05:21:08 +0200][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT 1
+[Fri, 29 May 15 05:21:14 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'article' AND `TABLE_SCHEMA` = DATABASE()
+[Fri, 29 May 15 05:21:14 +0200][INFO] DESCRIBE `article`
+[Fri, 29 May 15 05:21:14 +0200][INFO] SELECT `article`.`id`, `article`.`division_id`, `article`.`category_id`, `article`.`division_category_id`, `article`.`title`, `article`.`content`, `article`.`author`, `article`.`keyword`, `article`.`description`, `article`.`image`, `article`.`language`, `article`.`source`, `article`.`share`, `article`.`attribute`, `article`.`visibility`, `article`.`status`, `article`.`ctime`, `article`.`mtime` FROM `article` WHERE `article`.`division_id` = '3' AND `article`.`status` = 'Enabled' ORDER BY `article`.`id` DESC LIMIT 10
+[Fri, 29 May 15 05:21:14 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` WHERE `article`.`division_id` = '3' AND `article`.`status` = 'Enabled'
+[Fri, 29 May 15 05:21:14 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Fri, 29 May 15 05:21:14 +0200][INFO] DESCRIBE `category`
+[Fri, 29 May 15 05:21:14 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`language`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3
+[Fri, 29 May 15 05:22:03 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'category' AND `TABLE_SCHEMA` = DATABASE()
+[Fri, 29 May 15 05:22:03 +0200][INFO] DESCRIBE `category`
+[Fri, 29 May 15 05:22:03 +0200][INFO] SELECT `category`.`id` AS `id` FROM `category` WHERE `category`.`parent_id` = 42
+[Fri, 29 May 15 05:22:03 +0200][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'article' AND `TABLE_SCHEMA` = DATABASE()
+[Fri, 29 May 15 05:22:03 +0200][INFO] DESCRIBE `article`
+[Fri, 29 May 15 05:22:03 +0200][INFO] SELECT `article`.`id`, `article`.`division_id`, `article`.`category_id`, `article`.`division_category_id`, `article`.`title`, `article`.`content`, `article`.`author`, `article`.`keyword`, `article`.`description`, `article`.`image`, `article`.`language`, `article`.`source`, `article`.`share`, `article`.`attribute`, `article`.`visibility`, `article`.`status`, `article`.`ctime`, `article`.`mtime` FROM `article` WHERE (`article`.`division_category_id` = 42 OR `article`.`division_category_id` IN (43, 44)) AND `article`.`division_id` = '3' AND `article`.`status` = 'Enabled' ORDER BY `article`.`id` DESC LIMIT 10
+[Fri, 29 May 15 05:22:03 +0200][INFO] SELECT COUNT(*) AS `rowcount` FROM `article` WHERE (`article`.`division_category_id` = 42 OR `article`.`division_category_id` IN (43, 44)) AND `article`.`division_id` = '3' AND `article`.`status` = 'Enabled'
+[Fri, 29 May 15 05:22:03 +0200][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`language`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`division_id` = 3

@@ -24,13 +24,14 @@ class Article extends \Phalcon\Mvc\Model
 		if($where){
 			$divisionCategoryId = array();
 			if(isset($where['division_category_id']) && $where['division_category_id']){
-				$phql = "SELECT category.id FROM category where category.parent_id={$where['division_category_id']}";
+				/*$phql = "SELECT category.id FROM category where category.parent_id={$where['division_category_id']}";
 				$categoryId = $modelsManager->executeQuery($phql);
 				//echo '<pre>';
 				foreach ($categoryId as $category){
 					$divisionCategoryId[] = $category->id;
-				}
+				}*/
 				//print_r($divisionCategoryId);exit;
+				$divisionCategoryId = Category::selectCategoryId($modelsManager, $where['division_category_id']);
 			}
 			foreach($where as $k=>$v){
 				if($k=='title'){
