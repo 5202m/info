@@ -58,9 +58,16 @@ class CategoryController extends ControllerBase
                 "id = '{$child_id}'"
             );
         }
-        $category = Category::find(
-            "division_id = '{$id}' and language = '{$cates->language}'"
-        );
+        if($cates){
+            $category = Category::find(
+                "division_id = '{$id}' and language = '{$cates->language}'"
+            );
+        }else{
+            $category = Category::find(
+                "division_id = '{$id}'"
+            );
+        }
+        
         
         
         $this->view->setVar('cates',$cates);
