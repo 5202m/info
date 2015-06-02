@@ -1,5 +1,5 @@
 <?php
-array (
+return array (
 		'export' => array (
 			'dbhost' => '127.0.0.1',
 			'dbport' => '3306',
