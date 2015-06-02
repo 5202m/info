@@ -4,6 +4,9 @@ class CategoryController extends ControllerBase
     private $language = array('cn'=>'简体', 'tw'=>'繁体', 'en'=>'英语');
     public function indexAction(){
         $search_key = 'category_list_search';
+//        $this->session->remove($search_key);
+//        $this->listAction();
+	
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$this->session->set($search_key, $params);
@@ -29,15 +32,48 @@ class CategoryController extends ControllerBase
 			}
 			$strWhere = implode(' AND ', $strWhere);
 		}
-                
-//        $id = $this->Division_id;
         $category = Category::find(
             "{$strWhere}"
         );
-//        print_r($this->objToArray->ohYeah($category));die;
         $this->view->setVar('pages',$category);
         $this->view->setVar('language',$this->language);
     }
+    
+//    public function listAction(){
+//        $search_key = 'category_list_search';
+//        if($this->request->isPost()){
+//			$params = $this->request->getPost();
+//			$this->session->set($search_key, $params);
+//		}
+//		$where = array();
+//		if($this->session->has($search_key)){
+//			$where = $this->session->get($search_key);
+//			$this->view->where  = $where;
+//			foreach($where as $k=>$v){
+//				if(empty($v)){
+//					unset($where[$k]);
+//				}
+//			}
+//		}
+//                $where['division_id'] = $this->Division_id;
+//                if($where){
+//			foreach($where as $k=>$v){
+//				if($k=='language'){
+//					$strWhere[]  =  "Category.{$k} = '{$v}'";
+//                                }else{
+//                                    $strWhere[]  =  "Category.{$k} = '{$v}'";
+//                                }
+//			}
+//			$strWhere = implode(' AND ', $strWhere);
+//		}
+//        $category = Category::find(
+//            "{$strWhere}"
+//        );
+//        $this->view->setVar('pages',$category);
+//        $this->view->setVar('language',$this->language);
+//        $this->view->partial('category/index');
+//    }
+
     //编辑分类页面
     public function editAction($id){
         $Division_id = $this->Division_id;
@@ -58,9 +94,16 @@ class CategoryController extends ControllerBase
                 "id = '{$child_id}'"
             );
         }
-        $category = Category::find(
-            "division_id = '{$id}' and language = '{$cates->language}'"
-        );
+        if($cates){
+            $category = Category::find(
+                "division_id = '{$id}' and language = '{$cates->language}'"
+            );
+        }else{
+            $category = Category::find(
+                "division_id = '{$id}'"
+            );
+        }
+        
         
         
         $this->view->setVar('cates',$cates);
@@ -81,6 +124,17 @@ class CategoryController extends ControllerBase
         }
         $id = $this->request->getPost('id'); 
         $category = Category::findFirstById($id);
+        if($this->request->getPost('language') == '简体'){
+            $language = 'cn';
+        }elseif($this->request->getPost('language') == '繁体'){
+            $language = 'tw';
+        }else{
+            $language = 'en';
+        }
+        if($category->name == $this->request->getPost('name') && $category->visibility == $this->request->getPost('visibility') && $category->language == $language && $category->description == $this->request->getPost('description') && $category->parent_id == $this->request->getPost('parent_id')){
+            echo json_encode(array('status'=>false,'msg'=> '未做任何修改'));
+            exit;
+        }
         if(!$category){
             $this->flash->error("Category does not exist");
             return $this->response->redirect("index");
@@ -133,7 +187,7 @@ class CategoryController extends ControllerBase
         $category->visibility = $this->request->getPost('visibility'); 
         $category->language = $this->request->getPost('hd_language') != '' ? $this->request->getPost('hd_language') : $this->request->getPost('language'); 
         $category->path = '/';
-        $category->status = 'Disabled';
+        $category->status = 'Enabled';
         if($this->request->getPost('parent_id') == 'NULL'){
             $category->parent_id = null;
         }else{
