@@ -238,13 +238,14 @@ class ArticleController extends ControllerBase {
 			$where['division_category_id'] = $this->request->getPost('ori_division_category_id');
 			$status = Article::modifyArticle($this->modelsManager, $newVal, $where);
 			if($status->success() == true){
-				$this->flash->error('文章分类迁移成功');
+				//$this->flash->error('文章分类迁移成功');
+				$this->view->successMessage = $this->tipsToRedirect->modalSuccessTips('文章分类迁移成功', '/article');
 			}
 			else{
-				foreach ($status->getMessages() as $message) {
+				/*foreach ($status->getMessages() as $message) {
 		            $this->flash->error($message->getMessage());//$errors[] = $message->getMessage();
-		        }
-				
+		        }*/
+				$this->view->errorMessage = $status->getMessages();
 			}
 		}
 		$divisionCategory = $this->getDivisionCategory();

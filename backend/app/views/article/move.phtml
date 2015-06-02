@@ -7,13 +7,23 @@
 <div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon edit"></i><span class="break"></span>分类迁移</h2>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span>文章分类迁移</h2>
 						<div class="box-icon">
 							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
 							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
 						</div>
 					</div>
+					<?php if(isset($errorMessage)):?>
+					<div class="box-content alerts">
+						<div class="alert alert-error">
+							<button type="button" class="close" data-dismiss="alert">×</button>
+							<?php foreach($errorMessage as $message):?>
+							<strong><?php echo $message;?></strong><br />
+							<?php endforeach;?>
+						</div>
+					</div>
+					<?php endif;?>
 					<div class="box-content">
 						<form class="form-horizontal" method="post" action="" name="moveForm" id="moveForm">
 						  <fieldset>
@@ -55,10 +65,21 @@
 									<span id="new_division_category_id_msg" class="help-inline"></span>
 								</div>
 							</div>
-							
+							<!--div class="row-fluid"-->	
+								<!--div class="box span12"-->
+									<div class="box-content alerts">
+										<div class="alert alert-block ">
+											<!--button type="button" class="close" data-dismiss="alert">×</button-->
+											<!--h4 class="alert-heading">Warning!</h4-->
+											<p>您可以将原分类的所有文章迁移至新分类，迁移后原分类文章被清空，新分类则包含原分类+新分类的所有文章</p>
+										</div>
+									</div>
+									
+								<!--/div--><!--/span-->
+							<!--/div--><!--/row-->
 							<div class="form-actions">
 							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
-							  <button type="reset" class="btn">取消</button>
+							  <button type="button" class="btn" onclick="location.href='/article'">取消</button>
 							</div>
 						  </fieldset>
 						</form>   
@@ -95,5 +116,8 @@
 					}
 					return true;
 				});
+				<?php if(isset($successMessage)):
+					echo $successMessage;
+				 endif;?>
 			})
 			</script>
