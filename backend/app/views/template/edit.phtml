@@ -116,8 +116,8 @@
 							<div class="form-actions">
 							<?php echo \Phalcon\Tag::hiddenField(array("ajax","value"=>0));
 							  echo \Phalcon\Tag::submitButton(array("确定",'class'=>'btn btn-primary','id'=>'submit')) ?>
-						
-							  <button type="reset" id="reset" class="btn">取消</button>
+							  <button type="reset" id="reset" class="btn">重置</button>
+							  <button type="reset" id="back" class="btn">取消</button>
 							</div>
 						  </fieldset> 
 						<?php echo \Phalcon\Tag::endForm(); ?>
@@ -234,14 +234,13 @@
 
 			
 			$('#reset').click(function(){
-				<?php if($info->id) :?>
-				location.href='/template/list/1';
-				return ;
-				<?php endif ;?>
 				$('#content_source').val('');
 				$('#select_countent>div>a.selecta').find('img').css('border','0px');
 			});
-			
+			$('#back').click(function(){
+				location.href='/template/list/1';
+
+			});
 			
 			
 			
