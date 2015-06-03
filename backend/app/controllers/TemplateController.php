@@ -52,6 +52,21 @@ class TemplateController extends ControllerBase
 		
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
+			$have_modify = false;
+			if($params['id']){
+				$oldinfo = Template::findFirst($params['id']);
+				foreach($params as $k=>$v){
+					if(isset($oldinfo->$k) && $oldinfo->$k !== $v){
+						$have_modify = true;
+						break;
+					}
+				}
+			}
+			if($params['id']>0 && $have_modify==false){
+				echo json_encode(array('status'=>true,'msg'=>'你还没修改'));
+				$this->view->disable();
+				return ;
+			}
 			$last_id = Template::insert($params);
 			$isError = true ;
 			if(is_numeric($last_id)){
@@ -163,14 +178,26 @@ class TemplateController extends ControllerBase
 	}
 	public function deleteAction($id = 0){
 		if($id){
-			$template = new Template();
-			if($template->find($id)){
-				$template->id = $id;
-				if($template->delete()){
-					return $this->response->redirect("/template/list");
+			$status = false;
+			$cht = new CategoryHasTemplate();
+			foreach($cht->find("template_id='{$id}'") as $item){
+				if ($item->delete() == false) {
+					$status = true ;
+				} else {
+					
 				}
 			}
 			
+			if($status == false){
+				$template = new Template();
+				if($template->find($id)){
+					$template->id = $id;
+					if($template->delete()){
+						return $this->response->redirect("/template/list");
+					}
+				}
+			}
+			echo '删除失败';
 		}
 	}
 	public function categoryAction($type='category'){
