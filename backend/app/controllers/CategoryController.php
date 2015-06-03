@@ -118,6 +118,10 @@ class CategoryController extends ControllerBase
     }
     //处理编辑分类
     public function editHandleAction(){
+        $setoff = $this->request->getPost('setoff');
+        if($setoff == "setoff"){
+            return $this->response->redirect("index");
+        }
         $Division_id = $this->Division_id;
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
