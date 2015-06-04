@@ -238,6 +238,8 @@ $(function(){
             $('#myModal>.modal-body>p').html(data.msg);
             $('#myModal').modal('show');
             if(!data.status){
+                location.href='/category/index';
+                return false;
                     $('#myModal>.modal-body>p').append('<p><span id="jumpsec">5</span>秒后跳转到 <a  href="/category/index">列表页面</a>，<a id="nojump" href="javascript:;">取消</a></p>');
                     window.template_jump = setInterval('jumpsec()',1000);
             }
