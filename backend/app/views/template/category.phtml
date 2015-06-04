@@ -80,6 +80,12 @@
 			$(document).ready(function(){
 				loadtable();
 				$('#submit').click(function(){
+					var msg = '关联后立即生效,用户查看相关页面是会根据最新的模板进行展示?<br>【<a href="javascript:;" id="submit_ok">确定</a>】【<a href="javascript:;" id="submit_no">取消</a>】';
+					$('#myModal>.modal-body>p').html(msg);
+		        	$('#myModal').modal('show');
+		        	return false;
+				});
+				$('#submit_ok').live('click',function(){
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 					if(!template_id){
@@ -104,8 +110,9 @@
 				        	loadtable();
 				    	}
 				    });
+					setTimeout("$('#myModal').modal('hide')",600);
 					return false;
-				})
+				});
 
 				$('#category_id').live('change',function(){
 					var template_id = $('#template_id').val();
@@ -123,30 +130,28 @@
 				$('#reset').click(function(){
 					$("#category_id").trigger("change");
 				});
-
-				$('#clear_cache').live('click',function(){
-					var template_id = $('#template_id').val();
-					var category_id = $('#category_id').val();
-					$.ajax({
-				        type: "POST",
-				        url: '/template/purge',
-				        data: {'ajax':1,'template_id':template_id,'category_id':category_id,'relation':0},
-				        async:false,
-				        dataType:'json',
-				        success: function(data){
-					        $('#clear_cache_list').html(data.msg);
-					        
-					        setTimeout("$('#myModal').modal('hide')",600);
-				    	}
-				    });
-					
-					
-				});
-				$('#no_clear_cache').live('click',function(){
+				
+				//$('#clear_cache').live('click',function(){
+				//	var template_id = $('#template_id').val();
+				//	var category_id = $('#category_id').val();
+				//	$.ajax({
+				     //   type: "POST",
+				     //   url: '/template/purge',
+				    //    data: {'ajax':1,'template_id':template_id,'category_id':category_id,'relation':0},
+				    //    async:false,
+				    //    dataType:'json',
+				     //   success: function(data){
+					 //       $('#clear_cache_list').html(data.msg);
+					 //       
+					 //       setTimeout("$('#myModal').modal('hide')",600);
+				    //	}
+				  //  });
+				//});
+				
+				$('#submit_no').live('click',function(){
 					$('#myModal').modal('hide');
+					$(".search-choice-close").trigger("click");
 				});
-				
-				
 			});
 			function loadtable(){
 				$.ajax({

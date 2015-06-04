@@ -240,10 +240,7 @@ class TemplateController extends ControllerBase
 						}
 						
 						if($isCommit === true){
-							$successMessage = '关联后立即生效,用户查看相关页面是会根据最新的模板进行展示?<br />';
-							$successMessage .= 	'【<a href="javascript:;" id="clear_cache">确定</a>】';
-							$successMessage .=  '【<a href="javascript:;" id="no_clear_cache">取消</a>】<div id="clear_cache_list"></div>';
-							//$i
+							$successMessage = '模板关联成功';
 							$msg = $transaction->commit() ? $successMessage : ($msg.' 模板关联失败');
 							
 						}else{

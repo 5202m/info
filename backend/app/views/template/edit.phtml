@@ -39,7 +39,7 @@
 							<div class="control-group">
 							  <label class="control-label" for="typeahead">模板名字</label>
 							  <div class="controls">
-								<?php echo \Phalcon\Tag::textField(array("name", "class" => "span6 typeahead" , "value"=>$info->name,'maxlength'=>30)) ?>
+								<?php echo \Phalcon\Tag::textField(array("name", "class" => "span6 typeahead" , "value"=>$info->name,'maxlength'=>30 ,'onkeyup'=>"value=value.replace(/(^\s*)/g,'')" )) ?>
 							  </div>
 							</div>
 							
