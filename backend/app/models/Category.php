@@ -18,5 +18,15 @@ class Category extends \Phalcon\Mvc\Model
     	}
     	return $divisionCategoryId;
     }
+    static public function getSubIds($parent_id,&$ids){
+    	empty($ids) && $ids[]=$parent_id;
+    	foreach(Category::find("parent_id = '{$parent_id}'") as $item){
+    		if($item){
+    			$ids[]=$item->id;
+    			Category::getSubIds($item->id,$ids);
+    		}
+    	}
+    	
+    }
 }
 
