@@ -108,7 +108,8 @@
 				        	$('#myModal>.modal-body>p').html(data.msg);
 				        	$('#myModal').modal('show');
 				        	loadtable();
-				        	$(".search-choice-close").trigger("click");
+				        	//$(".search-choice-close").trigger("click");
+				        	$("#category_id").trigger("change");
 				    	}
 				    });
 					setTimeout("$('#myModal').modal('hide')",600);

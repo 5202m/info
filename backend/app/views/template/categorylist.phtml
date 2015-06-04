@@ -172,6 +172,7 @@
 				    });
 					if(deleteSuccess==1){
 						$(this).parent().html('');
+						setTimeout("$('#myModal').modal('hide')",600);
 					}
 					return false;
 				});
