@@ -178,7 +178,6 @@
 				$('.go_detail').click(function(){
 					var template_id = $(this).attr('data-template_id');
 					var category_id = $(this).attr('data-category_id');
-					alert(category_id);
 					window.go_detail_href = $(this).attr('href');
 					$.ajax({
 				        type: "POST",
