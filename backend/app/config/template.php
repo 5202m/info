@@ -18,9 +18,9 @@ return array(
 					 * content:编辑内容,优先级2
 					 * image:显示的图片
 					 */				
-					array('url'=>'','name'=>'分类','content'=>'','path'=>__DIR__ . '/../../public/template/category.html','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'列表','content'=>'','path'=>__DIR__ . '/../../public/template/list.html','image'=>'/img/gallery/photo10.jpg'),
-					array('url'=>'','name'=>'内容','content'=>'','path'=>__DIR__ . '/../../public/template/detail.html','image'=>'/img/gallery/photo10.jpg'),
+					array('url'=>'','name'=>'分类','content'=>'','path'=>__DIR__ . '/../../public/template/category.html','image'=>'/img/icon/u14.png'),
+					array('url'=>'','name'=>'列表','content'=>'','path'=>__DIR__ . '/../../public/template/list.html','image'=>'/img/icon/u12.png'),
+					array('url'=>'','name'=>'内容','content'=>'','path'=>__DIR__ . '/../../public/template/detail.html','image'=>'/img/icon/u16.png'),
 					
 				),
 		'node'=>array('127.0.0.1','192.168.4.1'),
