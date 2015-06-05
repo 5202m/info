@@ -17,9 +17,6 @@ class ArticleController extends ControllerBase {
 		$this->removeSearchSession();
 	    //$article = Article::findFirst(14039565);echo '<pre>';
 	    //print_r($article->category->name);die;
-		//foreach ($article->category as $category) {
-		//    echo $category->parts->name, "\n";
-		//}
 		$this->listAction(1, 10);
 		$this->view->partial('article/list');
     }
