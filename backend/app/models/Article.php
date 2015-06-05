@@ -32,7 +32,8 @@ class Article extends \Phalcon\Mvc\Model
 					$divisionCategoryId[] = $category->id;
 				}*/
 				//print_r($divisionCategoryId);exit;
-				$divisionCategoryId = Category::selectCategoryId($modelsManager, $where['division_category_id']);
+				//$divisionCategoryId = Category::selectCategoryId($modelsManager, $where['division_category_id']);
+				Category::getSubIds($where['division_category_id'], $divisionCategoryId);
 			}
 			foreach($where as $k=>$v){
 				if($k=='title'){
