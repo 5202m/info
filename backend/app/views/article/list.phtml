@@ -89,7 +89,7 @@
 							  <tr>
 							  	  <th width="10"><input type="checkbox" name="ckall" /></th>
 								  <th>标题</th>
-								  <!--th>所属分类</th-->
+								  <th>所属分类</th>
 								  <th>作者</th>
 								  <th>语言</th>
 								  <th>分享</th>
@@ -103,7 +103,7 @@
 							<tr>
 								<td><input type="checkbox" name="id" value="<?php echo $item->id;?>" /></td>
 								<td><?php echo $item->title;?></td>
-								<!--td class="center"><?php //echo $item->cname;?></td-->
+								<td class="center"><?php echo $item->category->name;?></td>
 								<td class="center"><?php echo $item->author;?></td>
 								<td><?php echo $language[$item->language];?></td>
 								<td><?php echo $item->share=='N'?'<span class="label label-error">否</span>':'<span class="label label-success">是</span>';?></td>

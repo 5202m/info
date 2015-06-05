@@ -2385,7 +2385,7 @@ function modifyArticleStatus(url, ids, act){
 					}
 					else{
 						$("#myModal>.modal-body>p").html(data.message);
-						$("#successModal").modal("show");
+						$("#myModal").modal("show");
 					}
 				}
 			},

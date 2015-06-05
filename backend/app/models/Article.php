@@ -4,6 +4,7 @@ class Article extends \Phalcon\Mvc\Model
 {
 	public function initialize(){
 		//$this->hasOne('id', 'Category', 'division_category_id');
+		$this->hasOne("division_category_id", "Category", "id");//{0}主表关联子表的ID，{1}关联的子表，{2}子表ID
 		$this->skipAttributes(array('from', 'ctime', 'mtime'));
 	}
 	
@@ -31,7 +32,8 @@ class Article extends \Phalcon\Mvc\Model
 					$divisionCategoryId[] = $category->id;
 				}*/
 				//print_r($divisionCategoryId);exit;
-				$divisionCategoryId = Category::selectCategoryId($modelsManager, $where['division_category_id']);
+				//$divisionCategoryId = Category::selectCategoryId($modelsManager, $where['division_category_id']);
+				Category::getSubIds($where['division_category_id'], $divisionCategoryId);
 			}
 			foreach($where as $k=>$v){
 				if($k=='title'){

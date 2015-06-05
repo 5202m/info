@@ -87,7 +87,7 @@ class ListController extends ControllerBase
     		$view->setVar('template_id',$template_id);
     		$view->setVar('category_id',$category_id);
     		$view->setVar('limit',$limit);
-    		$view->setVar('pagenumber',$pagenumber);
+    		$view->setVar('pagenumber',$page);
     		$view->setVar('pages',$pages);
     		$view->start();
     		$view->render("list","$template_id");
