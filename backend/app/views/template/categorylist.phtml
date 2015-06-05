@@ -102,7 +102,7 @@
 								
 								<td>
 								<?php $type = strtolower($info['ttype']) ;?>
-								<?php if($item['visibility']!='Hidden'):?>
+								<?php if($item['visibility']!='Hidden' && $info['tstatus']=='Enabled'):?>
 									<a title="预览" class="btn btn-success<?php echo  ' go_'.$type?>" data-category_id="<?php echo $info['category_id']?>" data-template_id="<?php echo $info['template_id']?>" target="_blank" href="<?php echo str_replace(array(':url',':category_id',':template_id'),array($frontend_baseUrl,$info['category_id'],$info['template_id']), $urlAll->$type)  ?>">
 										<i class="halflings-icon white zoom-in"></i>  
 									</a>
@@ -176,20 +176,37 @@
 					}
 					return false;
 				});
+				
 				$('.go_detail').click(function(){
 					var template_id = $(this).attr('data-template_id');
 					var category_id = $(this).attr('data-category_id');
 					window.go_detail_href = $(this).attr('href');
+					window.template_article_id = 0;
+				
 					$.ajax({
 				        type: "POST",
 				        url: '/template/ajaxarticle',
-				        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id},
+				        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id,'only_one_id':1},
 				        async:false,
 				        success: function(data){
-				        	$('#myModal>.modal-body>p').html('<div class="span5"><div class="box-content"><div class="row-fluid"><div class="span11">'+data+'<div id="loadding"></div></div></div></div></span>');
-				        	$('#myModal').modal('show');
+					        
+					        if(data.replace(/[^0-9]$/g,'') != data){
+					        	$('#myModal>.modal-body>p').html('<div class="span5"><div class="box-content"><div class="row-fluid"><div class="span11">'+data+'<div id="loadding"></div></div></div></div></span>');
+					        	$('#myModal').modal('show');
+					        }else{
+					        	window.template_article_id = data;
+					        }
+				        	
 				    	}
 				    });
+				    
+				    if(window.template_article_id){
+					    var href= window.go_detail_href;
+				    	href = href.replace(':article_id',window.template_article_id);
+				    	$(this).attr('href',href);
+				    	return true;
+				    }
+				    
 					return false;
 				});
 				

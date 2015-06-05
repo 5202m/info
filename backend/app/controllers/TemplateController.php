@@ -299,7 +299,7 @@ class TemplateController extends ControllerBase
 			$relation = $this->request->getPost('relation'); 
 			
 			$not = $relation ? '' : ' NOT ';
-			$sql="SELECT id,name,`type` FROM template WHERE division_id = '{$this->division_id}' AND id {$not} 
+			$sql="SELECT id,name,`type` FROM template WHERE `status`='Enabled' AND division_id = '{$this->division_id}' AND id {$not} 
 					in(SELECT template_id FROM category_has_template WHERE category_id = '{$category_id}')";
 			$list = $this->db->fetchAll($sql,PDO::FETCH_ASSOC);
 			$new_list = array();
@@ -345,6 +345,7 @@ class TemplateController extends ControllerBase
 		if($this->request->isPost()){
 			$category_id = $this->request->getPost('category_id');
 			$article_id = $this->request->getPost('article_id');
+			$this->view->only_one_id = $this->request->getPost('only_one_id') ? $this->request->getPost('only_one_id') : 0;
 		}
 		$this->view->category_id = $category_id;
 		$this->view->article_id = $article_id;
