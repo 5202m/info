@@ -124,6 +124,9 @@
 					var visibility =  $("#category_id").find("option:selected").attr('data-visibility');
 					if(visibility=='Hidden'){
 						//是否可以关联。
+						$('#myModal>.modal-body>p').html('该分类处于隐藏状态,无法关联模板。');
+			        	$('#myModal').modal('show');
+			        	return ;
 					}
 					
 					$.ajax({
