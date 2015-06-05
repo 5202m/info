@@ -15,6 +15,11 @@ class ArticleController extends ControllerBase {
 	 */
     public function indexAction(){
 		$this->removeSearchSession();
+	    //$article = Article::findFirst(14039565);echo '<pre>';
+	    //print_r($article->category->name);die;
+		//foreach ($article->category as $category) {
+		//    echo $category->parts->name, "\n";
+		//}
 		$this->listAction(1, 10);
 		$this->view->partial('article/list');
     }
@@ -156,7 +161,31 @@ class ArticleController extends ControllerBase {
 		$this->view->images = $images;
         $this->view->language = $this->language;
 	}
-	
+
+	/**
+	 * 判断是否有编辑文章内容
+	 */
+	public function isEditAction(){
+		if($this->request->isPost()){
+			$params = $this->request->getPost();
+			$have_modify = false;
+			if($params['id']){
+				$orgInfo = Article::findFirst($params['id']);
+				foreach($params as $k=>$v){
+					if(isset($orgInfo->$k) && $orgInfo->$k !== $v){
+						$have_modify = true;
+						break;
+					}
+				}
+			}
+			if($params['id']>0 && $have_modify==false){
+				echo json_encode(array('status'=>true,'msg'=>'你还没修改'));
+				$this->view->disable();
+				return ;
+			}
+		}
+		exit;
+	}
 	/**
 	 * 添加文章
 	 */

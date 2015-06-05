@@ -3,6 +3,7 @@
 class Category extends \Phalcon\Mvc\Model
 {
     public function initialize(){
+    	$this->belongsTo("id", "Article", "division_category_id");//{0}子表ID（分类表ID），{1}主表（文章表），{2}主表（文章表）关联子表（分类表）的ID
         Category::skipAttributes(array('ctime','mtime'));
     }
     

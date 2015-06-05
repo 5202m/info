@@ -163,7 +163,7 @@
 							</div>
 							<div class="form-actions">
 							  <input type="hidden" name="id" value="<?php echo $article->id;?>" />
-							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
+							  <button id="submit" type="button" class="btn btn-primary">确定</button>
 							  <input type="button" id="reset" class="btn" value="取消" />
 							</div>
 						  </fieldset>
@@ -185,17 +185,18 @@
 							var self = this;
 							K.ctrl(document, 13, function() {
 								self.sync();
-								K('form[name=createForm]')[0].submit();
+								K('form[name=editForm]')[0].submit();
 							});
 							K.ctrl(self.edit.doc, 13, function() {
 								self.sync();
-								K('form[name=createForm]')[0].submit();
+								K('form[name=editForm]')[0].submit();
 							});
 						}
 					});
 				});
 				$(document).ready(function(){
-					$('#editForm').submit(function(){
+					$.ajaxSetup({async: false});
+					$('#submit').click(function(){
 						var error_count = 0;
 						if($.trim($('#title').val())==''){
 							error_count++;
@@ -251,11 +252,16 @@
 							$('#content_msg').parent().parent().removeClass('error');
 							$('#content_msg').text('');
 						}
+						if(checkIsEdit()){
+							$("#myModal>.modal-body>p").html('你还没修改');
+							$("#myModal").modal("show");
+							return false;
+						}
 						if(error_count>0){
 							$('body,html').animate({scrollTop:0},1000); 
 							return false;
 						}
-						return true;
+						$('#editForm').submit();
 					});
 					$('#reset').click(function(){
 						location.href='/article';
@@ -264,4 +270,16 @@
 						echo $successMessage;
 					 endif;?>
 				})
+				function checkIsEdit(){
+					var flag = false;
+					$.post('/article/isEdit', 
+							$('#editForm').serialize(),
+							function(data){
+								if(data!=null){
+									flag = data.status;
+								}
+							},
+							'json');
+					return flag;
+				}
 			</script>
