@@ -32,7 +32,7 @@
 								<option value="">请选择</option>
 							  <?php 
                                     foreach ($items as $vs) :?>
-                                        <option value="<?php echo $vs['id'];?>" 
+                                        <option data-visibility='<?php echo $vs['visibility']?>' value="<?php echo $vs['id'];?>" 
                                         <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
                                              <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                  <?php echo $vs['name'].($vs['visibility'] == 'Hidden' ? '(隐藏)' : '');?>
@@ -120,6 +120,12 @@
 				$('#category_id').live('change',function(){
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
+
+					var visibility =  $("#category_id").find("option:selected").attr('data-visibility');
+					if(visibility=='Hidden'){
+						//是否可以关联。
+					}
+					
 					$.ajax({
 				        type: "POST",
 				        url: '/template/ajaxtemplate',
