@@ -81,6 +81,16 @@
 			$(document).ready(function(){
 				loadtable();
 				$('#submit').click(function(){
+
+					var visibility =  $("#category_id").find("option:selected").attr('data-visibility');
+					if(visibility=='Hidden'){
+						
+						$('#myModal>.modal-body>p').html('该分类处于隐藏状态,无法关联模板。');
+			        	$('#myModal').modal('show');
+			        	return false;
+					}
+					
+					
 					var msg = '关联后立即生效,用户查看相关页面是会根据最新的模板进行展示?<br>【<a href="javascript:;" id="submit_ok">确定</a>】【<a href="javascript:;" id="submit_no">取消</a>】';
 					$('#myModal>.modal-body>p').html(msg);
 		        	$('#myModal').modal('show');
@@ -121,13 +131,10 @@
 					var template_id = $('#template_id').val();
 					var category_id = $('#category_id').val();
 
-					var visibility =  $("#category_id").find("option:selected").attr('data-visibility');
-					if(visibility=='Hidden'){
-						//是否可以关联。
-						$('#myModal>.modal-body>p').html('该分类处于隐藏状态,无法关联模板。');
-			        	$('#myModal').modal('show');
-			        	return ;
-					}
+					//var visibility =  $("#category_id").find("option:selected").attr('data-visibility');
+					//if(visibility=='Hidden'){
+			        	//return ;
+					//}
 					
 					$.ajax({
 				        type: "POST",
