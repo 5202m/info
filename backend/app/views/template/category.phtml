@@ -35,7 +35,8 @@
                                         <option value="<?php echo $vs['id'];?>" 
                                         <?php echo (isset($where['category_id']) && $where['category_id']==$vs['id']) ? 'selected' : '' ?>>
                                              <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
-                                                 <?php echo $vs['name'];?>
+                                                 <?php echo $vs['name'].($vs['visibility'] == 'Hidden' ? '(隐藏)' : '');?>
+                                                
                                               </option>
                                             <?php endforeach;?>
                                 </select>
