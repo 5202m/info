@@ -67,7 +67,7 @@
                                                                                     echo "<option value='$cates->id'>{$cates->name}</option>";
                                                                                 }else{
                                                                                 foreach ($items as $vs){?>
-                                                                        <option <?php echo ($cates->id==$vs['id']?'selected="selected"':'');?> value="<?php echo $vs['id'];?>">
+                                                                        <option <?php echo ($cates->parent_id==$vs['id']?'selected="selected"':'');?> value="<?php echo $vs['id'];?>">
                                                                                     <?php echo str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$vs['level']);?>
                                                                                     <?php echo $vs['name'];?>
                                                                                 </option>
