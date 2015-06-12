@@ -16,9 +16,8 @@ class DetailController extends ControllerBase
     	$category_id = intval($category_id);
     	$article_id = intval($article_id);
     	 
-    	if(empty($category_id) || empty($template_id) || empty($article_id)){
+    	if(empty($category_id) || empty($template_id)){
     		$this->response->setStatusCode(404, 'Not Found');
-    		echo '404';
     	}
     	    	 
     	$this->view->disable();
