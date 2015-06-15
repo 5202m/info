@@ -51,7 +51,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .video-pinfo p{text-indent:2em;padding-bottom:0}
 
 /* 财经日历 */
-.rili-box{padding:10px}
+.rili-box{padding:10px;margin-right:300px;}
 .nav-box{width:749px;border:solid #494949;border-width:1px 0 1px 1px}
 .nav-box li{float:left;width:106px;height:28px;line-height:28px;text-align:center;color:#aaa;border-right:solid #494949 1px;background-position:0 -73px;background-repeat:repeat-x;cursor:pointer}
 .nav-box li:hover{background-position:0 -101px}
