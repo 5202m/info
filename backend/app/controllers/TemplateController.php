@@ -6,6 +6,12 @@ class TemplateController extends ControllerBase
 		$this->division_id = $this->Division_id;
 		$this->view->division_id = $this->division_id;
 		$this->view->frontend_baseUrl = $this->url;
+		$this->view->type_name = array(
+				'Category'=>'分类',
+				'List'=>'列表',
+				'Detail'=>'内容',
+				'Video'=>'视频',
+		);
 	}
 	public function indexAction()
 	{

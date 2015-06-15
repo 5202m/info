@@ -71,11 +71,6 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
-						 <?php $type_name = array(
-						  	'Category'=>'分类',
-						  	'List'=>'列表',
-						  	'Detail'=>'内容',
-						  );?>
 						  <?php foreach ($items as $item):?>
 						    <?php if(isset($list[$item['id']])): ?>
 						    <?php foreach($list[$item['id']] as $k=>$info) :?>
