@@ -223,6 +223,71 @@ class NewsWork extends Stackable {
 	}
 }
 
+
+class VideoWork extends Stackable {
+	public $division_id;
+	public function __construct($division_id, $lang, $dbmaps) {
+		$this->dbmaps = $dbmaps;
+		$this->lang = $lang == 'cn'?'zh':$lang;
+		$this->division_id = $division_id;
+	}
+	public function run() {
+		//$this->worker->logger('Thread - news', "%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId() );
+		try {
+			$db_import = $this->worker->getInstance ( 'import' );
+			$db_export = $this->worker->getInstance ( 'export' );
+			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$position = 1;
+			foreach ( $this->dbmaps as $division_category_id => $type ) {
+				$division_id = $this->division_id;
+				$category_id = $division_category_id;
+
+				$position = $this->worker->getpoints ( $division_id, $category_id, $type, $position );
+
+				$sql = "SELECT no as id, video, title, description, if(source = '2' , 'youku','JW Player') as player , if(display = 0 , 'Visible' ,'Hidden' ) as visibility,author, if(language='zh','cn',language) as language, smallimage as thumbnail, largeimage as image, publish as ctime, updatetime as mtime , mis , sort , equipment , expertsId , kind FROM video WHERE kind='".$type."' AND NO IS  NOT NULL  AND display = 0 AND  LANGUAGE = '".$this->lang."' AND  (equipment IS NULL OR  equipment!='mobile') AND no > '" . $position . "' ORDER BY NO asc";
+				$query = $db_export->query ( $sql );
+				//$this->worker->logger ( 'SQL', $query->queryString );
+
+				while ( $line = $query->fetch ( PDO::FETCH_OBJ ) ) {
+
+					$sql = "insert into article (`division_id`, `category_id`,  `title`,  `description`, `thumbnail`,  `image`,  `video`,  `author`,  `language`,  `player`,  `visibility`, `ctime`, `mtime`) values(:division_id, :category_id, :title, :description, :thumbnail, :image, :video, :author, :language, :player, :visibility, :ctime, :mtime)";
+					$sth = $db_import->prepare ( $sql );
+
+					$sth->bindValue ( ':division_id', $this->division_id );
+					$sth->bindValue ( ':category_id', $division_category_id );
+					$sth->bindValue ( ':title', $line->title );
+					$sth->bindValue ( ':description', $line->description );
+					$sth->bindValue ( ':thumbnail', $line->thumbnail );
+					$sth->bindValue ( ':image', $line->image );
+					$sth->bindValue ( ':video', $line->video );
+					$sth->bindValue ( ':author', $line->author );
+					$sth->bindValue ( ':language', $line->language );
+					$sth->bindValue ( ':player', $line->player );
+					$sth->bindValue ( ':visibility', 'Visible' );
+					$sth->bindValue ( ':ctime', $line->ctime );
+					$sth->bindValue ( ':mtime', $line->mtime );
+					$sth->execute ();
+
+					$this->worker->logger ( 'news', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title ) );
+					if ($line->id) {
+						$position = $line->id;
+					}
+					$this->worker->savepoints ( $division_id, $category_id, $type, $position );
+				}
+			}
+		} catch ( PDOException $e ) {
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
+		} catch ( Exception $e ) {
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
+		}
+	}
+	public function import() {
+	}
+	public function export() {
+	}
+}
+
 class Task {
 	
 	const MAXCONN 	= 32;
@@ -267,6 +332,12 @@ class Task {
 			if($sync->table == 'news'){
 				if(in_array($sync->lang, array('cn','tw'))){
 					$pool->submit ( new NewsWork ( $this->division_id, $sync->lang , array( $sync->category_id => "$sync->type")));
+				}
+			}
+			
+			if($sync->table == 'video'){
+				if(in_array($sync->lang, array('cn','tw'))){
+					$pool->submit ( new VideoWork ( $this->division_id, $sync->lang , array( $sync->category_id => "$sync->type")));
 				}
 			}
 			
