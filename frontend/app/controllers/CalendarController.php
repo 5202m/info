@@ -1,11 +1,8 @@
 <?php
-
+use Phalcon\Mvc\View;
 class CalendarController extends \Phalcon\Mvc\Controller {
     
     public function indexAction($date = ''){
-        if($date != ''){
-            $date = str_replace('.html', '', $date);
-        }
         $datas = $this->generator($date);
         if($datas){
             $this->view->setVar('datas',$datas);
@@ -16,14 +13,42 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         }
         
     }
-    public function v1Action($template_id,$date = ''){
-        $this->generator($template_id,$date);
+    public function gwfxAction($date = ''){
+        $this->view->disableLevel(array(
+            View::LEVEL_MAIN_LAYOUT => false
+        ));
+        if($date != ''){
+            $date = str_replace('.html', '', $date);
+        }
+        $datas = $this->generator($date);
+        if($datas){       
+            $this->view->setVar('datas',$datas);
+        }else{
+            $this->response->setStatusCode(404, 'Template Not Found');
+            echo 'Template Not Found';
+            return;
+        }
     }
-    private function generator( $day = '') {
+    public function appAction($date = ''){
+        $this->view->disableLevel(array(
+            View::LEVEL_MAIN_LAYOUT => false
+        ));
+        if($date != ''){
+            $date = str_replace('.html', '', $date);
+        }
+        $datas = $this->app_generator($date);
+        if($datas){       
+            $this->view->setVar('datas',$datas);
+        }else{
+            $this->response->setStatusCode(404, 'Template Not Found');
+            echo 'Template Not Found';
+            return;
+        }
+    }
+    private function generator($day = '') {
         if($day == ''){
             $url = "http://www.gwfx.com/zh/calendar/index.html";
-        }
-        if($day != ''){
+        }else{
             $url = "http://www.gwfx.com/zh/calendar/".$day.".html";
         }
         
@@ -34,14 +59,45 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $dom->loadHTML($html);
         $xpath = new DOMXPath($dom);
         $xml = $xpath->query('/html/body/div[@class="greyBg"]/div[@id="wrap"]/div[@class="w960"]/div[@class="cen-conbox clearfix"]/div[@class="innerContent fr"]');
-
 //foreach ($xml as $result_object){
         //echo $result_object->childNodes->item(0)->nodeValue;
 //      print_r($result_object);
 //}
 
         $xhtml = $dom->saveHTML($xml->item(0));
-        $new_xhtml = str_replace('http://www.gwfx.com/zh/calendar','/calendar/index',$xhtml);
+        
+        $new_xhtml = str_replace('http://www.gwfx.com/zh/calendar','/calendar/gwfx',$xhtml);
+        
+        return($new_xhtml);
+    }
+    
+    private function app_generator($day = '') {
+        if($day == ''){
+            $url = "http://m.gwfx.com/zh/calender/index.html";
+        }else{
+            $url = "http://m.gwfx.com/zh/calender/".$day.".html";
+        }
+        
+        $html = $this->curl($url);
+        libxml_use_internal_errors(true);
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+        $xpath = new DOMXPath($dom);
+        $xml_1 = $xpath->query('/html/body/div[@class="date_1"]');
+        $xml_2 = $xpath->query('/html/body/section[@class="Calendar"]');
+        $xml_3 = $xpath->query('/html/body/section[@class="Thing"]');
+//        print_r($xml);
+//foreach ($xml as $result_object){
+//        echo $result_object->childNodes->item(0)->nodeValue;
+//      print_r($result_object);
+//}
+        $xhtml_1 = $dom->saveHTML($xml_1->item(0));
+        $xhtml_2 = $dom->saveHTML($xml_2->item(0));
+        $xhtml_3 = $dom->saveHTML($xml_3->item(0));
+        $xhtml_4 = $dom->saveHTML($xml_3->item(1));
+        $xhtml = $xhtml_1.$xhtml_2.$xhtml_3.$xhtml_4;
+        $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','/calendar/app',$xhtml);
         return($new_xhtml);
     }
 
