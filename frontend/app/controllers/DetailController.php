@@ -7,9 +7,7 @@ class DetailController extends ControllerBase
 	
     public function indexAction()
     {
-// 		echo "hello";
-// 		var_dump(array(1, 2, 3, 4));
-// 		var_export(new stdclass());	
+	
     }
     
     public function htmlAction($template_id, $category_id, $article_id){
@@ -18,9 +16,8 @@ class DetailController extends ControllerBase
     	$category_id = intval($category_id);
     	$article_id = intval($article_id);
     	 
-    	if(empty($category_id) || empty($template_id) || empty($article_id)){
+    	if(empty($category_id) || empty($template_id)){
     		$this->response->setStatusCode(404, 'Not Found');
-    		echo '404';
     	}
     	    	 
     	$this->view->disable();
@@ -58,11 +55,24 @@ class DetailController extends ControllerBase
     			'article_id' => $article_id,
     			'visibility' => 'Visible'
     	);
-    	$article = Article::findFirst(array(
-    			$conditions,
-    			"bind" => $parameters
-    	));
- 
+
+		if($article_id == 0){
+			$article = Article::findFirst(array(
+				"(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = 'Visible'",
+				"bind" => array(
+					'category_id' => $category_id,
+					'division_category_id' => $category_id,
+				),
+				"order" => "id DESC",
+				"limit" => 1
+			));
+		}else{		
+			$article = Article::findFirst(array(
+				$conditions,
+				"bind" => $parameters
+			));
+		}
+		
 		if($article){
 
 	    	$view = new \Phalcon\Mvc\View();
@@ -78,10 +88,13 @@ class DetailController extends ControllerBase
 	    	if(!is_dir(dirname($article_file))){
 	    		mkdir(dirname($article_file), 0755, TRUE);
 	    	}
-	    	file_put_contents($article_file, $content);
+			
+			if($article_id != 0){
+				file_put_contents($article_file, $content);
+			}
 	    	
 	    	$this->response->setHeader('Cache-Control', 'max-age=60');
-	    	print($content);   
+	    	print($content); 
 		}else{
 			$this->response->setStatusCode(404, 'Article Not Found');
 			echo 'Article Not Found';
