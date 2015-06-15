@@ -47,12 +47,12 @@ class VideoController extends ControllerBase{
     		}
     	}
     	
-    	$conditions = "(category_id = :category_id: OR division_id = :division_id:) AND visibility = :visibility:";
+    	$conditions = "category_id = :category_id: AND visibility = :visibility:";
     	//language = :language: AND
     
     	$parameters = array(
     			'category_id' => $category_id,
-    			'division_id' => $category_id,
+    			//'division_id' => $category_id,
     			/*'language' => 'cn',*/
     			'visibility' => 'Visible'
     	);
@@ -99,7 +99,93 @@ class VideoController extends ControllerBase{
 	}
 	
 	public function playAction($template_id, $category_id, $video_id){
+		$template_id = intval($template_id);
+    	$category_id = intval($category_id);
+    	$video_id = intval($video_id);
+    	 
+    	if(empty($category_id) || empty($template_id)){
+    		$this->response->setStatusCode(404, 'Not Found');
+    	}
+    	    	 
+    	$this->view->disable();
+    	 
+    	$template_file = $this->basedir."/template/video/".$template_id.".phtml";
+    	$video_file = $this->basedir."/static/video/play/$template_id/$category_id/$video_id.html";
+    	 
+    	if(!is_file($template_file)){
+    		 
+    		$template = Template::findFirst(array(
+    				"id = :template_id: AND status = :status:",
+    				"bind" => array(
+    						'template_id' => $template_id,
+    						'status' => 'Enabled'
+    				)
+    		));
+    		 
+    		if($template){
+    			if(!is_dir(dirname($template_file))){
+    				mkdir(dirname($template_file), 0755, TRUE);
+    			}
+    			file_put_contents($template_file , $template->content);
+    		}else{
+    			$this->response->setStatusCode(404, 'Template Not Found');
+    			echo 'Template Not Found';
+    			return;
+    		}
+    	}    	
+    	
+    	$conditions = "category_id = :category_id: AND id = :video_id: AND visibility = :visibility:";
+    
+    	$parameters = array(
+    			'category_id' => $category_id,
+    			//'division_id' => $category_id,
+    			'video_id' => $video_id,
+    			'visibility' => 'Visible'
+    	);
+
+		if($video_id == 0){
+			$video = Video::findFirst(array(
+				"category_id = :category_id: AND visibility = 'Visible'",
+				"bind" => array(
+					'category_id' => $category_id,
+					//'division_id' => $category_id,
+				),
+				"order" => "id DESC",
+				"limit" => 1
+			));
+		}else{		
+			$video = Video::findFirst(array(
+				$conditions,
+				"bind" => $parameters
+			));
+		}
 		
+		if($video){
+
+	    	$view = new \Phalcon\Mvc\View();
+	    	$view->setViewsDir($this->basedir.'/template');
+	    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+	    	$view->setVar('video',$video);
+	    	$view->start();
+	    	$view->render("detail","$template_id");
+	    	$view->finish();
+	    	 
+	    	$content =  $view->getContent();
+	    	 
+	    	if(!is_dir(dirname($video_file))){
+	    		mkdir(dirname($video_file), 0755, TRUE);
+	    	}
+			
+			if($video_id != 0){
+				file_put_contents($video_file, $content);
+			}
+	    	
+	    	$this->response->setHeader('Cache-Control', 'max-age=60');
+	    	print($content); 
+		}else{
+			$this->response->setStatusCode(404, 'Video Not Found');
+			echo 'Video Not Found';
+		} 	
 	}
 }
 ?>
