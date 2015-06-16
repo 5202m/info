@@ -3,6 +3,9 @@ use Phalcon\Mvc\View;
 class CalendarController extends \Phalcon\Mvc\Controller {
     
     public function indexAction($date = ''){
+        $this->view->disableLevel(array(
+            View::LEVEL_MAIN_LAYOUT => false
+        ));
         $datas = $this->generator($date);
         if($datas){
             $this->view->setVar('datas',$datas);
