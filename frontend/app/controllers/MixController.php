@@ -6,6 +6,7 @@ class MixController extends ControllerBase
 {
 
 	public $basedir = '/www/hx9999.com/inf.hx9999.com';
+	private $division_categorys = array();
 	
     public function indexAction()
     {
@@ -65,14 +66,14 @@ class MixController extends ControllerBase
 				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
 		));
 		foreach($categorys as $category){
-			$division_categorys[] = $category->id;
+			$this->division_categorys[] = $category->id;
 		}
 		
     	$conditions = "division_category_id in ( :division_category_id: ) AND visibility = :visibility:";
     	//category_id = :category_id: OR language = :language: AND
     
     	$parameters = array(
-    			'division_category_id' => implode(',', $division_categorys), 
+    			'division_category_id' => implode(',', $this->division_categorys), 
     			/*'language' => 'cn',*/
     			'visibility' => 'Visible'
     	);
@@ -130,26 +131,26 @@ class MixController extends ControllerBase
     	if(!$parent_id){
     		$this->response->setStatusCode(404, 'Not Found');
     	}
-		
-    	$categorys = Category::find(array(
-				'parent_id = :parent_id: AND visibility = :visibility:',
-    			"bind" => array(
-					'parent_id' => $parent_id,
-					'visibility' => 'Visible'
-				),
-				'columns'=>'id'
-				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
-		));
-		foreach($categorys as $category){
-			$division_categorys[] = $category->id;
+		if(empty($this->division_categorys)){
+			$categorys = Category::find(array(
+					'parent_id = :parent_id: AND visibility = :visibility:',
+					"bind" => array(
+						'parent_id' => $parent_id,
+						'visibility' => 'Visible'
+					),
+					'columns'=>'id'
+					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+			));
+			foreach($categorys as $category){
+				$this->division_categorys[] = $category->id;
+			}
 		}
-		
     	$count = Article::count(array(
     			"division_category_id IN ( :division_category_id: ) AND visibility = :visibility:",
 				//category_id = :category_id: OR
     			'bind' => array(
 	    			/*'category_id' => $category_id,*/
-	    			'division_category_id' => implode(',', $division_categorys),
+	    			'division_category_id' => implode(',', $this->division_categorys),
 	    			'visibility' => 'Visible'
     				)
     			));
