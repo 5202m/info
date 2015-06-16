@@ -4,6 +4,10 @@ class VideoController extends ControllerBase{
 	public $basedir = '/www/hx9999.com/inf.hx9999.com';
 	
 //	public categoryAction(){}
+	public function mixAction($template_id, $category_id, $limit = 20, $page = 0){
+		
+	}
+	
 	public function listAction($template_id, $category_id, $limit = 20, $page = 0){
 		$template_id = intval($template_id);
     	$category_id = intval($category_id);
@@ -98,10 +102,10 @@ class VideoController extends ControllerBase{
     	}
 	}
 	
-	public function playAction($template_id, $category_id, $video_id){
+	public function playAction($template_id, $category_id, $article_id){
 		$template_id = intval($template_id);
     	$category_id = intval($category_id);
-    	$video_id = intval($video_id);
+    	$video_id = intval($article_id);
     	 
     	if(empty($category_id) || empty($template_id)){
     		$this->response->setStatusCode(404, 'Not Found');
@@ -159,7 +163,7 @@ class VideoController extends ControllerBase{
 				"bind" => $parameters
 			));
 		}
-		
+		echo '<pre>';print_r($video);
 		if($video){
 
 	    	$view = new \Phalcon\Mvc\View();
@@ -187,5 +191,23 @@ class VideoController extends ControllerBase{
 			echo 'Video Not Found';
 		} 	
 	}
+	
+    public function purgeAction($template_id, $category_id, $article_id){
+    	$template_id = intval($template_id);
+    	$category_id = intval($category_id);
+    	$article_id  = intval($article_id);
+    	 
+    	$template_file = $this->basedir."/template/video/".$template_id.".phtml";
+    	 
+    	unlink($template_file);
+    	 
+    	if($article_id > 0){
+    		$article_path = $this->basedir."/static/video/play/$template_id/$category_id/$article_id.html";
+    	}else{
+    		$article_path = $this->basedir."/static/video/play/$template_id/$category_id/*.html";
+    	}
+    	 
+    	array_map('unlink', glob($article_path));    	
+    }
 }
 ?>
