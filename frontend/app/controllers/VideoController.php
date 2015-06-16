@@ -106,7 +106,7 @@ class VideoController extends ControllerBase{
 		$template_id = intval($template_id);
     	$category_id = intval($category_id);
     	$video_id = intval($article_id);
-    	 
+    	//echo $template_id;die;
     	if(empty($category_id) || empty($template_id)){
     		$this->response->setStatusCode(404, 'Not Found');
     	}
@@ -115,7 +115,7 @@ class VideoController extends ControllerBase{
     	 
     	$template_file = $this->basedir."/template/video/".$template_id.".phtml";
     	$video_file = $this->basedir."/static/video/play/$template_id/$category_id/$video_id.html";
-    	 
+    	
     	if(!is_file($template_file)){
     		 
     		$template = Template::findFirst(array(
@@ -125,7 +125,7 @@ class VideoController extends ControllerBase{
     						'status' => 'Enabled'
     				)
     		));
-    		 
+    		
     		if($template){
     			if(!is_dir(dirname($template_file))){
     				mkdir(dirname($template_file), 0755, TRUE);
@@ -163,7 +163,7 @@ class VideoController extends ControllerBase{
 				"bind" => $parameters
 			));
 		}
-		echo '<pre>';print_r($video);
+		//echo '<pre>';print_r($video);
 		if($video){
 
 	    	$view = new \Phalcon\Mvc\View();
@@ -171,7 +171,7 @@ class VideoController extends ControllerBase{
 	    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
 	    	$view->setVar('video',$video);
 	    	$view->start();
-	    	$view->render("detail","$template_id");
+	    	$view->render("video","$template_id");
 	    	$view->finish();
 	    	 
 	    	$content =  $view->getContent();
