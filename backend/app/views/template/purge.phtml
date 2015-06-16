@@ -96,6 +96,7 @@
 					urlAll = $.parseJSON(urlAll);
 					var type = $('#template_id option:selected').attr('data-type');
 					type = type.toLowerCase();
+					window.currtable = type;
 					var url = '';
 					switch(type){
 						case 'category':
@@ -106,6 +107,21 @@
 							break;
 						case 'detail':
 							url = urlAll.detail;
+							window.template_article_id = $('#article_id_input').val();
+							
+							if($('#ajaxarticle').html()==''){
+								getarticle();
+								return false;
+							}else{
+								if(!window.template_article_id){
+									//$('#myModal>.modal-body>p').html('请选择文章');
+									//$('#myModal').modal('show');
+									return false;
+								}
+							}
+							break;
+						case 'video':
+							url = urlAll.video;
 							window.template_article_id = $('#article_id_input').val();
 							
 							if($('#ajaxarticle').html()==''){
@@ -201,11 +217,12 @@
 			function getarticle(){
 				var template_id = $('#template_id').val();
 				var category_id = $('#category_id').val();
+				var table = window.currtable;
 				
 				$.ajax({
 			        type: "POST",
 			        url: '/template/ajaxarticle',
-			        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id},
+			        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id,'table':table},
 			        async:false,
 			        success: function(data){
 				        $('#ajaxarticle').html(data);
