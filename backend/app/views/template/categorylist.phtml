@@ -175,13 +175,16 @@
 				$('.go_detail,.go_video').click(function(){
 					var template_id = $(this).attr('data-template_id');
 					var category_id = $(this).attr('data-category_id');
+					var myclass = $(this).attr('class');
+					var table = myclass.substring(myclass.indexOf('go_')+3);
+					
 					window.go_detail_href = $(this).attr('href');
 					window.template_article_id = 0;
-				
+					
 					$.ajax({
 				        type: "POST",
 				        url: '/template/ajaxarticle',
-				        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id,'only_one_id':1},
+				        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id,'only_one_id':1,'table':table},
 				        async:false,
 				        success: function(data){
 					        

@@ -351,8 +351,10 @@ class TemplateController extends ControllerBase
 		if($this->request->isPost()){
 			$category_id = $this->request->getPost('category_id');
 			$article_id = $this->request->getPost('article_id');
+			$this->view->table  = $this->request->getPost('table');
 			$this->view->only_one_id = $this->request->getPost('only_one_id') ? $this->request->getPost('only_one_id') : 0;
 		}
+		
 		$this->view->category_id = $category_id;
 		$this->view->article_id = $article_id;
 		$this->view->partial('template/ajaxarticle');
