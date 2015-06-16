@@ -31,7 +31,7 @@ if($table == 'video'){
 	$wehe_category = " AND category_id='{$category_id}'";
 	echo \Phalcon\Tag::selectStatic(array(
 		"article_id",
-		 Video::find(array("visibility='Visible' AND division='{$division_id}'{$wehe_category}",'limit'=>20,'order'=>'id DESC')),
+		 Video::find(array("visibility='Visible' AND division_id='{$division_id}'{$wehe_category}",'limit'=>20,'order'=>'id DESC')),
 		"using" => array("id", "title"),
 		"value"=>'',
 		'useEmpty' => true,
@@ -44,7 +44,7 @@ if($table == 'video'){
 
 	echo \Phalcon\Tag::selectStatic(array(
 		"article_id",
-		Article::find(array("visibility='Visible' AND division='{$division_id}'{$wehe_category}",'limit'=>20,'order'=>'id DESC')),
+		Article::find(array("visibility='Visible' AND division_id='{$division_id}'{$wehe_category}",'limit'=>20,'order'=>'id DESC')),
 		"using" => array("id", "title"),
 		"value"=>'',
 		'useEmpty' => true,
