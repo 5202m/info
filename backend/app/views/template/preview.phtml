@@ -97,6 +97,7 @@
 					urlAll = $.parseJSON(urlAll);
 					var type = $('#template_id option:selected').attr('data-type');
 					type = type.toLowerCase();
+					window.currtable = type;
 					var url = '';
 					switch(type){
 						case 'category':
@@ -104,6 +105,21 @@
 							break;
 						case 'list':
 							url = urlAll.list;
+							break;
+						case 'video':
+							url = urlAll.video;
+							window.template_article_id = $('#article_id_input').val();
+							
+							if($('#ajaxarticle').html()==''){
+								getarticle();
+								return false;
+							}else{
+								if(!window.template_article_id){
+									//$('#myModal>.modal-body>p').html('请选择文章');
+									//$('#myModal').modal('show');
+									return false;
+								}
+							}
 							break;
 						case 'detail':
 							url = urlAll.detail;
@@ -155,6 +171,7 @@
 					urlAll = $.parseJSON(urlAll);
 					var type = $('#template_id option:selected').attr('data-type');
 					type = type.toLowerCase();
+					window.currtable = type;
 					var url = '';
 					switch(type){
 						case 'category':
@@ -165,6 +182,9 @@
 							break;
 						case 'detail':
 							url = urlAll.detail;
+							break;
+						case 'video':
+							url = urlAll.video;
 							break;
 					}
 
@@ -218,7 +238,8 @@
 				var type ="<?php echo $type?>";
 				window.template_article_id = <?php echo $getData['article_id']?>;
 	
-				if(type == 'Detail'){
+				if(type == 'Detail' || type == 'Video'){
+					window.currtable = type;
 					getarticle();
 				}
 				previewiframe(template_id,category_id,url,type,0);
@@ -244,11 +265,12 @@
 			function getarticle(){
 				var template_id = $('#template_id').val();
 				var category_id = $('#category_id').val();
+				var table = window.currtable;
 				
 				$.ajax({
 			        type: "POST",
 			        url: '/template/ajaxarticle',
-			        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id},
+			        data: {'ajax':1,'category_id':category_id,'article_id':window.template_article_id,'table':table},
 			        async:false,
 			        success: function(data){
 				        $('#ajaxarticle').html(data);
