@@ -245,7 +245,7 @@ class VideoWork extends Stackable {
 
 				$position = $this->worker->getpoints ( $division_id, $category_id, $type, $position );
 
-				$sql = "SELECT no as id, video, title, description, if(source = '2' , 'youku','JW Player') as player , if(display = 0 , 'Visible' ,'Hidden' ) as visibility,author, if(language='zh','cn',language) as language, smallimage as thumbnail, largeimage as image, publish as ctime, updatetime as mtime , mis , sort , equipment , expertsId , kind FROM video WHERE kind='".$type."' AND NO IS  NOT NULL AND video IS NOT NULL  AND display = 0 AND  LANGUAGE = '".$this->lang."' AND  (equipment IS NULL OR  equipment!='mobile') AND no > '" . $position . "' ORDER BY NO asc";
+				$sql = "SELECT no as id, video, title, description, if(source = '2' , 'youku','JW Player') as player , if(display = 0 , 'Visible' ,'Hidden' ) as visibility,author, if(language='zh','cn',language) as language, smallimage as thumbnail, largeimage as image, publish as ctime, updatetime as mtime , mis , sort , equipment , expertsId , kind FROM video WHERE kind='".$type."' AND NO IS  NOT NULL AND video !='' AND display = 0 AND  LANGUAGE = '".$this->lang."' AND  (equipment IS NULL OR  equipment!='mobile') AND no > '" . $position . "' ORDER BY NO asc";
 				$query = $db_export->query ( $sql );
 				//$this->worker->logger ( 'SQL', $query->queryString );
 

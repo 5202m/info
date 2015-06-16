@@ -3,13 +3,15 @@ return array(
 		'preview'=>array(
 			'category'=>':url/category/html/:template_id/:category_id.html',
 			'list'=>':url/list/html/:template_id/:category_id.html',
-			'detail'=>':url/detail/html/:template_id/:category_id/:article_id.html'
+			'detail'=>':url/detail/html/:template_id/:category_id/:article_id.html',
+			'video'=>':url/video/play/:template_id/:category_id/:article_id.html'
 		),
 		
 		'purge'=>array(
 				'category'=>':url/category/purge/:template_id/:parent_id.html',
 				'list'=>':url/list/purge/:template_id/:parent_id.html',
-				'detail'=>':url/detail/purge/:template_id/:parent_id.html'
+				'detail'=>':url/detail/purge/:template_id/:parent_id.html',
+				'video'=>':url/video/purge/:template_id/:parent_id.html'
 		),
 		
 		'sample'=>array(
