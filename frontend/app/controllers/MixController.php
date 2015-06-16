@@ -83,7 +83,7 @@ class MixController extends ControllerBase
     			'columns'=>'id,division_category_id,title,author,ctime',
     			"order" => "ctime DESC",
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
-    			/*, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)*/
+    			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));
 
     	if(count($articles) == 0){
