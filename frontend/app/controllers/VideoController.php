@@ -5,7 +5,108 @@ class VideoController extends ControllerBase{
 	
 //	public categoryAction(){}
 	public function mixAction($template_id, $category_id, $limit = 20, $page = 0){
+		$template_id = intval($template_id);
+    	$parent_id = intval($category_id);
+    	$limit 		 = intval($limit);
+    	$page 	 	= intval($page);
+    	
+    	$offset 	 = $limit * $page;
+    	
+    	if(empty($parent_id) || empty($template_id)){
+    		$this->response->setStatusCode(404, 'Not Found');
+    	}
+    	
+    	if($limit > 100){
+    		$limit = 100;
+    	}
+    	
+    	$this->view->disable();
+    	
+    	$template_file = $this->basedir."/template/video/".$template_id.".phtml";
+    	$categroy_file = $this->basedir."/static/video/list/$template_id/$parent_id.html";
+    	
+    	if(!is_file($template_file)){
+    		$template = Template::findFirst(array(
+    				"id = :template_id: AND status = :status:",
+    				"bind" => array(
+    						'template_id' => $template_id,
+    						'status' => 'Enabled'
+    				)
+    		));
+
+    		if($template){
+    			if(!is_dir(dirname($template_file))){
+    				mkdir(dirname($template_file), 0755, TRUE);
+    			}
+    			file_put_contents($template_file , $template->content);
+    		}else{
+    			$this->response->setStatusCode(404, 'Template Not Found');
+    			echo 'Template Not Found';
+    			return;
+    		}
+    	}
+
+		$categorys = Category::find(array(
+				'parent_id = :parent_id: AND visibility = :visibility:',
+    			"bind" => array(
+					'parent_id' => $parent_id,
+					'visibility' => 'Visible'
+				),
+				'columns'=>'id'
+				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+		));
+		foreach($categorys as $category){
+			$this->division_categorys[] = $category->id;
+		}
 		
+    	$conditions = "category_id in ( :category_id: ) AND visibility = :visibility:";
+    	//category_id = :category_id: OR language = :language: AND
+    
+    	$parameters = array(
+    			'category_id' => implode(',', $this->division_categorys), 
+    			/*'language' => 'cn',*/
+    			'visibility' => 'Visible'
+    	);
+    	$key = sprintf(":mix:html:%s:%s:%s:%s", $template_id,$parent_id, $limit, $page );
+    	$videos = Video::find(array(
+    			$conditions,
+    			"bind" => $parameters,
+    			'columns'=>'id,category_id,title,author,ctime',
+    			"order" => "ctime DESC",
+    			'limit' => array('number'=>$limit, 'offset'=>$offset)
+    			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
+    	));
+
+    	if(count($videos) == 0){
+    		$this->response->setStatusCode(404, 'Video List Not Found');
+    		echo 'Video List Not Found';
+    	}else{
+    		$pages = $this->paginator($parent_id, $limit, $page);
+    		
+    		$view = new \Phalcon\Mvc\View();
+    		$view->setViewsDir($this->basedir.'/template');
+    		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+    		$view->setVar('video',$videos);
+    		$view->setVar('template_id',$template_id);
+    		$view->setVar('parent_id',$parent_id);
+    		$view->setVar('limit',$limit);
+    		$view->setVar('pagenumber',$page);
+    		$view->setVar('pages',$pages);
+    		$view->start();
+    		$view->render("list","$template_id");
+    		$view->finish();
+    		 
+    		$content =  $view->getContent();
+    		//     	if($content){
+    		// 	    	if(!is_dir(dirname($categroy_file))){
+    		// 	    		mkdir(dirname($categroy_file), 0755, TRUE);
+    		// 	    	}
+    		// 	    	file_put_contents($categroy_file, $content);
+    		//     	}
+    		$this->response->setHeader('Cache-Control', 'max-age=60');
+    		print($content);
+
+    	}
 	}
 	
 	public function listAction($template_id, $category_id, $limit = 20, $page = 0){
@@ -74,7 +175,7 @@ class VideoController extends ControllerBase{
     		$this->response->setStatusCode(404, 'Video List Not Found');
     		echo 'Video List Not Found';
     	}else{
-    		//$pages = $this->paginator($category_id, $limit, $page);
+    		$pages = $this->paginator($category_id, $limit, $page);
     		
     		$view = new \Phalcon\Mvc\View();
     		$view->setViewsDir($this->basedir.'/template');
@@ -84,7 +185,7 @@ class VideoController extends ControllerBase{
     		$view->setVar('category_id',$category_id);
     		$view->setVar('limit',$limit);
     		$view->setVar('pagenumber',$page);
-    		//$view->setVar('pages',$pages);
+    		$view->setVar('pages',$pages);
     		$view->start();
     		$view->render("list","$template_id");
     		$view->finish();
@@ -191,6 +292,58 @@ class VideoController extends ControllerBase{
 			echo 'Video Not Found';
 		} 	
 	}
+	
+	public function pageAction($parent_id, $limit, $page = 0){
+    	$pager = $this->paginator($parent_id, $limit, $page);
+    	print_r($pager);
+    }
+    
+    public function paginator($parent_id, $limit, $page = 1){	
+    	$parent_id = intval($parent_id);
+    	$limit 		= intval($limit);
+    	$page 	= intval($page);
+
+    	if(!$parent_id){
+    		$this->response->setStatusCode(404, 'Not Found');
+    	}
+		if(empty($this->division_categorys)){
+			$categorys = Category::find(array(
+					'parent_id = :parent_id: AND visibility = :visibility:',
+					"bind" => array(
+						'parent_id' => $parent_id,
+						'visibility' => 'Visible'
+					),
+					'columns'=>'id'
+					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+			));
+			foreach($categorys as $category){
+				$this->division_categorys[] = $category->id;
+			}
+		}
+    	$count = Video::count(array(
+    			"category_id IN ( :category_id: ) AND visibility = :visibility:",
+				//category_id = :category_id: OR
+    			'bind' => array(
+	    			/*'category_id' => $category_id,*/
+	    			'category_id' => implode(',', $this->division_categorys),
+	    			'visibility' => 'Visible'
+    				)
+    			));
+    	
+    	$total 	= ceil($count / $limit)-1;
+    	$before = $page<=$total && $page > 1?$page-1:0;
+    	$next 	= $page>=$total?$total:$page+1;
+    	$paginator = array(
+    			'count' 	=> $count,
+    			'first' 	=> 0,
+    			'last' 		=> $total,
+    			'before' 	=> $before,
+    			'current' 	=> $page,
+    			'next' 		=> $next,
+    			'total' 	=> $total
+    	); 
+    	return ($paginator);
+    }
 	
     public function purgeAction($template_id, $category_id, $article_id){
     	$template_id = intval($template_id);
