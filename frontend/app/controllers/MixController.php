@@ -69,15 +69,19 @@ class MixController extends ControllerBase
 			$this->division_categorys[] = $category->id;
 		}
 		
-    	$conditions = "division_category_id in ( :division_category_id: ) AND visibility = :visibility:";
+		$key = sprintf(":mix:html:%s:%s:%s:%s", $template_id,$parent_id, $limit, $page );
+		
+    	//$conditions = "division_category_id in ( :division_category_id: ) AND visibility = :visibility:";
     	//category_id = :category_id: OR language = :language: AND
-    
-    	$parameters = array(
-    			'division_category_id' => implode(',', $this->division_categorys), 
+		
+    	//$parameters = array(
+    	//		'division_category_id' => implode(',', $this->division_categorys), 
     			/*'language' => 'cn',*/
-    			'visibility' => 'Visible'
-    	);
-    	$key = sprintf(":mix:html:%s:%s:%s:%s", $template_id,$parent_id, $limit, $page );
+    	//		'visibility' => 'Visible'
+    	//);
+		
+    	
+		/*
     	$articles = Article::find(array(
     			$conditions,
     			"bind" => $parameters,
@@ -86,7 +90,16 @@ class MixController extends ControllerBase
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));
-
+		*/
+		$articles = Article::query()
+			->columns(array('id', 'division_category_id', 'title', 'author,ctime'))
+			->inWhere('division_category_id', $this->division_categorys)
+			->andWhere("visibility = 'Visible'")
+			/*->bind(array("visibility" => "Visible"))*/
+			->limit($limit, $offset)
+			->order("ctime DESC")
+			->execute();
+		
     	if(count($articles) == 0){
     		$this->response->setStatusCode(404, 'Article List Not Found');
     		echo 'Article List Not Found';
@@ -103,7 +116,7 @@ class MixController extends ControllerBase
     		$view->setVar('pagenumber',$page);
     		$view->setVar('pages',$pages);
     		$view->start();
-    		$view->render("list","$template_id");
+    		$view->render("mix","$template_id");
     		$view->finish();
     		 
     		$content =  $view->getContent();
