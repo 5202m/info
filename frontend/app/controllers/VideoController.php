@@ -2,7 +2,7 @@
 class VideoController extends ControllerBase{
 	
 	public $basedir = '/www/hx9999.com/inf.hx9999.com';
-	
+	private $division_categorys = array();
 //	public categoryAction(){}
 	public function mixAction($template_id, $category_id, $limit = 20, $page = 0){
 		$template_id = intval($template_id);
@@ -45,7 +45,7 @@ class VideoController extends ControllerBase{
     			return;
     		}
     	}
-
+		
 		$categorys = Category::find(array(
 				'parent_id = :parent_id: AND visibility = :visibility:',
     			"bind" => array(
@@ -85,7 +85,7 @@ class VideoController extends ControllerBase{
 			->limit($limit, $offset)
 			->order("ctime DESC")
 			->execute();
-			
+		
     	if(count($videos) == 0){
     		$this->response->setStatusCode(404, 'Video List Not Found');
     		echo 'Video List Not Found';
@@ -95,14 +95,14 @@ class VideoController extends ControllerBase{
     		$view = new \Phalcon\Mvc\View();
     		$view->setViewsDir($this->basedir.'/template');
     		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
-    		$view->setVar('video',$videos);
+    		$view->setVar('videos',$videos);
     		$view->setVar('template_id',$template_id);
     		$view->setVar('parent_id',$parent_id);
     		$view->setVar('limit',$limit);
     		$view->setVar('pagenumber',$page);
     		$view->setVar('pages',$pages);
     		$view->start();
-    		$view->render("list","$template_id");
+    		$view->render("video","$template_id");
     		$view->finish();
     		 
     		$content =  $view->getContent();
