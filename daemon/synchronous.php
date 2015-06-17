@@ -20,8 +20,8 @@ class SynchronousWorker extends Worker {
 
 			self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true,
-					PDO::ATTR_PERSISTENT => true
+					PDO::MYSQL_ATTR_COMPRESS => true
+					/*PDO::ATTR_PERSISTENT => true*/
 			) );
 
 			$dbhost1 = $this->config['export']['dbhost'];
@@ -307,9 +307,9 @@ class Task {
 		$dbname = $this->config['import']['dbname'];
 
 		$dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
-				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-				PDO::MYSQL_ATTR_COMPRESS => true,
-				PDO::ATTR_PERSISTENT => true
+			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+			PDO::MYSQL_ATTR_COMPRESS => true
+			/*PDO::ATTR_PERSISTENT => true*/
 		) );		
 		
 		$sql = "select * from `synchronous` where division_id=:division_id";
