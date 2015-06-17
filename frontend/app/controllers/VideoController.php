@@ -138,7 +138,7 @@ class VideoController extends ControllerBase{
     	
     	$template_file = $this->basedir."/template/video/".$template_id.".phtml";
     	$categroy_file = $this->basedir."/static/video/list/$template_id/$category_id.html";
-    	
+    	//var_dump($template_file);
     	if(!is_file($template_file)){
     	
     		$template = Template::findFirst(array(
@@ -176,10 +176,10 @@ class VideoController extends ControllerBase{
     			"bind" => $parameters,
     			//'columns'=>'id,title,author,ctime',
     			"order" => "ctime DESC",
-    			'limit' => array('number'=>$limit, 'offset'=>$offset)
-    			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
+    			'limit' => array('number'=>$limit, 'offset'=>$offset), 
+    			"cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));
-
+		//print_r($videos);
     	if(count($videos) == 0){
     		$this->response->setStatusCode(404, 'Video List Not Found');
     		echo 'Video List Not Found';
@@ -189,14 +189,14 @@ class VideoController extends ControllerBase{
     		$view = new \Phalcon\Mvc\View();
     		$view->setViewsDir($this->basedir.'/template');
     		$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
-    		$view->setVar('video',$videos);
+    		$view->setVar('videos',$videos);
     		$view->setVar('template_id',$template_id);
     		$view->setVar('category_id',$category_id);
     		$view->setVar('limit',$limit);
     		$view->setVar('pagenumber',$page);
     		$view->setVar('pages',$pages);
     		$view->start();
-    		$view->render("list","$template_id");
+    		$view->render("video","$template_id");
     		$view->finish();
     		 
     		$content =  $view->getContent();
@@ -348,7 +348,7 @@ class VideoController extends ControllerBase{
     			'last' 		=> $total,
     			'before' 	=> $before,
     			'current' 	=> $page,
-    			'next' 		=> $next,
+    			'next' 		=> ($next<0?0:$next),
     			'total' 	=> $total
     	); 
     	return ($paginator);
