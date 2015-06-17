@@ -59,24 +59,33 @@ class VideoController extends ControllerBase{
 			$this->division_categorys[] = $category->id;
 		}
 		
-    	$conditions = "category_id in ( :category_id: ) AND visibility = :visibility:";
+    	//$conditions = "category_id in ( :category_id: ) AND visibility = :visibility:";
     	//category_id = :category_id: OR language = :language: AND
     
-    	$parameters = array(
-    			'category_id' => implode(',', $this->division_categorys), 
+    	//$parameters = array(
+    	//		'category_id' => implode(',', $this->division_categorys), 
     			/*'language' => 'cn',*/
-    			'visibility' => 'Visible'
-    	);
+    	//		'visibility' => 'Visible'
+    	//);
     	$key = sprintf(":mix:html:%s:%s:%s:%s", $template_id,$parent_id, $limit, $page );
-    	$videos = Video::find(array(
+    	/*$videos = Video::find(array(
     			$conditions,
     			"bind" => $parameters,
     			'columns'=>'id,category_id,title,author,ctime',
     			"order" => "ctime DESC",
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
-    	));
-
+    	));*/
+		
+		$videos = Video::query()
+			->columns(array('id', 'category_id', 'title', 'author,ctime'))
+			->inWhere('category_id', $this->division_categorys)
+			->andWhere("visibility = 'Visible'")
+			/*->bind(array("visibility" => "Visible"))*/
+			->limit($limit, $offset)
+			->order("ctime DESC")
+			->execute();
+			
     	if(count($videos) == 0){
     		$this->response->setStatusCode(404, 'Video List Not Found');
     		echo 'Video List Not Found';

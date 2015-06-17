@@ -23,7 +23,7 @@ return new \Phalcon\Config(array(
 		'templateDir'=> include('template.php'),
 	),
 	'redis' => array(
-		'host' => '192.168.6.1',
+		'host' => '192.168.2.1',
 		'port' => '6379'
 	),
 	'models' => array(
