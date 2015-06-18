@@ -68,6 +68,20 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .tr-bg td{background:#202020}
 .sj-box h3{font-weight:bold;font-size:14px;color:#ddd;line-height:32px}
 
+.zxbox-tit{ border-bottom:1px solid #e0e0e0; background-color:#fff; height:68px}
+.zxbox-tit ul{ padding:0}
+.zxbox-tit li{ float:left; width:33.33%; text-align:center; border-bottom:0}
+.zxbox-tit li a{ font-size:24px;}
+.zxbox-tit li.on-this a{ color:#b59130}
+.zxbox-tit li:hover{ background-color:inherit}
+.previous,.next{ background:url(../images/icon-bg.png); }
+.previous a,.next a{ color:#feedbb; font-size:28px; padding:24px 0; width:118px; text-align:center}
+.previous{ position:fixed; bottom:100px; left:0}
+.next{ position:fixed; bottom:100px; right:0}
+
+.back-icon{background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0}
+.back-icon a{ display:block; width:84px; text-align:center; padding:20px 0}
+.back-icon a img{ }
 
 @media screen and (min-width: 1080px) and (max-width: 1920px)
 {
@@ -84,6 +98,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:30px}
 	.newx-conbox p{ font-size:42px; color:#333; line-height:72px;}
 	.right-box{padding:30px}
+	.zxbox-tit{height:102px}
+	.zxbox-tit li a{ font-size:36px;}
+	.previous a,.next a{ width:177px}
+	.previous a,.next a{font-size:42px; padding:36px 0}
+		.previous,.next{ bottom:150px}
+		.back-icon{top:450px;}
+	.back-icon a{ width:126px;padding:30px 0}
+	.back-icon a img{ width:34px; height:61px}
 }
 @media screen and (min-width: 720px) and (max-width: 1079px)
 {
@@ -99,6 +121,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.source{ font-size:20px; line-height:36px}
 	.time-year{ padding-right:20px}
 	.newx-conbox p{ font-size:28px; color:#333; line-height:48px;}
+	.zxbox-tit{ height:68px}
+	.zxbox-tit li a{ font-size:24px;}
+	.previous a,.next a{ width:118px}
+	.previous a,.next a{font-size:28px; padding:24px 0}
+	.previous,.next{ bottom:100px}
+	.back-icon{top:300px;}
+	.back-icon a{ width:84px;padding:20px 0}
+	.back-icon a img{ }
 }
 @media screen and (min-width: 480px) and (max-width: 719px)
 {
@@ -115,6 +145,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:13px}
 	.newx-conbox p{ font-size:18px; color:#333; line-height:32px;}
 	.right-box{padding:13px}
+	.zxbox-tit{ height:45px}
+	.zxbox-tit li a{ font-size:16px;}
+	.previous a,.next a{ width:79px}
+	.previous a,.next a{font-size:19px; padding:16px 0}
+		.previous,.next{ bottom:67px}
+		.back-icon{top:200px;}
+	.back-icon a{ width:56px;padding:13px 0}
+	.back-icon a img{ width:14px; height:27px}
 }
 @media screen and (min-width: 320px) and (max-width: 479px)
 {
@@ -131,7 +169,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:9px}
 	.newx-conbox p{ font-size:12px; color:#333; line-height:21px;}
 	.right-box{padding:9px}
-	
+	.zxbox-tit{ height:30px}
+	.zxbox-tit li a{ font-size:11px;}
+	.previous a,.next a{ width:52px}
+	.previous a,.next a{font-size:13px; padding:11px 0}
+	.previous,.next{ bottom:44px}
+	.back-icon{top:133px;}
+	.back-icon a{ width:56px;padding:13px 0}
+	.back-icon a img{ width:14px; height:27px}
 }
 @media screen and (min-width: 240px) and (max-width: 319px)
 {
@@ -148,7 +193,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:9px}
 	.newx-conbox p{ font-size:12px; color:#333; line-height:21px;}
 	.right-box{padding:9px}
-	
+	.zxbox-tit{ height:20px}
+	.zxbox-tit li a{ font-size:7px;}
+	.previous a,.next a{ width:35px}
+	.previous a,.next a{font-size:9px; padding:7px 0}
+	.previous,.next{ bottom:30px}
+	.back-icon{top:88px;}
+	.back-icon a{ width:37px;padding:9px 0}
+	.back-icon a img{ width:10px; height:18px}
 }
 @media (device-height:480px) and (-webkit-min-device-pixel-ratio:2){/* 兼容iphone4/4s */
 
@@ -165,7 +217,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:10px}
 	.newx-conbox p{ font-size:14px; color:#333; line-height:24px;}
 	.right-box{padding:10px}
-
+	.zxbox-tit{ height:32px}
+	.zxbox-tit li a{ font-size:12px;}
+	.previous a,.next a{width:59px;}
+	.previous a,.next a{font-size:14px; padding:12px 0}
+	.previous,.next{ bottom:50px}
+	.back-icon{top:150px;}
+	.back-icon a{ width:42px;padding:10px 0}
+	.back-icon a img{width:12px; height:20px}
 }
 @media (device-height:568px) and (-webkit-min-device-pixel-ratio:2){/* 兼容iphone5 */
 
@@ -182,8 +241,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:10px}
 	.newx-conbox p{ font-size:14px; color:#333; line-height:24px;}
 	.right-box{padding:10px}
-
-
+	.zxbox-tit{ height:32px}
+	.zxbox-tit li a{ font-size:12px;}
+	.previous a,.next a{width:59px;}
+	.previous a,.next a{font-size:14px; padding:12px 0}
+	.previous,.next{ bottom:50px}
+	.back-icon{top:150px;}
+	.back-icon a{ width:42px;padding:10px 0}
+	.back-icon a img{width:12px; height:20px}
 }
 
 
@@ -202,7 +267,14 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:12px}
 	.newx-conbox p{ font-size:17px; color:#333; line-height:29px;}
 	.right-box{padding:12px}
-
+	.zxbox-tit{ height:37px}
+	.zxbox-tit li a{ font-size:14px;}
+	.previous a,.next a{width:71px;}
+	.previous a,.next a{font-size:17px; padding:14px 0}
+	.previous,.next{ bottom:60px}
+	.back-icon{top:180px;}
+	.back-icon a{ width:50px;padding:12px 0}
+	.back-icon a img{width:14px; height:24px}
 }
 
 @media (device-height:736px) and (-webkit-min-device-pixel-ratio:2){/* 兼容iphone6 Plus */
@@ -220,5 +292,12 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.time-year{ padding-right:15px}
 	.newx-conbox p{ font-size:21px; color:#333; line-height:36px;}
 	.right-box{padding:15px}
-
+	.zxbox-tit{height:46px}
+	.zxbox-tit li a{ font-size:18px;}
+	.previous a,.next a{ width:88px}
+	.previous a,.next a{font-size:21px; padding:18px 0}
+	.previous,.next{ bottom:75px}
+	.back-icon{top:225px;}
+	.back-icon a{ width:63px;padding:15px 0}
+	.back-icon a img{width:18px; height:30px}
 }
