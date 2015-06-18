@@ -164,7 +164,8 @@ class NewsWork extends Stackable {
 
 				$position = $this->worker->getpoints ( $division_id, $category_id, $type, $position );
 
-				$sql = "SELECT no as id, title, description as content, author, if(language='zh','cn',language) as language, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description, publish as ctime, updatetime as mtime, image_b1, image_b2, image_b3, image_b4, image_s1, image_s2, image_s3, image_s4,video,audio FROM news WHERE kind='".$type."' AND NO IS  NOT NULL  AND display = 0 AND  LANGUAGE = '".$this->lang."' AND  (equipment IS NULL OR  equipment!='mobile') AND no > '" . $position . "' ORDER BY NO asc";
+				$sql = "SELECT no as id, title, description as content, author, if(language='zh','cn',language) as language, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description, publish as ctime, updatetime as mtime, image_b1, image_b2, image_b3, image_b4, image_s1, image_s2, image_s3, image_s4,video,audio FROM news WHERE kind='".$type."' AND NO IS  NOT NULL  AND display = 0 AND  LANGUAGE = '".$this->lang."' AND no > '" . $position . "' ORDER BY NO asc";
+				// AND  (equipment IS NULL OR  equipment!='mobile')
 				$query = $db_export->query ( $sql );
 				//$this->worker->logger ( 'SQL', $query->queryString );
 
