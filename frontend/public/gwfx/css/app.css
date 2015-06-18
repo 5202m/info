@@ -77,8 +77,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .zxbox-tit li:hover{ background-color:inherit}
 .previous,.next{ background:url(../images/icon-bg.png); bottom:0}
 .previous a,.next a{ color:#feedbb; font-size:28px; padding:24px 0; width:118px; text-align:center}
-.previous{ position:fixed; bottom:100px; left:0}
-.next{ position:fixed; bottom:100px; right:0}
+.previous{ position:fixed; left:0}
+.next{ position:fixed;  right:0}
 
 .back-icon{background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0; z-index:99}
 .back-icon a{ display:block; width:84px; text-align:center; padding:20px 0}
