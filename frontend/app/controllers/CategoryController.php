@@ -61,6 +61,8 @@ class CategoryController extends ControllerBase
 			$view = new \Phalcon\Mvc\View();
 			$view->setViewsDir($this->basedir.'/template');
 			$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
+			$view->setVar('template_id',$template_id);
+			$view->setVar('parent_id',$parent_id);
 			$view->setVar('categorys',$categorys);
 			$view->start();
 			$view->render("category","$template_id");
