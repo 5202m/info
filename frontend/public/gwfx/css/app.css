@@ -46,6 +46,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .source{color:#999;text-align:right}
 .newx-conbox{padding-top:20px;border-top:solid #d5d5d5 1px}
 .newx-conbox p,.video-pinfo p{line-height:28px;color:#d7d7d7;font-size:14px; text-align:justify; text-indent:2em}
+.newx-conbox p img,.video-pinfo p img{ width:100%; display:block;}
 .video-box{margin:0 auto;width:100%;text-align:center}
 .video-pinfo h3{margin-top:10px;font-weight:normal;color:#d7d7d7}
 .video-pinfo p{text-indent:2em;padding-bottom:0}
@@ -74,12 +75,12 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .zxbox-tit li a{ font-size:24px;}
 .zxbox-tit li.on-this a{ color:#b59130}
 .zxbox-tit li:hover{ background-color:inherit}
-.previous,.next{ background:url(../images/icon-bg.png); }
+.previous,.next{ background:url(../images/icon-bg.png); bottom:0}
 .previous a,.next a{ color:#feedbb; font-size:28px; padding:24px 0; width:118px; text-align:center}
 .previous{ position:fixed; bottom:100px; left:0}
 .next{ position:fixed; bottom:100px; right:0}
 
-.back-icon{background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0}
+.back-icon{background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0; z-index:99}
 .back-icon a{ display:block; width:84px; text-align:center; padding:20px 0}
 .back-icon a img{ }
 
@@ -102,7 +103,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:36px;}
 	.previous a,.next a{ width:177px}
 	.previous a,.next a{font-size:42px; padding:36px 0}
-		.previous,.next{ bottom:150px}
+
 		.back-icon{top:450px;}
 	.back-icon a{ width:126px;padding:30px 0}
 	.back-icon a img{ width:34px; height:61px}
@@ -125,7 +126,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:24px;}
 	.previous a,.next a{ width:118px}
 	.previous a,.next a{font-size:28px; padding:24px 0}
-	.previous,.next{ bottom:100px}
 	.back-icon{top:300px;}
 	.back-icon a{ width:84px;padding:20px 0}
 	.back-icon a img{ }
@@ -149,7 +149,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:16px;}
 	.previous a,.next a{ width:79px}
 	.previous a,.next a{font-size:19px; padding:16px 0}
-		.previous,.next{ bottom:67px}
 		.back-icon{top:200px;}
 	.back-icon a{ width:56px;padding:13px 0}
 	.back-icon a img{ width:14px; height:27px}
@@ -173,7 +172,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:11px;}
 	.previous a,.next a{ width:52px}
 	.previous a,.next a{font-size:13px; padding:11px 0}
-	.previous,.next{ bottom:44px}
 	.back-icon{top:133px;}
 	.back-icon a{ width:56px;padding:13px 0}
 	.back-icon a img{ width:14px; height:27px}
@@ -197,7 +195,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:7px;}
 	.previous a,.next a{ width:35px}
 	.previous a,.next a{font-size:9px; padding:7px 0}
-	.previous,.next{ bottom:30px}
 	.back-icon{top:88px;}
 	.back-icon a{ width:37px;padding:9px 0}
 	.back-icon a img{ width:10px; height:18px}
@@ -221,7 +218,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:12px;}
 	.previous a,.next a{width:59px;}
 	.previous a,.next a{font-size:14px; padding:12px 0}
-	.previous,.next{ bottom:50px}
 	.back-icon{top:150px;}
 	.back-icon a{ width:42px;padding:10px 0}
 	.back-icon a img{width:12px; height:20px}
@@ -245,7 +241,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:12px;}
 	.previous a,.next a{width:59px;}
 	.previous a,.next a{font-size:14px; padding:12px 0}
-	.previous,.next{ bottom:50px}
 	.back-icon{top:150px;}
 	.back-icon a{ width:42px;padding:10px 0}
 	.back-icon a img{width:12px; height:20px}
@@ -271,7 +266,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:14px;}
 	.previous a,.next a{width:71px;}
 	.previous a,.next a{font-size:17px; padding:14px 0}
-	.previous,.next{ bottom:60px}
 	.back-icon{top:180px;}
 	.back-icon a{ width:50px;padding:12px 0}
 	.back-icon a img{width:14px; height:24px}
@@ -296,7 +290,6 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:18px;}
 	.previous a,.next a{ width:88px}
 	.previous a,.next a{font-size:21px; padding:18px 0}
-	.previous,.next{ bottom:75px}
 	.back-icon{top:225px;}
 	.back-icon a{ width:63px;padding:15px 0}
 	.back-icon a img{width:18px; height:30px}
