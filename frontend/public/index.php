@@ -66,17 +66,30 @@ try {
 		));
 			
 		//Create the Cache setting redis connection options
-		$cache = new Phalcon\Cache\Backend\Redis($frontCache, array(
+		$redis = new Phalcon\Cache\Backend\Redis($frontCache, array(
 				'host' => $config->redis->host,
 				'port' => $config->redis->port,
 // 				'auth' => $config->redis->auth,
-				'persistent' => true,
+//				'persistent' => true,
 // 				'statsKey' => 'info',
 				'index' => 1
 				
 		));
+		
+		$frontCache = new \Phalcon\Cache\Frontend\Data(array(
+				"lifetime" => 86400
+		));
+		$file = new \Phalcon\Cache\Backend\File($frontCache, array(
+				"cacheDir" => "../app/cache/"
+		));
+		
+		$cache = new stdClass();
+		$cache->redis = $redis;
+		$cache->file = $file;
+		//$cache->mem = $mem;
 	
-		return $cache;
+		//return $cache;
+		return $redis;
 	});
 	
 	/**
@@ -105,10 +118,11 @@ try {
 	 */
 	$application = new \Phalcon\Mvc\Application();
 	$application->setDI($di);
+	
 	echo $application->handle()->getContent();
 
 } catch (Phalcon\Exception $e) {
-	echo $e->getMessage();
+	error_log($e->getMessage()) ;
 } catch (PDOException $e){
-	echo $e->getMessage();
+	error_log($e->getMessage()) ;
 }

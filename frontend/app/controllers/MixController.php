@@ -63,7 +63,7 @@ class MixController extends ControllerBase
 					'visibility' => 'Visible'
 				),
 				'columns'=>'id'
-				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $parent_id ), "lifetime" => 86400)
 		));
 		foreach($categorys as $category){
 			$this->division_categorys[] = $category->id;
@@ -91,14 +91,21 @@ class MixController extends ControllerBase
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));
 		*/
-		$articles = Article::query()
-			->columns(array('id', 'division_category_id', 'title', 'author,ctime'))
-			->inWhere('division_category_id', $this->division_categorys)
-			->andWhere("visibility = 'Visible'")
-			/*->bind(array("visibility" => "Visible"))*/
-			->limit($limit, $offset)
-			->order("ctime DESC")
-			->execute();
+		
+		$articles = $this->cache->get($key);
+		if ($articles === null) {
+
+			$articles = Article::query()
+				->columns(array('id', 'division_category_id', 'title', 'author,ctime'))
+				->inWhere('division_category_id', $this->division_categorys)
+				->andWhere("visibility = 'Visible'")
+				/*->bind(array("visibility" => "Visible"))*/
+				->limit($limit, $offset)
+				->order("ctime DESC")
+				->execute();
+		
+			$this->cache->save($key, $articles, 120);
+		}
 		
     	if(count($articles) == 0){
     		$this->response->setStatusCode(404, 'Article List Not Found');
@@ -112,6 +119,7 @@ class MixController extends ControllerBase
     		$view->setVar('articles',$articles);
     		$view->setVar('template_id',$template_id);
     		$view->setVar('parent_id',$parent_id);
+    		$view->setVar('category_id',$parent_id);
     		$view->setVar('limit',$limit);
     		$view->setVar('pagenumber',$page);
     		$view->setVar('pages',$pages);
@@ -152,7 +160,7 @@ class MixController extends ControllerBase
 						'visibility' => 'Visible'
 					),
 					'columns'=>'id'
-					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $parent_id ), "lifetime" => 86400)
 			));
 			foreach($categorys as $category){
 				$this->division_categorys[] = $category->id;

@@ -53,7 +53,7 @@ class VideoController extends ControllerBase{
 					'visibility' => 'Visible'
 				),
 				'columns'=>'id'
-				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+				, "cache" => array("service"=> 'cache', "key" => sprintf(":video:mix:page:%s", $parent_id ), "lifetime" => 86400)
 		));
 		foreach($categorys as $category){
 			$this->division_categorys[] = $category->id;
@@ -67,7 +67,7 @@ class VideoController extends ControllerBase{
     			/*'language' => 'cn',*/
     	//		'visibility' => 'Visible'
     	//);
-    	$key = sprintf(":mix:html:%s:%s:%s:%s", $template_id,$parent_id, $limit, $page );
+    	$key = sprintf(":video:mix:html:%s:%s:%s:%s", $template_id,$parent_id, $limit, $page );
     	/*$videos = Video::find(array(
     			$conditions,
     			"bind" => $parameters,
@@ -76,16 +76,19 @@ class VideoController extends ControllerBase{
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
     	));*/
-		
-		$videos = Video::query()
-			->columns(array('id', 'category_id', 'title', 'author,ctime'))
-			->inWhere('category_id', $this->division_categorys)
-			->andWhere("visibility = 'Visible'")
-			/*->bind(array("visibility" => "Visible"))*/
-			->limit($limit, $offset)
-			->order("ctime DESC")
-			->execute();
-		
+    	$videos = $this->cache->get($key);
+    	if ($articles === null) {
+
+			$videos = Video::query()
+				->columns(array('id', 'category_id', 'title', 'author,ctime'))
+				->inWhere('category_id', $this->division_categorys)
+				->andWhere("visibility = 'Visible'")
+				/*->bind(array("visibility" => "Visible"))*/
+				->limit($limit, $offset)
+				->order("ctime DESC")
+				->execute();
+			$this->cache->save($key, $videos, 120);
+    	}
     	if(count($videos) == 0){
     		$this->response->setStatusCode(404, 'Video List Not Found');
     		echo 'Video List Not Found';
@@ -170,7 +173,7 @@ class VideoController extends ControllerBase{
     			/*'language' => 'cn',*/
     			'visibility' => 'Visible'
     	);
-    	$key = sprintf(":list:html:%s:%s:%s:%s", $template_id,$category_id, $limit, $page );
+    	$key = sprintf(":video:list:html:%s:%s:%s:%s", $template_id,$category_id, $limit, $page );
     	$videos = Video::find(array(
     			$conditions,
     			"bind" => $parameters,
@@ -323,7 +326,7 @@ class VideoController extends ControllerBase{
 						'visibility' => 'Visible'
 					),
 					'columns'=>'id'
-					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:page:%s", $parent_id ), "lifetime" => 86400)
+					, "cache" => array("service"=> 'cache', "key" => sprintf(":video:mix:page:%s", $parent_id ), "lifetime" => 86400)
 			));
 			foreach($categorys as $category){
 				$this->division_categorys[] = $category->id;
