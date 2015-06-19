@@ -1,4 +1,4 @@
-﻿body{font:12px/1.4 microsoft yahei;color:#333;;background:#f8f8f8;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
+body{font:12px/1.4 microsoft yahei;color:#333;;background:#f8f8f8;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
 body,p,ol,ul,li,h1,h2,h3,h4,h5,h6,dl,dt,dd,pre,input,table,tr,td,button,textarea{margin:0;padding:0}
 ol,ul,li{list-style:none}
 input,button{border:0 none}
@@ -76,13 +76,22 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .zxbox-tit li.on-this a{ color:#b59130}
 .zxbox-tit li:hover{ background-color:inherit}
 .previous,.next{ background:url(../images/icon-bg.png); bottom:0}
-.previous a,.next a{ color:#feedbb; font-size:28px; padding:24px 0; width:118px; text-align:center}
+.left-zxbox .previous a,.left-zxbox .next a{ color:#feedbb; font-size:28px; padding:0.8em 0; width:118px; text-align:center; height:1em}
+.left-zxbox .refash a{ height:1.6em; padding:0.5em 0}
+.left-zxbox .refash a img{ height:100%; width:auto; display: block; margin:0 auto}
 .previous{ position:fixed; left:0}
 .next{ position:fixed;  right:0}
 
 .back-icon{background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0; z-index:99}
 .back-icon a{ display:block; width:84px; text-align:center; padding:20px 0}
 .back-icon a img{ }
+
+/*ÓïÒô*/
+.music-ts {position: relative;display: block;margin: 5px 0 10px 0;width: 78%;height: 32px;padding: 0 10px 0 5px;background: #b59130;color: #777;border-radius: 4px;font-size: 14px;}
+.music-ts .wave-no {position: relative;top: 7px;display: block;width: 20px;height: 20px;background: url(../images/animate.png) no-repeat;background-size: 20px 20px;}
+.music-ts .wave-on {position: relative;top: 7px;display: block;width: 20px;height: 20px;background: url(../images/animate.gif) no-repeat;background-size: 20px 20px;}
+.music-ts .fdr {position: absolute;bottom: -4px;right: -42px;font-family: arial;}
+
 
 @media screen and (min-width: 1080px) and (max-width: 1920px)
 {
@@ -101,8 +110,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:30px}
 	.zxbox-tit{height:102px}
 	.zxbox-tit li a{ font-size:36px;}
-	.previous a,.next a{ width:177px}
-	.previous a,.next a{font-size:42px; padding:36px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{ width:177px;font-size:42px; }
 
 		.back-icon{top:450px;}
 	.back-icon a{ width:126px;padding:30px 0}
@@ -124,8 +132,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.newx-conbox p{ font-size:28px; color:#333; line-height:48px;}
 	.zxbox-tit{ height:68px}
 	.zxbox-tit li a{ font-size:24px;}
-	.previous a,.next a{ width:118px}
-	.previous a,.next a{font-size:28px; padding:24px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{ width:118px;font-size:28px;}
 	.back-icon{top:300px;}
 	.back-icon a{ width:84px;padding:20px 0}
 	.back-icon a img{ }
@@ -147,8 +154,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:13px}
 	.zxbox-tit{ height:45px}
 	.zxbox-tit li a{ font-size:16px;}
-	.previous a,.next a{ width:79px}
-	.previous a,.next a{font-size:19px; padding:16px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:19px; width:79px}
 		.back-icon{top:200px;}
 	.back-icon a{ width:56px;padding:13px 0}
 	.back-icon a img{ width:14px; height:27px}
@@ -170,8 +176,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:9px}
 	.zxbox-tit{ height:30px}
 	.zxbox-tit li a{ font-size:11px;}
-	.previous a,.next a{ width:52px}
-	.previous a,.next a{font-size:13px; padding:11px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:13px; width:52px}
 	.back-icon{top:133px;}
 	.back-icon a{ width:56px;padding:13px 0}
 	.back-icon a img{ width:14px; height:27px}
@@ -193,8 +198,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:9px}
 	.zxbox-tit{ height:20px}
 	.zxbox-tit li a{ font-size:7px;}
-	.previous a,.next a{ width:35px}
-	.previous a,.next a{font-size:9px; padding:7px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:9px; width:35px}
 	.back-icon{top:88px;}
 	.back-icon a{ width:37px;padding:9px 0}
 	.back-icon a img{ width:10px; height:18px}
@@ -216,8 +220,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:10px}
 	.zxbox-tit{ height:32px}
 	.zxbox-tit li a{ font-size:12px;}
-	.previous a,.next a{width:59px;}
-	.previous a,.next a{font-size:14px; padding:12px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:14px;width:59px;}
 	.back-icon{top:150px;}
 	.back-icon a{ width:42px;padding:10px 0}
 	.back-icon a img{width:12px; height:20px}
@@ -239,8 +242,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:10px}
 	.zxbox-tit{ height:32px}
 	.zxbox-tit li a{ font-size:12px;}
-	.previous a,.next a{width:59px;}
-	.previous a,.next a{font-size:14px; padding:12px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:14px;width:59px;}
 	.back-icon{top:150px;}
 	.back-icon a{ width:42px;padding:10px 0}
 	.back-icon a img{width:12px; height:20px}
@@ -264,8 +266,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:12px}
 	.zxbox-tit{ height:37px}
 	.zxbox-tit li a{ font-size:14px;}
-	.previous a,.next a{width:71px;}
-	.previous a,.next a{font-size:17px; padding:14px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:17px;width:71px;}
 	.back-icon{top:180px;}
 	.back-icon a{ width:50px;padding:12px 0}
 	.back-icon a img{width:14px; height:24px}
@@ -288,8 +289,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.right-box{padding:15px}
 	.zxbox-tit{height:46px}
 	.zxbox-tit li a{ font-size:18px;}
-	.previous a,.next a{ width:88px}
-	.previous a,.next a{font-size:21px; padding:18px 0}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:21px; width:88px}
 	.back-icon{top:225px;}
 	.back-icon a{ width:63px;padding:15px 0}
 	.back-icon a img{width:18px; height:30px}

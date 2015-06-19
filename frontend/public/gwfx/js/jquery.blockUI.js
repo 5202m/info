@@ -221,14 +221,14 @@ function install(el, opts) {
 	// layer3 is the message content that is displayed while blocking
 
 	var lyr1 = ($.browser.msie || opts.forceIframe) 
-		? $('<iframe class="blockUI" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="'+opts.iframeSrc+'"></iframe>')
+		? $('<iframe class="blockUI" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="../../资讯列表页/js/'+opts.iframeSrc+'"></iframe>')
 		: $('<div class="blockUI" style="display:none"></div>');
 	var lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
 	
 	var lyr3;
 	if (opts.theme && full) {
 		var s = '<div class="blockUI blockMsg blockPage ui-dialog ui-widget ui-corner-all" style="z-index:'+z+';display:none;position:fixed">' +
-					'<div class="ui-widget-header ui-dialog-titlebar blockTitle">'+(opts.title || '&nbsp;')+'</div>' +
+					'<div class="ui-widget-header ui-dialog-titlebar blockTitle">'+(opts.title || ' ')+'</div>' +
 					'<div class="ui-widget-content ui-dialog-content"></div>' +
 				'</div>';
 		lyr3 = $(s);
