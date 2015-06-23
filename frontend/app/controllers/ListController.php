@@ -68,7 +68,7 @@ class ListController extends ControllerBase
     	$articles = Article::find(array(
     			$conditions,
     			"bind" => $parameters,
-    			'columns'=>'id,title,author,ctime,mtime',
+    			'columns'=>'id,division_category_id,title,author,ctime,mtime',
     			"order" => "ctime DESC",
     			'limit' => array('number'=>$limit, 'offset'=>$offset)
     			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
