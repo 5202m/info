@@ -92,7 +92,7 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $xpath = new DOMXPath($dom);
         $xml = $xpath->query('/html/body/div[@class="greyBg"]/div[@id="wrap"]/div[@class="w960"]/div[@class="cen-conbox clearfix"]/div[@class="innerContent fr"]');
         $xhtml = $dom->saveHTML($xml->item(0));
-        $new_xhtml = str_replace('http://www.gwfx.com/zh/calendar','http://'.$_SERVER["HTTP_HOST"].'/calendar/gwfx',$xhtml);
+        $new_xhtml = str_replace('http://www.gwfx.com/zh/calendar','/calendar/gwfx',$xhtml);
         return($new_xhtml);
     }
     //pc端繁体 财经日历模板
@@ -109,7 +109,7 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $xpath = new DOMXPath($dom);
         $xml = $xpath->query('/html/body/div[@class="greyBg"]/div[@id="wrap"]/div[@class="w960"]/div[@class="cen-conbox clearfix"]/div[@class="innerContent fr"]');
         $xhtml = $dom->saveHTML($xml->item(0));
-        $new_xhtml = str_replace('http://www.gwfx.com/tw/calendar','http://'.$_SERVER["HTTP_HOST"].'/calendar/gwfxtw',$xhtml);
+        $new_xhtml = str_replace('http://www.gwfx.com/tw/calendar','/calendar/gwfxtw',$xhtml);
         return($new_xhtml);
     }
     //app端简体 财经日历模板
@@ -132,7 +132,7 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $xhtml_3 = $dom->saveHTML($xml_3->item(0));
         $xhtml_4 = $dom->saveHTML($xml_3->item(1));
         $xhtml = $xhtml_1.$xhtml_2.$xhtml_3.$xhtml_4;
-        $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','http://'.$_SERVER["HTTP_HOST"].'/calendar/app',$xhtml);
+        $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','/calendar/app',$xhtml);
         return($new_xhtml);
     }
 
