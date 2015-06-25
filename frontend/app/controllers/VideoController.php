@@ -101,6 +101,7 @@ class VideoController extends ControllerBase{
     		$view->setVar('videos',$videos);
     		$view->setVar('template_id',$template_id);
     		$view->setVar('parent_id',$parent_id);
+    		$view->setVar('category_id',$parent_id);
     		$view->setVar('limit',$limit);
     		$view->setVar('pagenumber',$page);
     		$view->setVar('pages',$pages);
@@ -347,11 +348,11 @@ class VideoController extends ControllerBase{
     	$next 	= $page>=$total?$total:$page+1;
     	$paginator = array(
     			'count' 	=> $count,
-    			'first' 	=> 0,
+    			'first' 	=> 1,
     			'last' 		=> $total,
-    			'before' 	=> $before,
+    			'before' 	=> $before,//($before==0?1:$before),
     			'current' 	=> $page,
-    			'next' 		=> ($next<0?0:$next),
+    			'next' 		=> ($next<0?1:$next),
     			'total' 	=> $total
     	); 
     	return ($paginator);
