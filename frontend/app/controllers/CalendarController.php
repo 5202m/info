@@ -69,7 +69,7 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
-        $datas = $this->app_generator($date);
+        $datas = $this->webui_generator($date);
         if($datas){       
             $this->view->setVar('datas',$datas);
         }else{
@@ -154,6 +154,30 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $xhtml_4 = $dom->saveHTML($xml_3->item(1));
         $xhtml = $xhtml_1.$xhtml_2.$xhtml_3.$xhtml_4;
         $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','/calendar/app',$xhtml);
+        return($new_xhtml);
+    }
+    
+    //app端简体 财经日历模板
+    private function webui_generator($day = '') {
+        if($day == ''){
+            $url = "http://m.gwfx.com/zh/calender/index.html";
+        }else{
+            $url = "http://m.gwfx.com/zh/calender/".$day.".html";
+        }
+        $html = $this->curl($url);
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+        $xpath = new DOMXPath($dom);
+        $xml_1 = $xpath->query('/html/body/div[@class="date_1"]');
+        $xml_2 = $xpath->query('/html/body/section[@class="Calendar"]');
+        $xml_3 = $xpath->query('/html/body/section[@class="Thing"]');
+        $xhtml_1 = $dom->saveHTML($xml_1->item(0));
+        $xhtml_2 = $dom->saveHTML($xml_2->item(0));
+        $xhtml_3 = $dom->saveHTML($xml_3->item(0));
+        $xhtml_4 = $dom->saveHTML($xml_3->item(1));
+        $xhtml = $xhtml_1.$xhtml_2.$xhtml_3.$xhtml_4;
+        $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','/calendar/webui',$xhtml);
         return($new_xhtml);
     }
 
