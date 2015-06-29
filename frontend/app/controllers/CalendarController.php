@@ -58,6 +58,27 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         }
     }
     /**
+     * 财经日历webui端简体模板
+     * @param type $date
+     * @return type
+     */
+    public function webuiAction($date = ''){
+        $this->view->disableLevel(array(
+            View::LEVEL_MAIN_LAYOUT => false
+        ));
+        if($date != ''){
+            $date = str_replace('.html', '', $date);
+        }
+        $datas = $this->app_generator($date);
+        if($datas){       
+            $this->view->setVar('datas',$datas);
+        }else{
+            $this->response->setStatusCode(404, 'Template Not Found');
+            echo 'Template Not Found';
+            return;
+        }
+    }
+    /**
      * 财经日历pc端繁体模板
      * @param type $date
      * @return type
