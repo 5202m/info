@@ -6,7 +6,7 @@ img{border:0 none}
 .fl{float:left}
 .fr{float:right}
 .vcen{vertical-align:middle}
-a{color:#d7d7d7;text-decoration:none}
+a{color:#333;text-decoration:none}
 a:hover{text-decoration:none}
 a:active{noOutline:expression(this.onFocus=this.blur())}
 .red{color:#C8310C}
