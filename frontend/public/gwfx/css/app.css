@@ -1,4 +1,4 @@
-body{font:12px/1.4 microsoft yahei;color:#333;;background:#f8f8f8;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
+body{font:12px/1.4 microsoft yahei;color:#333;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
 body,p,ol,ul,li,h1,h2,h3,h4,h5,h6,dl,dt,dd,pre,input,table,tr,td,button,textarea{margin:0;padding:0}
 ol,ul,li{list-style:none}
 input,button{border:0 none}
@@ -45,7 +45,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .right-box h2{font-weight:bold;font-size:22px;color:#000;text-align:center}
 .source{color:#999;text-align:right}
 .newx-conbox{padding-top:20px;border-top:solid #d5d5d5 1px}
-.newx-conbox p,.video-pinfo p{line-height:28px;color:#d7d7d7;font-size:14px; text-align:justify; text-indent:2em}
+.newx-conbox p,.video-pinfo p{line-height:28px;color:#d7d7d7;font-size:14px; text-align:justify; text-indent:2em; padding-bottom:0.8em}
 .newx-conbox p img,.video-pinfo p img{ width:100%; display:block;}
 .video-box{margin:0 auto;width:100%;text-align:center}
 .video-pinfo h3{margin-top:10px;font-weight:normal;color:#d7d7d7}
@@ -161,47 +161,47 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 }
 @media screen and (min-width: 320px) and (max-width: 479px)
 {
-	.n-img,.n-img img{ width:53px; height:42px;}
-	.n-img{ margin-right:10px}
-	.n-con{ margin-left:63px}
-	.biaot{ font-size:12px; line-height:14px}
-	.time{ font-size:9px; line-height:13px}
-	.time-day{ padding-right:5px}
-	.left-zxbox a{ padding:7px}
+		.n-img,.n-img img{ width:72px; height:53px;}
+	.n-img{ margin-right:12px}
+	.n-con{ margin-left:84px}
+	.biaot{ font-size:17px; line-height:19px}
+	.time{ font-size:12px; line-height:14px}
+	.time-day{ padding-right:6px}
+	.left-zxbox a{ padding:9px}
 	
-	.right-box h2{ font-size:16px; font-weight:normal; padding-bottom:9px}
-	.source{ font-size:9px; line-height:16px}
-	.time-year{ padding-right:9px}
-	.newx-conbox p{ font-size:12px; color:#333; line-height:21px;}
-	.right-box{padding:9px}
-	.zxbox-tit{ height:30px}
-	.zxbox-tit li a{ font-size:11px;}
-	.left-zxbox .previous a,.left-zxbox .next a{font-size:13px; width:52px}
-	.back-icon{top:133px;}
-	.back-icon a{ width:56px;padding:13px 0}
-	.back-icon a img{ width:14px; height:27px}
+	.right-box h2{ font-size:22px; font-weight:normal; padding-bottom:12px}
+	.source{ font-size:12px; line-height:21px}
+	.time-year{ padding-right:12px}
+	.newx-conbox p{ font-size:17px; color:#333; line-height:29px;}
+	.right-box{padding:12px}
+	.zxbox-tit{ height:37px}
+	.zxbox-tit li a{ font-size:14px;}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:17px;width:71px;}
+	.back-icon{top:180px;}
+	.back-icon a{ width:50px;padding:12px 0}
+	.back-icon a img{width:14px; height:24px}
 }
 @media screen and (min-width: 240px) and (max-width: 319px)
 {
-	.n-img,.n-img img{ width:53px; height:42px;}
+	 .n-img,.n-img img{ width:60px; height:48px;}
 	.n-img{ margin-right:10px}
-	.n-con{ margin-left:63px}
-	.biaot{ font-size:12px; line-height:14px}
-	.time{ font-size:9px; line-height:13px}
+	.n-con{ margin-left:70px}
+	.biaot{ font-size:14px; line-height:16px}
+	.time{ font-size:10px; line-height:12px}
 	.time-day{ padding-right:5px}
-	.left-zxbox a{ padding:7px}
+	.left-zxbox a{ padding:8px}
 	
-	.right-box h2{ font-size:16px; font-weight:normal; padding-bottom:9px}
-	.source{ font-size:9px; line-height:16px}
-	.time-year{ padding-right:9px}
-	.newx-conbox p{ font-size:12px; color:#333; line-height:21px;}
-	.right-box{padding:9px}
-	.zxbox-tit{ height:20px}
-	.zxbox-tit li a{ font-size:7px;}
-	.left-zxbox .previous a,.left-zxbox .next a{font-size:9px; width:35px}
-	.back-icon{top:88px;}
-	.back-icon a{ width:37px;padding:9px 0}
-	.back-icon a img{ width:10px; height:18px}
+	.right-box h2{ font-size:18px; font-weight:normal; padding-bottom:10px}
+	.source{ font-size:10px; line-height:18px}
+	.time-year{ padding-right:10px}
+	.newx-conbox p{ font-size:14px; color:#333; line-height:24px;}
+	.right-box{padding:10px}
+	.zxbox-tit{ height:32px}
+	.zxbox-tit li a{ font-size:12px;}
+	.left-zxbox .previous a,.left-zxbox .next a{font-size:14px;width:59px;}
+	.back-icon{top:150px;}
+	.back-icon a{ width:42px;padding:10px 0}
+	.back-icon a img{width:12px; height:20px}
 }
 @media (device-height:480px) and (-webkit-min-device-pixel-ratio:2){/* 兼容iphone4/4s */
 
