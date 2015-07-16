@@ -35,8 +35,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .n-img{width:50px;height:50px}
 .n-con{margin-left:60px}
 .comment .n-con{margin-left:0}
-.biaot{line-height:18px;color:#333333; min-height:2em}
-.time{color:#999; text-align:right}
+.biaot{line-height:1.2em;color:#333333;height:2.4em; overflow-y:hidden}
+.time{color:#999; text-align:right; line-height:1.2em}
 .left-zxbox .more-btn{margin:8px auto 0;padding:0;display:block;width:82px;height:20px;line-height:20px;text-align:center;color:#ddd;background-color:none}
 .left-zxbox .more-btn:hover{background-position:0 -23px;background-color:none}
 
@@ -98,8 +98,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.n-img,.n-img img{ width:180px; height:132px;}
 	.n-img{ margin-right:30px}
 	.n-con{ margin-left:210px}
-	.biaot{ font-size:42px; line-height:48px}
-	.time{ font-size:30px; line-height:36px}
+	.biaot{ font-size:42px; }
+	.time{ font-size:30px;}
 	.time-day{ padding-right:15px}
 	.left-zxbox a{ padding:22px}
 	
@@ -121,8 +121,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.n-img,.n-img img{ width:120px; height:88px;}
 	.n-img{ margin-right:20px}
 	.n-con{ margin-left:140px}
-	.biaot{ font-size:28px; line-height:32px}
-	.time{ font-size:20px; line-height:24px}
+	.biaot{ font-size:28px; }
+	.time{ font-size:20px;}
 	.time-day{ padding-right:10px}
 	.left-zxbox a{ padding:15px}
 	
@@ -142,8 +142,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.n-img,.n-img img{ width:80px; height:58px;}
 	.n-img{ margin-right:13px}
 	.n-con{ margin-left:93px}
-	.biaot{ font-size:18px; line-height:21px}
-	.time{ font-size:13px; line-height:16px}
+	.biaot{ font-size:18px;}
+	.time{ font-size:13px;}
 	.time-day{ padding-right:7px}
 	.left-zxbox a{ padding:10px}
 	
@@ -164,8 +164,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 		.n-img,.n-img img{ width:72px; height:53px;}
 	.n-img{ margin-right:12px}
 	.n-con{ margin-left:84px}
-	.biaot{ font-size:17px; line-height:19px}
-	.time{ font-size:12px; line-height:14px}
+	.biaot{ font-size:17px; }
+	.time{ font-size:12px; }
 	.time-day{ padding-right:6px}
 	.left-zxbox a{ padding:9px}
 	
@@ -187,8 +187,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	 .n-img,.n-img img{ width:60px; height:48px;}
 	.n-img{ margin-right:10px}
 	.n-con{ margin-left:70px}
-	.biaot{ font-size:14px; line-height:16px}
-	.time{ font-size:10px; line-height:12px}
+	.biaot{ font-size:14px; }
+	.time{ font-size:10px; }
 	.time-day{ padding-right:5px}
 	.left-zxbox a{ padding:8px}
 	
@@ -209,8 +209,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
    .n-img,.n-img img{ width:60px; height:48px;}
 	.n-img{ margin-right:10px}
 	.n-con{ margin-left:70px}
-	.biaot{ font-size:14px; line-height:16px}
-	.time{ font-size:10px; line-height:12px}
+	.biaot{ font-size:14px; }
+	.time{ font-size:10px; }
 	.time-day{ padding-right:5px}
 	.left-zxbox a{ padding:8px}
 	
@@ -231,8 +231,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
    .n-img,.n-img img{ width:60px; height:48px;}
 	.n-img{ margin-right:10px}
 	.n-con{ margin-left:70px}
-	.biaot{ font-size:14px; line-height:16px}
-	.time{ font-size:10px; line-height:12px}
+	.biaot{ font-size:14px;}
+	.time{ font-size:10px;}
 	.time-day{ padding-right:5px}
 	.left-zxbox a{ padding:8px}
 	
@@ -255,8 +255,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
   	.n-img,.n-img img{ width:72px; height:53px;}
 	.n-img{ margin-right:12px}
 	.n-con{ margin-left:84px}
-	.biaot{ font-size:17px; line-height:19px}
-	.time{ font-size:12px; line-height:14px}
+	.biaot{ font-size:17px; }
+	.time{ font-size:12px; }
 	.time-day{ padding-right:6px}
 	.left-zxbox a{ padding:9px}
 	
@@ -278,8 +278,8 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
    .n-img,.n-img img{ width:90px; height:66px;}
 	.n-img{ margin-right:15px}
 	.n-con{ margin-left:105px}
-	.biaot{ font-size:21px; line-height:24px}
-	.time{ font-size:15px; line-height:18px}
+	.biaot{ font-size:21px; }
+	.time{ font-size:15px; }
 	.time-day{ padding-right:8px}
 	.left-zxbox a{ padding:11px}
 	
