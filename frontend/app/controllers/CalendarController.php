@@ -154,7 +154,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $xhtml_4 = $dom->saveHTML($xml_3->item(1));
         $xhtml = $xhtml_1.$xhtml_2.$xhtml_3.$xhtml_4;
         $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','/calendar/app',$xhtml);
-        return($new_xhtml);
+        $new_xhtml_a = preg_replace("(<a[^>]*class=\"text\">(.+?)<\/a>)","$1", $new_xhtml);
+
+        return($new_xhtml_a);
     }
     
     //app端简体 财经日历模板
@@ -178,7 +180,8 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         $xhtml_4 = $dom->saveHTML($xml_3->item(1));
         $xhtml = $xhtml_1.$xhtml_2.$xhtml_3.$xhtml_4;
         $new_xhtml = str_replace('http://m.gwfx.com/zh/calender','/calendar/webui',$xhtml);
-        return($new_xhtml);
+        $new_xhtml_a = preg_replace("(<a[^>]*class=\"text\">(.+?)<\/a>)","$1", $new_xhtml);
+        return($new_xhtml_a);
     }
 
     private function curl($url, $fields = array(), $auth = false) {
