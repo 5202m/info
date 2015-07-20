@@ -229,6 +229,7 @@ tr.oushu{ background-color:#f8f8f8}
 .setup-jysz .setup-bottom{ padding-right:0}
 
 /*修改密码*/
+
 .change-pass{ width:360px; height:321px; margin-top:-160px; margin-left:-180px}
 .change-top h2 i{ width:23px; height:24px; background-position:-90px -255px; top:-1px}
 .change-c,.change-psw{ padding:15px; border-bottom:1px solid #b4b4b4; background-color:#fff}
@@ -280,6 +281,8 @@ tr.oushu{ background-color:#f8f8f8}
 .dingdan-ing{ width:401px; margin-left:-200px}
 .dingdan-ing .dingd-right{ display:none}
 .caoshi-ts{ padding:15px 15px 0 15px}
+.huod-time-start{ padding:3px; background-color:#f4f4f4; line-height:17px; border-radius:3px; float:left; margin-right:10px; border:1px solid #bbb}
+.huod-listr-time{ height:30px}
 
 .zszy-tc{ width:360px; height:auto; margin-left:-180px; margin-top:-92px}
 .zszy-tc .zhiy{ border:1px solid #b4b4b4; border-top:0; padding-left:15px; margin:0	}
@@ -322,7 +325,7 @@ table.news-xkktab td a:visited{ font-weight: normal}
 .huod-top{ height:28px}
 .huod-list .huod-listr .huod-zt{ padding:3px 10px; border-radius:10px; color:#fff; }
 .huod-list .huod-listr .huod-zt.jinxing{ background-color:#dd2b2b; font-weight:bold; float:left; display:block}
-.huod-list .huod-listr .huod-zt.jieshu{ background-color:#333; color:#ccc;font-weight:bold; float:left; display:block}
+.huod-list .huod-listr .huod-zt.jieshu{ background-color:#666; color:#ccc;font-weight:bold; float:left; display:block}
 .huod-times{ padding:3px; background-color:#f8f8f8; border:1px solid #ccc; border-radius:3px; float:left; height:24px; margin-right:10px}
 .huod-times span{ padding:0 5px}
 .huodlist-link{ position:absolute; right:0px; bottom:0px}
@@ -331,16 +334,16 @@ table.news-xkktab td a:visited{ font-weight: normal}
 .dingd-centot .huod-list .huod-listr{ margin-left:226px; min-height:140px}
 .huod-listr h5{ font-size:14px}
 .news-tit{ width:780px; height:545px; margin-top:-272px; margin-left:-390px}
-.news-cent{}
+.news-cent{ height:-moz-calc(100% - 31px);height:-webkit-calc(100% - 31px);height:calc(100% - 31px);}
 .news-yauto{overflow:hidden; overflow-y:auto;height:485px;}
 .news-cent .xialalist{ padding:0;}
 .news-cent .xialak-a{ width:60px; height:20px; line-height:20px; margin:0}
 .news-cent i.xialasj{ top:7px}	
 .news-cent .xialalist ul{ width:60px; top:19px} 
 .sousuo-r{ display:block; width:12px; height:12px; position:absolute; background-position:-191px -54px; right:35px; top:10px}
-.news-left{ width:300px; float:left; border-right:1px solid #b4b4b4; background-color:#f8f8f8; padding:5px}
+.news-left{ width:300px; float:left; border-right:1px solid #b4b4b4; background-color:#f8f8f8; padding:5px 0}
 .news-right{ padding:10px 20px}
-.news-tith5{ font-size:14px; font-weight:bold; text-align:center; line-height:30px; padding-top:10px; color:#0050A6}
+.news-tith5{ font-size:14px; font-weight:bold; text-align:center; padding:10px 0; color:#0050A6}
 .news-right .news-time{ text-align:right; line-height:24px; color:#666; border-bottom:1px solid #b59130; margin-bottom:5px}
 .news-right .news-cent{ text-align:justify; line-height:20px; text-indent:2em}
 .news-right .news-cent p{ padding-bottom:5px}
@@ -363,6 +366,7 @@ table.news-xkktab td a:visited{ font-weight: normal}
 .zygg-h5 span{ padding-left:5px}
 .huod-leib{ position:absolute; padding:2px 8px; background-color:#b59130; color:#fff; top:8px; right:0px; border-radius:3px}
 .gongg-list{ height:45px;}
+.gongg-list.on{ background-color:#fff; border-left:5px solid #b59130}
 .gongg-list .news-list-gg{ display:block; padding-top:5px; position:relative}
 .gongg-list .news-list-gg:hover{ text-decoration:underline; color:#000}
 .gong-link{ text-indent: 0em; padding-top:10px}
@@ -454,3 +458,15 @@ a.xialak-a b.top-lazhutu,.xialalist ul li b.top-lazhutu{ background-position:-37
 .next-link{ text-align:center; height:23px}
 .next-link a{ padding:3px 16px; margin:0 5px; background-color:#b59130; color:#fff; border-radius:3px;}
 .next-link a.resh{ background-color:#666}
+
+.newsr-rev{ position:relative}
+a.back-link{line-height:16px; color:#b59130; position:absolute; display:block; top:3px; background:url(../images/back-link.png) no-repeat 2px center; padding-left:11px; font-weight:bold; font-size:14px}
+a.back-link:hover{color:#333}
+
+.tc-yhhuod{height:-moz-calc(100% - 28px);height:-webkit-calc(100% - 28px);height:calc(100% - 28px);}
+.tc-yhhuod .news-content{ height:100%}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	.change-pass{ width:400px}
+	}
