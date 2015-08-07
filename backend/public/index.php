@@ -117,12 +117,12 @@ try {
 	/**
 	 * Start the session the first time some component request the session service
 	 */
-//  	$di->set('session', function() {
-//  		$session = new \Phalcon\Session\Adapter\Files();
-//  		$session->start();
-//  		return $session;
-//  	});
-
+  	$di->set('session', function() {
+  		$session = new \Phalcon\Session\Adapter\Files();
+  		$session->start();
+  		return $session;
+  	});
+/*
 	$di->set('session', function() use ($config) {
 		$session = new Phalcon\Session\Adapter\Redis(array(
 				'path' => sprintf("tcp://%s:%s?weight=1",$config->redis->host, $config->redis->port)
@@ -130,7 +130,7 @@ try {
 		$session->start();
 		return $session;
 	});
-
+*/
 	/**
 	 * If the configuration specify the use of metadata adapter use it or use memory otherwise
 	 */
