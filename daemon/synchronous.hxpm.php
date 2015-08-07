@@ -116,12 +116,13 @@ class InfoWork extends Stackable {
 
 				$sql = "SELECT newsinfo.id,newsinfo.title,newsinfo.content,newsinfo.keyword,newsinfo.create_time as ctime,newsinfo.language FROM newsinfo,newsinfo_index WHERE language = '" . $this->lang . "' AND newsinfo.news_index = newsinfo_index.id and  newsinfo_index.category ='" . $type . "' AND newsinfo.id > '" . $position . "' ORDER BY newsinfo.id asc";
 				$query = $db_export->query ( $sql );
-				$this->worker->logger ( 'SQL', $query->queryString );
+				//$this->worker->logger ( 'SQL', $query->queryString );
 
 				while ( $line = $query->fetch ( PDO::FETCH_OBJ ) ) {
 
 					$sql = "insert into article (`division_id`, `division_category_id`,  `title`,  `content`, `author`,  `keyword`,  `description`,  `image`,  `language`,  `source`,  `share`,  `visibility`,  `status`,  `ctime`,  `mtime`) values(:division_id, :division_category_id, :title, :content, :author, :keyword, :description, :image,  :language, :source, :share, :visibility, :status, :ctime, :mtime)";
 					$sth = $db_import->prepare ( $sql );
+					
 					$sth->bindValue ( ':division_id', $this->division_id );
 					$sth->bindValue ( ':division_category_id', $division_category_id );
 					$sth->bindValue ( ':title', $line->title );
@@ -137,17 +138,20 @@ class InfoWork extends Stackable {
 					$sth->bindValue ( ':status', 'Enabled' );
 					$sth->bindValue ( ':ctime', date('Y-m-d H:i:s',$line->ctime) );
 					$sth->bindValue ( ':mtime', null );
-					$sth->execute ();
-
-					$this->worker->logger ( 'info', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title ) );
-					if ($line->id) {
-						$position = $line->id;
+					$status = $sth->execute ();
+					if($status){
+						$this->worker->logger ( 'info', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title ) );
+						if ($line->id) {
+							$position = $line->id;
+						}
+						$this->worker->savepoints ( $division_id, $category_id, $type, $position );
 					}
-					$this->worker->savepoints ( $division_id, $category_id, $type, $position );
 				}
 			}
 		} catch ( PDOException $e ) {
 			$this->worker->logger ( 'Exception info', $e->getMessage( ) );
+		} catch ( PDOStatement $e ) {
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );			
 		} catch ( Exception $e ) {
 			$this->worker->logger ( 'Exception info', $e->getMessage( ) );
 		}
@@ -177,8 +181,8 @@ class NewsWork extends Stackable {
 
 				$position = $this->worker->getpoints ( $division_id, $category_id, $type, $position );
 
-				$sql = "select ad.aid as id,ar.title as title,ad.body as content,ar.writer as author,ar.keywords as keyword,ar.description as description,ar.pubdate as ctime from news_hx9999.dede_addonarticle as ad left join news_hx9999.dede_archives as ar on ad.aid = ar.id WHERE ar.typeid='".$type."' AND id > '" . $position . "' ORDER BY id asc";
-				// AND  (equipment IS NULL OR  equipment!='mobile')
+				$sql = "select ad.aid as id,ar.title as title,ad.body as content,ar.writer as author,ar.keywords as keyword,ar.description as description,ar.pubdate as ctime from news_hx9999.dede_addonarticle as ad left join news_hx9999.dede_archives as ar on ad.aid = ar.id WHERE ar.typeid='".$type."' AND id > '" . $position . "' ORDER BY id asc limit 1000";
+
 				$query = $db_export->query ( $sql );
 				//$this->worker->logger ( 'SQL', $query->queryString );
 
@@ -206,19 +210,23 @@ class NewsWork extends Stackable {
 					$sth->bindValue ( ':ctime', date('Y-m-d H:i:s',$line->ctime) );
 					//$sth->bindValue ( ':mtime', $line->mtime );
 					$sth->bindValue ( ':mtime', null );
-					$sth->execute ();
-
-					$this->worker->logger ( 'news', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, 'cn', $line->title ) );
-					if ($line->id) {
-						$position = $line->id;
+					$status = $sth->execute ();
+					
+					if($status){
+						$this->worker->logger ( 'news', sprintf ( "%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, 'cn', $line->title ) );
+						if ($line->id) {
+							$position = $line->id;
+						}
+						$this->worker->savepoints ( $division_id, $category_id, $type, $position );
 					}
-					$this->worker->savepoints ( $division_id, $category_id, $type, $position );
 				}
 			}
 		} catch ( PDOException $e ) {
-			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception news', $e->getMessage( ) );
+		} catch ( PDOStatement $e ) {
+			$this->worker->logger ( 'Exception news', $e->getMessage( ) );
 		} catch ( Exception $e ) {
-			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception news', $e->getMessage( ) );
 		}
 	}
 	public function import() {
