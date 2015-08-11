@@ -217,7 +217,7 @@ class MixController extends ControllerBase
     	$limit 		 = intval($limit);
     	$offset 	 = intval($offset);
     	 
-    	if(empty($category_id) || empty($template_id)){
+    	if(empty($category_id) || empty($limit)){
     		$this->response->setStatusCode(404, 'Not Found');
     	}
     	 
@@ -226,39 +226,63 @@ class MixController extends ControllerBase
     	}
     	 
     	$this->view->disable();
-    	 
-    	$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:";
-    	
-    	$parameters = array(
-    			'category_id' => $category_id,
-    			'division_category_id' => $category_id,
-    			'language' => 'cn',
-    			'visibility' => 'Visible'
-    	);
-    	$key = sprintf(":list:json:%s:%s:%s", $category_id, $limit, $offset );
-    	$articles = Article::find(array(
-    			$conditions,
-    			"bind" 		=> $parameters,
-    			'columns'=>'id,title,author,ctime',
-    			"order" 	=> "ctime DESC",
-    			'limit' 	=> array('number'=>$limit, 'offset'=>$offset)
-    			, "cache" 	=> array("service"=> 'cache', "key" => $key, "lifetime" => 60)
-    	));
-    	print_r($articles);
-    	$result = array();
-    	foreach ($articles as $article){
-    		//unset($article->status);
-    		//unset($article->from);
-    		//unset($article->from);
-    		$result[]=$article;
-    	}
-    	$result['pages'] = $this->paginator($category_id, $limit, $offset);
-    	
-    	$response = new Phalcon\Http\Response();
-    	$response->setHeader('Cache-Control', 'max-age=60');
-    	$response->setContentType('application/json', 'utf-8');
-    	$response->setContent(json_encode($result));
-    	return $response;
+				
+		$key = sprintf(":list:json:%s:%s:%s", $category_id, $limit, $offset );
+		$json = null;
+		$json = $this->cache->get($key);
+		if ($json === null) {
+
+			$categorys = Category::find(array(
+					'parent_id = :parent_id: AND visibility = :visibility:',
+					"bind" => array(
+						'parent_id' => $category_id,
+						'visibility' => 'Visible'
+					),
+					'columns'=>'id'
+					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $category_id ), "lifetime" => 86400)
+			));
+			foreach($categorys as $category){
+				$this->division_categorys[] = $category->id;
+			}		
+		
+			$articles = Article::query()
+				->columns(array('id', 'division_category_id', 'title', 'author,ctime'))
+				->inWhere('division_category_id', $this->division_categorys)
+				->andWhere("visibility = 'Visible'")
+				/*->bind(array("visibility" => "Visible"))*/
+				->limit($limit, $offset)
+				->order("ctime DESC")
+				->execute();
+		
+			if(count($articles) == 0){
+				$this->response->setStatusCode(404, 'Article List Not Found');
+				echo 'Article List Not Found';
+				return;
+			}else{    	
+
+				foreach ($articles as $article){
+					//unset($article->status);
+					//unset($article->from);
+					//unset($article->from);
+					$json_array[]=$article;
+				}
+				$json_array['pages'] = $this->paginator($category_id, $limit, $offset);	
+				$json = json_encode($json_array);	
+				$this->cache->save($key, $json, 120);
+				
+			}
+		}
+
+		$response = new Phalcon\Http\Response();
+		$response->setHeader('Cache-Control', 'max-age=60');
+		$expireDate = new DateTime();
+		$expireDate->modify('+1 minutes');
+		$response->setExpires($expireDate);
+		$response->setHeader('E-Tag', $eTag = crc32($key));
+		$response->setContentType('application/json', 'utf-8');
+		$response->setContent($json);
+		return $response;
+		
     }
     
     public function purgeAction($template_id,$category_id){
