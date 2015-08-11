@@ -101,7 +101,7 @@ class DetailController extends ControllerBase
 		} 	
     	
     }
-    public function jsonAction($template_id, $category_id, $article_id){
+    public function jsonAction($category_id, $article_id){
 
     	$this->view->disable();
     
@@ -117,7 +117,7 @@ class DetailController extends ControllerBase
     			$conditions,
     			"bind" => $parameters
     	));
-   		print_r($article);
+
     	$response = new Phalcon\Http\Response();
     	$response->setHeader('Cache-Control', 'max-age=60');
     	$response->setContentType('application/json', 'utf-8');
