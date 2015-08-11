@@ -179,37 +179,44 @@ class ListController extends ControllerBase
     	 
     	$this->view->disable();
     	 
-    	$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:";
-    	
-    	$parameters = array(
-    			'category_id' => $category_id,
-    			'division_category_id' => $category_id,
-    			'language' => 'cn',
-    			'visibility' => 'Visible'
-    	);
-    	$key = sprintf(":list:json:%s:%s:%s", $category_id, $limit, $offset );
-    	$articles = Article::find(array(
-    			$conditions,
-    			"bind" 		=> $parameters,
-    			'columns'=>'id,title,author,ctime',
-    			"order" 	=> "ctime DESC",
-    			'limit' 	=> array('number'=>$limit, 'offset'=>$offset)
-    			, "cache" 	=> array("service"=> 'cache', "key" => $key, "lifetime" => 60)
-    	));
-    	print_r($articles);
-    	$result = array();
-    	foreach ($articles as $article){
-    		//unset($article->status);
-    		//unset($article->from);
-    		//unset($article->from);
-    		$result[]=$article;
+		$key = sprintf(":list:json:%s:%s:%s", $category_id, $limit, $offset );
+		$json = null;
+		$json = $this->cache->get($key);
+		if(empty($json)){
+			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:";
+			
+			$parameters = array(
+					'category_id' => $category_id,
+					'division_category_id' => $category_id,
+					'language' => 'cn',
+					'visibility' => 'Visible'
+			);
+			$key = sprintf(":list:json:array:%s:%s:%s", $category_id, $limit, $offset );
+			$articles = Article::find(array(
+					$conditions,
+					"bind" 		=> $parameters,
+					'columns'=>'id,division_category_id,title,author,ctime',
+					"order" 	=> "ctime DESC",
+					'limit' 	=> array('number'=>$limit, 'offset'=>$offset)
+					, "cache" 	=> array("service"=> 'cache', "key" => $key, "lifetime" => 60)
+			));
+
+			$result = array();
+			foreach ($articles as $article){
+				//unset($article->status);
+				//unset($article->from);
+				//unset($article->from);
+				$result[]=$article;
+			}
+			$result['pages'] = $this->paginator($category_id, $limit, $offset);
+			
+			$json = json_encode($result);
+			$this->cache->save($key, $json, 120);
     	}
-    	$result['pages'] = $this->paginator($category_id, $limit, $offset);
-    	
     	$response = new Phalcon\Http\Response();
     	$response->setHeader('Cache-Control', 'max-age=60');
     	$response->setContentType('application/json', 'utf-8');
-    	$response->setContent(json_encode($result));
+    	$response->setContent($json);
     	return $response;
     }
     
