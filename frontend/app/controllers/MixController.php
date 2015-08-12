@@ -216,7 +216,7 @@ class MixController extends ControllerBase
     	$category_id = intval($category_id);
     	$limit 		 = intval($limit);
     	$offset 	 = intval($offset);
-    	 
+    	
     	if(empty($category_id) || empty($limit)){
     		$this->response->setStatusCode(404, 'Not Found');
     	}
@@ -227,7 +227,7 @@ class MixController extends ControllerBase
     	 
     	$this->view->disable();
 				
-		$key = sprintf(":list:json:%s:%s:%s", $category_id, $limit, $offset );
+		$key = sprintf(":mix:json:%s:%s:%s", $category_id, $limit, $offset );
 		$json = null;
 		$json = $this->cache->get($key);
 		if ($json === null) {
@@ -250,7 +250,7 @@ class MixController extends ControllerBase
 				->inWhere('division_category_id', $this->division_categorys)
 				->andWhere("visibility = 'Visible'")
 				/*->bind(array("visibility" => "Visible"))*/
-				->limit($limit, $offset)
+				->limit($limit, $limit*$offset)
 				->order("ctime DESC")
 				->execute();
 		
@@ -258,7 +258,7 @@ class MixController extends ControllerBase
 				$this->response->setStatusCode(404, 'Article List Not Found');
 				echo 'Article List Not Found';
 				return;
-			}else{    	
+			}else{
 
 				foreach ($articles as $article){
 					//unset($article->status);
