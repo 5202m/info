@@ -303,6 +303,93 @@ class MixController extends ControllerBase
    
     	$this->cache->flush ();
     }
+    
+    public function json2appAction($category_id, $limit = 20, $offset = 0){
+    	$category_id = intval($category_id);
+    	$limit 		 = intval($limit);
+    	$offset 	 = intval($offset);
+		$json = null;
+		$key = sprintf(":mix:json2app:%s:%s:%s", $category_id, $limit, $offset);
+    	
+    	if(empty($category_id) || empty($limit)){
+    		//$this->response->setStatusCode(404, 'Not Found');
+    		$json_array['code'] = 'fail';
+    		$json_array['num'] = 0;
+    		$json_array['datas'] = null;
+    		$json_array['pages'] = null;
+    		$json = json_encode($json_array);
+			$this->cache->save($key, $json, 120);
+    	}
+    	 
+    	if($limit > 100){
+    		$limit = 100;
+    	}
+    	 
+    	$this->view->disable();
+				
+		$json = $this->cache->get($key);
+		if ($json === null) {
+
+			$categorys = Category::find(array(
+					'parent_id = :parent_id: AND visibility = :visibility:',
+					"bind" => array(
+						'parent_id' => $category_id,
+						'visibility' => 'Visible'
+					),
+					'columns'=>'id'
+					, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $category_id ), "lifetime" => 86400)
+			));
+			foreach($categorys as $category){
+				$this->division_categorys[] = $category->id;
+			}		
+		
+			$articles = Article::query()
+				->columns(array('id', 'division_category_id', 'title', 'author,ctime'))
+				->inWhere('division_category_id', $this->division_categorys)
+				->andWhere("visibility = 'Visible'")
+				/*->bind(array("visibility" => "Visible"))*/
+				->limit($limit, $limit*$offset)
+				->order("ctime DESC")
+				->execute();
+		
+			if(count($articles) == 0){
+				//$this->response->setStatusCode(404, 'Article List Not Found');
+				//echo 'Article List Not Found';
+	    		$json_array['code'] = 'fail';
+	    		$json_array['num'] = 0;
+	    		$json_array['datas'] = null;
+	    		$json_array['pages'] = null;
+	    		$json = json_encode($json_array);
+				$this->cache->save($key, $json, 120);
+				//return;
+			}else{
+				$json_array['code'] = 'success';
+	    		$json_array['num'] = $limit;
+	    		//$json_array['datas'] = null;
+	    		//$json_array['pages'] = null;
+				foreach ($articles as $article){
+					//unset($article->status);
+					//unset($article->from);
+					//unset($article->from);
+					$json_array['datas'][]=$article;
+				}
+				$json_array['pages'] = $this->paginator($category_id, $limit, $offset);	
+				$json = json_encode($json_array);	
+				$this->cache->save($key, $json, 120);
+				
+			}
+		}
+
+		$response = new Phalcon\Http\Response();
+		$response->setHeader('Cache-Control', 'max-age=60');
+		$expireDate = new DateTime();
+		$expireDate->modify('+1 minutes');
+		$response->setExpires($expireDate);
+		$response->setHeader('E-Tag', $eTag = crc32($key));
+		$response->setContentType('application/json', 'utf-8');
+		$response->setContent($json);
+		return $response;
+    }
 }
 
 
