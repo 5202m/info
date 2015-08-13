@@ -371,6 +371,7 @@ class MixController extends ControllerBase
 					//unset($article->status);
 					//unset($article->from);
 					//unset($article->from);
+					$article['icon'] = '/img/list/small/'. $article['id'] % 20 .'.png';
 					$json_array['datas'][]=$article;
 				}
 				$json_array['pages'] = $this->paginator($category_id, $limit, $offset);	
