@@ -63,7 +63,7 @@ class SynchronousWorker extends Worker {
 	}
 	public function logger($type, $message) {
 		$log = sprintf ( "%s\t%s\t%s\t%s\n", date ( 'Y-m-d H:i:s' ), $this->getThreadId (), $type, $message );
-		file_put_contents ( sprintf("../log/debug.%s.log", date ( 'Y-m-d' )), $log, FILE_APPEND );
+		file_put_contents ( sprintf(__DIR__."/../log/hxpm.%s.log", date ( 'Y-m-d' )), $log, FILE_APPEND );
 	}
 	public function savepoints($division_id, $category_id, $type, $position) {
 		$db = $this->getInstance ( 'import' );
@@ -375,8 +375,8 @@ class Synchronous {
 	protected $config	= array();
 
 	public function __construct() {
-		$this->pidfile = '/var/run/'.self::pidfile.'.pid';
-		$this->config = include_once("config.php");
+		$this->pidfile = '/var/run/'.basename(__FILE__, '.php').'.pid';
+		$this->config = include_once(__DIR__."/config.php");
 //                print_r($this->config);die;
 	}
 	private function daemon(){
