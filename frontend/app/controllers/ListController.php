@@ -169,7 +169,7 @@ class ListController extends ControllerBase
     	$limit 		 = intval($limit);
     	$offset 	 = intval($offset);
     	 
-    	if(empty($category_id) || empty($template_id)){
+    	if(empty($category_id)){
     		$this->response->setStatusCode(404, 'Not Found');
     	}
     	 
@@ -227,7 +227,7 @@ class ListController extends ControllerBase
     	$key = sprintf(":list:json2app:%s:%s:%s", $category_id, $limit, $offset );
 		$json = null;
 		
-    	if(empty($category_id) || empty($template_id)){
+    	if(empty($category_id)){
     		//$this->response->setStatusCode(404, 'Not Found');
     		$json_array['code'] = 'fail';
     		$json_array['num'] = 0;
