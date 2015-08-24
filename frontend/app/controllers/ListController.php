@@ -274,7 +274,7 @@ class ListController extends ControllerBase
 				//unset($article->status);
 				//unset($article->from);
 				//unset($article->from);
-				$icon = ($article->id % 20);
+				$icon = ($article->id % 120);
 				$article->icon = 'http://inf.gwfx.com/img/list/small/'. $icon .'.png';
 				$result['datas'][]=$article;
 			}
