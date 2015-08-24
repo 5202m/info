@@ -23,11 +23,7 @@ return new \Phalcon\Config(array(
 		'templateDir'=> include('template.php'),
 	),
 	'redis' => array(
-<<<<<<< Updated upstream
 		'host' => '192.168.2.1',
-=======
-		'host' => '127.0.0.1',
->>>>>>> Stashed changes
 		'port' => '6379'
 	),
 	'models' => array(
