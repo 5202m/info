@@ -27,6 +27,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
+        if($date > date("Y-m-d")){
+        	$date = date("Y-m-d");
+        }
         $datas = $this->generator($date);
         if($datas){       
             $this->view->setVar('datas',$datas);
@@ -47,6 +50,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         ));
         if($date != ''){
             $date = str_replace('.html', '', $date);
+        }
+        if($date > date("Y-m-d")){
+        	$date = date("Y-m-d");
         }
         $datas = $this->app_generator($date);
         if($datas){       
@@ -69,6 +75,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
+        if($date > date("Y-m-d")){
+        	$date = date("Y-m-d");
+        }
         $datas = $this->webui_generator($date);
         if($datas){       
             $this->view->setVar('datas',$datas);
@@ -89,6 +98,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         ));
         if($date != ''){
             $date = str_replace('.html', '', $date);
+        }
+        if($date > date("Y-m-d")){
+        	$date = date("Y-m-d");
         }
         $datas = $this->tw_generator($date);
         if($datas){       
