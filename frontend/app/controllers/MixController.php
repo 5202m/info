@@ -278,7 +278,7 @@ class MixController extends ControllerBase
 		$expireDate = new DateTime();
 		$expireDate->modify('+1 minutes');
 		$response->setExpires($expireDate);
-		$response->setHeader('ETag', $eTag = crc32($key));
+		$response->setHeader('ETag', $eTag = crc32($json));
 		$response->setContentType('application/json', 'utf-8');
 		$response->setContent($json);
 		return $response;
@@ -387,7 +387,7 @@ class MixController extends ControllerBase
 		$expireDate = new DateTime();
 		$expireDate->modify('+1 minutes');
 		$response->setExpires($expireDate);
-		$response->setHeader('ETag', $eTag = crc32($key));
+		$response->setHeader('ETag', $eTag = crc32($json));
 		$response->setContentType('application/json', 'utf-8');
 		$response->setContent($json);
 		return $response;
