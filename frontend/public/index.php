@@ -17,7 +17,8 @@ try {
 	$loader->registerDirs(
 		array(
 			$config->application->controllersDir,
-			$config->application->modelsDir
+			$config->application->modelsDir,
+			$config->application->libraryDir
 		)
 	)->register();
 
@@ -112,7 +113,10 @@ try {
 		$session->start();
 		return $session;
 	});
-
+	
+	$di->set('templates', function () {
+		return new Templates();
+	});
 	/**
 	 * Handle the request
 	 */

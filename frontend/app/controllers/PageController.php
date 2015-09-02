@@ -47,15 +47,23 @@ class PageController extends ControllerBase
     		}
     	}
 		
-		if($template_file){
+		if(is_file($template_file)){
+			if(is_file($page_file)){
+				
+			}else{
+				
+			}
 			
 	    	$view = new \Phalcon\Mvc\View();
 	    	$view->setViewsDir($this->basedir.'/template');
 	    	$view->setRenderLevel(Phalcon\Mvc\View::LEVEL_LAYOUT);
 	    	//$view->setVar('article',$article);
+			//$view->cache(array('key' => 'my-key', 'lifetime' => 86400));
+			$view->sss = "aaa";
 	    	$view->start();
 	    	$view->render($dir_name, "$template_id");
 	    	$view->finish();
+
 			$content =  $view->getContent();
 
 	    	if(!is_dir(dirname($page_file))){
@@ -63,13 +71,13 @@ class PageController extends ControllerBase
 	    	}
 			
 			if($content){
-				file_put_contents($page_file, $content);
+				//file_put_contents($page_file, $content);
 			}			
 			
-			$expireDate = new DateTime();
-			$expireDate->modify('+1 minutes');
-			$this->response->setExpires($expireDate);
-			//$response->setHeader('ETag', $eTag = crc32($template_file));			
+			//$expireDate = new DateTime();
+			//$expireDate->modify('+1 minutes');
+			//$this->response->setExpires($expireDate);
+			$this->response->setHeader('ETag', $eTag = crc32($content));			
 	    	$this->response->setHeader('Cache-Control', 'max-age=60');
 			
 			//$this->response->setContent();
