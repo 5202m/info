@@ -7,12 +7,12 @@ class ImageController extends ControllerBase
     {
 	
     }
-    public function get($filename){
+    public function get($folder, $filename){
 		
 		$connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
 		$db = $connection->selectDB('test');
 		//$filename ='test.jpg';
-		$grid = $db->getGridFS('images');
+		$grid = $db->getGridFS($folder);
 		//echo $grid->storeFile($filename, array("date" => new MongoDate()));
 
 		$image = $grid->findOne($filename);
@@ -38,13 +38,13 @@ class ImageController extends ControllerBase
 		}
 		return($this->response);
 	}
-    public function htmlAction($filename, $ver = 0){
+    public function htmlAction($folder, $filename, $ver = 0){
     
     	//$filename = intval($filename);
     	$ver = intval($ver);
     	
 		$this->view->disable();
-		$this->get($filename);
+		$this->get($folder, $filename);
 		
     }
 }
