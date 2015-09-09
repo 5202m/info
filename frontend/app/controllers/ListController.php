@@ -104,7 +104,7 @@ class ListController extends ControllerBase
 			$expireDate = new DateTime();
 			$expireDate->modify('+1 minutes');
 			$this->response->setExpires($expireDate);
-			$this->response->setHeader('ETag', $eTag = crc32($key));
+			$this->response->setHeader('ETag', $eTag = crc32($content));
 			$this->response->setContent($content);
     		//print($content);
 			return $this->response;
