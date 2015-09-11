@@ -1,0 +1,66 @@
+<script type="text/javascript">
+
+
+</script>
+<div class="row-fluid sortable">		
+    <div class="box span12">
+        <div class="box-header" data-original-title>
+            <h2><i class="halflings-icon user"></i><span class="break"></span><?php ?></h2>
+            <div class="box-icon">
+                <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+            </div>
+        </div>
+        
+        <div class="box-content">
+            <div class="row-fluid">
+                <form method="post" action="/album/uploadHandle" enctype="multipart/form-data">
+							<div class="control-group">
+                                                            <div style="float:left">上传到</div>
+								<div class="controls" style="float:left;margin-left: 30px;">
+                                                                    <select id="folder" name="folder">
+                                                                        <?php 
+                                                                                $folder_arr = $this->objToArray->ohYeah($folder);
+                                                                                foreach ($folder_arr as $vs){?>
+                                                                        <option  value="<?php echo $vs['folder'];?>">
+                                                                                    <?php echo $vs['folder'];?>
+                                                                                </option>
+                                                                        <?php }?>
+								  </select>
+								</div>
+							  </div>
+                                                          <div style="text-align: center;">
+                                                              <input type="file" name="file">
+                                                          </div>
+                                                          <div class="form-actions">
+                                                              <button id="submit" type="submit" class="btn btn-primary">开始上传</button>
+							  </div>
+                </form>
+						</div>
+
+            
+        </div>
+    </div><!--/span-->
+
+</div><!--/row-->
+<script language="javascript" type="text/javascript">
+   $(function(){
+//    $("#submit").click(function(){
+//        $('#myModal>.modal-body>p').html('1111');
+//        $('#myModal').modal('show');
+//        window.location.href = '/album/upload';
+//        
+//
+//    });
+    
+
+
+});
+
+</script>
+
+
+
+
+
