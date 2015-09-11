@@ -7,19 +7,18 @@ class ImageController extends ControllerBase
     {
 	
     }
-    public function get($folder, $filename){
+    public function get($action, $folder, $filename){
 		
 		$connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
 		$db = $connection->selectDB('test');
-		//$filename ='test.jpg';
+
 		$grid = $db->getGridFS($folder);
-		//echo $grid->storeFile($filename, array("date" => new MongoDate()));
 
 		$image = $grid->findOne($filename);
 		
 		if ($image) {
 			
-			$image_file = sprintf("%s/static/image/%s", $this->basedir, $filename);
+			$image_file = sprintf("%s/image/%s/%s/%s", $this->basedir,$action, $folder, $filename);
 			$content = $image->getBytes();
 			//echo $image_file;
 			if(!is_dir(dirname($image_file))){
@@ -38,13 +37,13 @@ class ImageController extends ControllerBase
 		}
 		return($this->response);
 	}
-    public function htmlAction($folder, $filename, $ver = 0){
+    public function rawAction($folder, $filename, $ver = 0){
     
     	//$filename = intval($filename);
     	$ver = intval($ver);
     	
 		$this->view->disable();
-		$this->get($folder, $filename);
+		$this->get('raw', $folder, $filename);
 		
     }
 }
