@@ -53,14 +53,14 @@
 //                            var_dump($pictures_arr)      ;die;
                             
                         ?>
-                    <div style="float: left;width: 200px;margin-left: 22px;margin-top: 22px;"><a href="/album/show/<?php echo $vs->folder;?>"><img src="
+                    <div style="float: left;width: 200px;margin-left: 22px;margin-top: 22px;"><a href="/album/browse/<?php echo $vs->folder;?>"><img src="
                       <?php 
                    
                     
                     if($doc_arr['filename'] == ''){
                         echo '/img/album/pic-none.png';
                     }else{
-                        echo '/album/image/'.$vs->folder.'/'.$doc_arr['filename'];
+                        echo '/image/raw/'.$vs->folder.'/'.$doc_arr['filename'];
                     }?>                                                                                                                               
                                                                                                                                                      
                     " /></a></div>

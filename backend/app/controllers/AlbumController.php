@@ -97,7 +97,7 @@ class AlbumController extends ControllerBase
     /**
      * 展示图片
      */
-    public function showAction($folder){
+    public function browseAction($folder){
         $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1" );
         $db = $connection->test;
 

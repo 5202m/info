@@ -33,9 +33,13 @@
                     $pictures_arr = $this->objToArray->ohYeah($image);
                     
                     foreach($pictures_arr as $vs){
-                        ?>
-                    <div style="float: left;width: 200px;margin-left: 22px;margin-top: 22px;"><a href="/album/image/<?php echo $folder;?>/<?php echo $vs['file']['filename'];?>"><img src="/album/image/<?php echo $folder;?>/<?php echo $vs['file']['filename'];?>" /></a></div>
-                         <?php }?>
+                    ?>
+                    <div style="float: left;width: 200px;margin-left: 22px;margin-top: 22px;">
+						<a href="/image/raw/<?php echo $folder;?>/<?php echo $vs['file']['filename'];?>">
+							<img src="/image/thumbnail/<?php echo $folder;?>/<?php echo $vs['file']['filename'];?>" />
+						</a>
+					</div>
+                    <?php }?>
                    
                 </div>
             </table>   
