@@ -170,7 +170,7 @@ try {
         $obj = new arrayToObj();
         return $obj;
     });
-    
+
     
     $di->set('tree', function() {
         $l = DIRECTORY_SEPARATOR;

@@ -10,6 +10,13 @@ return new \Phalcon\Config(array(
 		'dbname'     => 'inf',
 
 	),
+        'mongodb' => array(
+                'host'     => 'mongodb://neo:chen@192.168.6.1/test',
+		'port'     => '',
+		'username' => '',
+		'password' => '',
+		'dbname'     => 'test',
+        ),
 	'application' => array(
 		'controllersDir' => __DIR__ . '/../../app/controllers/',
 		'modelsDir'      => __DIR__ . '/../../app/models/',
@@ -24,6 +31,9 @@ return new \Phalcon\Config(array(
 	),
 	'redis' => array(
 		'host' => '192.168.2.1',
+
+//		'host' => '127.0.0.1',
+
 		'port' => '6379'
 	),
 	'models' => array(

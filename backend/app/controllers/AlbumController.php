@@ -2,6 +2,11 @@
 
 class AlbumController extends ControllerBase
 {
+    public function initialize() {
+        parent::initialize();
+        $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
+        $this->mongodb = $connection->selectDB('test');
+    }
 
     public function indexAction()
     {
@@ -9,10 +14,8 @@ class AlbumController extends ControllerBase
     }
     public function get($folder, $filename){
 		
-		$connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
-		$db = $connection->selectDB('test');
 		//$filename ='test.jpg';
-		$grid = $db->getGridFS($folder);
+		$grid = $this->mongodb->getGridFS($folder);
 		//echo $grid->storeFile($filename, array("date" => new MongoDate()));
                 
                 $image = $grid->findOne($filename);
@@ -53,7 +56,7 @@ class AlbumController extends ControllerBase
         $paginator = new Phalcon\Paginator\Adapter\Model(
         array(
                 "data" => $folder,
-                "limit"=> 16,
+                "limit"=> 3,
                 "page" => $currentPage
             )
         );
@@ -97,15 +100,19 @@ class AlbumController extends ControllerBase
     /**
      * 展示图片
      */
-    public function browseAction($folder){
-        $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1" );
-        $db = $connection->test;
+    public function browseAction($folder,$skip){
 
-        $grid = $db->getGridFS($folder);
-
-        $image = $grid->find();
+        $grid = $this->mongodb->getGridFS($folder);
+        $skip_num = 3*($skip-1);
+        if($skip == ''){
+            $skip_num = 0;
+        }
+        $image = $grid->find()->limit(3)->skip($skip_num);
+        $count = $grid->count();
 
         $this->view->setVar('folder',$folder);
+        $this->view->setVar('count',$count);
+        $this->view->setVar('skip',$skip);
         $this->view->setVar('image',$image);
     }
     public function uploadAction(){
@@ -126,10 +133,8 @@ class AlbumController extends ControllerBase
         //最大文件大小
         $maxSize = 1000000;
         
-        $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1" );
-        $db = $connection->test;
 
-        $grid = $db->getGridFS($folder);
+        $grid = $this->mongodb->getGridFS($folder);
         if ($this->request->hasFiles() == true) {
             foreach ($this->request->getUploadedFiles() as $file) {
                 //获得文件扩展名
