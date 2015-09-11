@@ -275,9 +275,9 @@ class MixController extends ControllerBase
 
 		$response = new Phalcon\Http\Response();
 		$response->setHeader('Cache-Control', 'max-age=60');
-		$expireDate = new DateTime();
-		$expireDate->modify('+1 minutes');
-		$response->setExpires($expireDate);
+		//$expireDate = new DateTime();
+		//$expireDate->modify('+1 minutes');
+		//$response->setExpires($expireDate);
 		$response->setHeader('ETag', $eTag = crc32($json));
 		$response->setContentType('application/json', 'utf-8');
 		$response->setContent($json);
@@ -384,9 +384,9 @@ class MixController extends ControllerBase
 
 		$response = new Phalcon\Http\Response();
 		$response->setHeader('Cache-Control', 'max-age=60');
-		$expireDate = new DateTime();
-		$expireDate->modify('+1 minutes');
-		$response->setExpires($expireDate);
+		//$expireDate = new DateTime();
+		//$expireDate->modify('+1 minutes');
+		//$response->setExpires($expireDate);
 		$response->setHeader('ETag', $eTag = crc32($json));
 		$response->setContentType('application/json', 'utf-8');
 		$response->setContent($json);
