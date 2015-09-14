@@ -15,7 +15,7 @@
         
         <div class="box-content">
             <div class="row-fluid">
-                <form method="post" action="/album/uploadHandle" enctype="multipart/form-data">
+                <form method="post" action="/album/uploadHandle" enctype="multipart/form-data" target="hidden_frame">
 							<div class="control-group">
                                                             <div style="float:left">上传到</div>
 								<div class="controls" style="float:left;margin-left: 30px;">
@@ -37,6 +37,7 @@
                                                               <button id="submit" type="submit" class="btn btn-primary">开始上传</button>
 							  </div>
                 </form>
+                <iframe style="display:none" name='hidden_frame' id="hidden_frame"></iframe>  
 						</div>
 
             
@@ -45,18 +46,19 @@
 
 </div><!--/row-->
 <script language="javascript" type="text/javascript">
-   $(function(){
-//    $("#submit").click(function(){
-//        $('#myModal>.modal-body>p').html('1111');
-//        $('#myModal').modal('show');
-//        window.location.href = '/album/upload';
-//        
-//
-//    });
-    
 
+function callback(message,success)  
+{  
+    if(success==false)  
+    {  
+         alert(message);
+    }  
+    else{  
+        alert(message);
+        window.location.href = '/album/folder';
+    }  
+}  
 
-});
 
 </script>
 

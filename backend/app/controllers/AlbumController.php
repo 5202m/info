@@ -121,68 +121,81 @@ class AlbumController extends ControllerBase
     }
     public function uploadHandleAction(){
         $folder = $this->request->getPost('folder');
-        $savePath = $this->imagesPath.$folder.'/';
-    	if(php_uname('s')=='Windows NT'){//本地测试时使用
-    		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/';
-    	}
-        if(!file_exists($savePath)){
-                mkdir($savePath, 0777, true);
-        }
-        //定义允许上传的文件扩展名
-        $extArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
-        //最大文件大小
-        $maxSize = 1000000;
-        
+        if($folder){
+            $savePath = $this->imagesPath.$folder.'/';
+            if(php_uname('s')=='Windows NT'){//本地测试时使用
+                    $savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/';
+            }
+            if(!file_exists($savePath)){
+                    mkdir($savePath, 0777, true);
+            }
+            //定义允许上传的文件扩展名
+            $extArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
+            //最大文件大小
+            $maxSize = 1000000;
 
-        $grid = $this->mongodb->getGridFS($folder);
-        if ($this->request->hasFiles() == true) {
-            foreach ($this->request->getUploadedFiles() as $file) {
-                //获得文件扩展名
-                $tempArr = explode(".", $file->getName());
-                $fileExt = array_pop($tempArr);
-                $fileExt = trim($fileExt);
-                $fileExt = strtolower($fileExt);
-                //检查扩展名
-                if (in_array($fileExt, $extArr) === false) {
-                    echo json_encode(array('status'=>false,'msg'=> "上传文件扩展名是不允许的扩展名。\n只允许" . implode(",", $extArr) . "格式。"));
-                    return $this->response->redirect('upload');
-                }
-                if($file->getSize()>$maxSize){
-                    echo json_encode(array('status'=>false,'msg'=> '上传文件大小超过限制。'));
-                    return $this->response->redirect('upload');
-                }else{
-                    if($file->isUploadedFile()){
-                        $fileUrl = $savePath.$file->getName();
-                        if($file->moveTo($fileUrl)){
-                            $result = $grid->find(array('md5'=>md5_file($fileUrl)));
-                            foreach ($result as $doc) {
-                                $doc_arr = $this->objToArray->ohYeah($doc);
-                                $doc_arr['md5'] = $doc_arr['file']['md5'];
-                            }
-                            if(!$doc_arr['md5']){
-                                $storedfile = $grid->storeFile($fileUrl, array('filename'=>$file->getName(),"date" => new MongoDate()));
-                                return $this->response->redirect('folder');
+
+            $grid = $this->mongodb->getGridFS($folder);
+            if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                    //获得文件扩展名
+                    $tempArr = explode(".", $file->getName());
+                    $fileExt = array_pop($tempArr);
+                    $fileExt = trim($fileExt);
+                    $fileExt = strtolower($fileExt);
+                    //检查扩展名
+                    if (in_array($fileExt, $extArr) === false) {
+                        echo "<script>parent.callback('上传图片扩展名是不允许的扩展名',false)</script>";  
+                        return ;
+                    }
+                    if($file->getSize()>$maxSize){
+                        echo "<script>parent.callback('上传图片大小超过限制',false)</script>";  
+                        return ;
+                    }else{
+                        if($file->isUploadedFile()){
+                            $fileUrl = $savePath.$file->getName();
+                            if($file->moveTo($fileUrl)){
+                                $result = $grid->find(array('md5'=>md5_file($fileUrl)));
+                                foreach ($result as $doc) {
+                                    $doc_arr = $this->objToArray->ohYeah($doc);
+                                    $doc_arr['md5'] = $doc_arr['file']['md5'];
+                                }
+                                if(!$doc_arr['md5']){
+                                    $storedfile = $grid->storeFile($fileUrl, array('filename'=>$file->getName(),"date" => new MongoDate()));
+                                    if($storedfile){
+                                        echo "<script>parent.callback('上传图片成功',true)</script>";  
+                                        return ;
+                                    }else{
+                                        $msg = $file->getError();
+                                        echo "<script>parent.callback('$msg',false)</script>";  
+                                        return ;
+                                    }
+                                    
+                                }else{
+                                    echo "<script>parent.callback('不能重复上传图片',false)</script>";  
+                                    return ;
+                                }
                             }else{
-                                echo json_encode(array('status'=>false,'msg'=> '不能重复上传图片。'));
-                                return $this->response->redirect('upload');
+                                $msg = $file->getError();
+                                echo "<script>parent.callback('$msg',false)</script>";  
+                                return ;
                             }
-                        }else{
-                            echo json_encode(array('status'=>false,'msg'=> $file->getError()));
-                            return $this->response->redirect('upload');
+                        }
+                        else{
+                                $msg = $file->getError();
+                                echo "<script>parent.callback('$msg',false)</script>";  
+                                return ;
                         }
                     }
-                    else{
-                            echo json_encode(array('status'=>false,'msg'=> $file->getError()));
-                            return $this->response->redirect('upload');
-                    }
+
+
                 }
-                
-                
+            }else{
+                    echo json_encode(array('status'=>false,'msg'=> $file->getError()));
+                    return $this->response->redirect('upload');
             }
-        }else{
-                echo json_encode(array('status'=>false,'msg'=> $file->getError()));
-                return $this->response->redirect('upload');
         }
+        
         
     }
     
