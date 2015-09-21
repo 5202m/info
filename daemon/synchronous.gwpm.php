@@ -6,7 +6,7 @@ class SynchronousWorker extends Worker {
 	// }
 
 	protected $config;
-	protected static $dbh_export, $dbh_import;
+	protected static $dbh_gwpm_export, $dbh_gwpm_import;
 	public function __construct($config) {
 		$this->config = $config;
 	}
@@ -18,7 +18,7 @@ class SynchronousWorker extends Worker {
 			$dbpass = $this->config['import']['dbpass'];
 			$dbname = $this->config['import']['dbname'];
 
-			self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
+			self::$dbh_gwpm_import = new PDO("mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 					PDO::MYSQL_ATTR_COMPRESS => true
 					/*PDO::ATTR_PERSISTENT => true*/
@@ -29,23 +29,23 @@ class SynchronousWorker extends Worker {
 			$dbuser1 = $this->config['gwpm']['export']['dbuser'];
 			$dbpass1 = $this->config['gwpm']['export']['dbpass'];
 			$dbname1 = $this->config['gwpm']['export']['dbname'];
-			self::$dbh_export = new PDO("mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
+			self::$dbh_gwpm_export = new PDO("mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 					PDO::MYSQL_ATTR_COMPRESS => true
 			));
 
 		} catch (PDOException $e) {
-                        $this->logger('Exception real_news', $e->getMessage());
-                } catch (Exception $e) {
-                        $this->logger('Exception real_news', $e->getMessage());
-                }
+			$this->logger('Exception t_hotpoint', $e->getMessage());
+		} catch (Exception $e) {
+			$this->logger('Exception t_hotpoint', $e->getMessage());
+		}
 
 	}
 	protected function getInstance($io) {
-		if ($io == 'export'){
-			return self::$dbh_export;
+		if ($io == 't_hotpoint_export'){
+			return self::$dbh_gwpm_export;
 		} else {
-			return self::$dbh_import;
+			return self::$dbh_gwpm_import;
 		}
 	}
 	public function logger($type, $message) {
@@ -90,8 +90,8 @@ class T_HotpointWork extends Stackable {
 	public function run() {
 		//$this->worker->logger('real_news', sprintf("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId()));
 		try {
-			$db_export = $this->worker->getInstance('export');
 			$db_import = $this->worker->getInstance('import');
+			$db_export = $this->worker->getInstance('t_hotpoint_export');
 			$db_import->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$db_export->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$position = 1;
@@ -118,7 +118,7 @@ class T_HotpointWork extends Stackable {
 					$sth->bindValue(':description', $line->description);
 					$sth->bindValue(':image', null);
 					$sth->bindValue(':language', $line->language);
-					$sth->bindValue(':source', 'GWFX');
+					$sth->bindValue(':source', 'GWPM');
 					$sth->bindValue(':share', 'N');
 					$sth->bindValue(':visibility', 'Visible');
 					$sth->bindValue(':status', 'Enabled');
@@ -177,7 +177,6 @@ class Task {
 		$pool = new Pool(self::MAXCONN , \SynchronousWorker::class, array($this->config));
 		
 		foreach($syncs as $sync){
-
 			if($sync->table == 't_hotpoint'){
 				if(in_array($sync->lang, array('cn','tw'))){
 					$pool->submit(new T_HotpointWork($this->division_id, $sync->lang , array($sync->category_id => $sync->type)));

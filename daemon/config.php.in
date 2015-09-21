@@ -38,11 +38,13 @@ return  array (
             )
     ),
     'gwpm' => array(
-    		'dbhost' => '{{gwpm.dbhost}}',
-    		'dbport' => '{{gwpm.dbport}}',
-    		'dbuser' => '{{gwpm.dbuser}}',
-    		'dbpass' => '{{gwpm.dbpass}}',
-    		'dbname' => '{{gwpm.dbname}}',
+    		'export' => array(
+	    		'dbhost' => '{{gwpm.export.dbhost}}',
+	    		'dbport' => '{{gwpm.export.dbport}}',
+	    		'dbuser' => '{{gwpm.export.dbuser}}',
+	    		'dbpass' => '{{gwpm.export.dbpass}}',
+	    		'dbname' => '{{gwpm.export.dbname}}',
+    		),
     ),
 );
 ?>
