@@ -36,7 +36,14 @@ return  array (
                     'dbpass' => '{{hxpm.import.dbpass}}',
                     'dbname' => '{{hxpm.import.dbname}}'
             )
-        )
+    ),
+    'gwpm' => array(
+    		'dbhost' => '{{gwpm.dbhost}}',
+    		'dbport' => '{{gwpm.dbport}}',
+    		'dbuser' => '{{gwpm.dbuser}}',
+    		'dbpass' => '{{gwpm.dbpass}}',
+    		'dbname' => '{{gwpm.dbname}}',
+    ),
 );
 ?>
 

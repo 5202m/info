@@ -37,7 +37,16 @@ return array(
                 'dbpass' => 'inf',
                 'dbname' => 'inf'
             )
-        )
+    ),
+    'gwpm' => array(
+    		'export' => array(
+	    		'dbhost' => '192.168.35.236',
+	    		'dbport' => '3306',
+	    		'dbuser' => 'root',
+	    		'dbpass' => '123456',
+	    		'dbname' => 'goldenway_web',
+    		),
+    ),
 );
 ?>
 
