@@ -6,7 +6,7 @@ class SenderWorker extends Worker {
 	// }
 
 	protected $config;
-	protected static $dbh_info_export,$dbh_news_export, $dbh_import;
+	protected static $dbh;
 	public function __construct($config) {
 		$this->config = $config;
 
@@ -16,11 +16,11 @@ class SenderWorker extends Worker {
 	}
 	private function connect(){
 		try {
-			$dbhost = $this->config['sender']['dbhost'];
-			$dbport = $this->config['sender']['dbport'];
-			$dbuser = $this->config['sender']['dbuser'];
-			$dbpass = $this->config['sender']['dbpass'];
-			$dbname = $this->config['sender']['dbname'];
+			$dbhost = $this->config['database']['host'];
+			$dbport = $this->config['database']['port'];
+			$dbuser = $this->config['database']['user'];
+			$dbpass = $this->config['database']['password'];
+			$dbname = $this->config['database']['dbname'];
 
 			self::$dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
@@ -47,7 +47,7 @@ class SenderWorker extends Worker {
 
 }
 
-class QueueWork extends Collectable {
+class QueueWork extends Stackable {
 
 	private $status = false;
 	private $task = null;
@@ -64,9 +64,9 @@ class QueueWork extends Collectable {
 		try {
 
 			if(empty($this->task->group_id)){
-				$sql = "insert ignore into queue(id, task_id, contact_id) select ".$this->task->id.", id from contact";
+				$sql = "insert ignore into queue(task_id, contact_id) select ".$this->task->id.", id from contact";
 			}else{
-				$sql = "insert ignore into queue(id, task_id, contact_id) select ".$this->task->id.", contact.id from contact, group_has_contact where group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;";
+				$sql = "insert ignore into queue(task_id, contact_id) select ".$this->task->id.", contact.id from contact, group_has_contact where group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;";
 			}
 				
 			$sth = $dbh->prepare ( $sql );
@@ -74,6 +74,7 @@ class QueueWork extends Collectable {
 				$sth->bindValue ( ':group_id', $this->task->group_id );
 			}
 			$status = $sth->execute();
+			//echo $sth->queryString;
 			if($status){
 				
 				$this->worker->logger ( sprintf("Queue %s", $this->task->name) , "last Insert Id ".$dbh->lastInsertId() );
@@ -89,15 +90,13 @@ class QueueWork extends Collectable {
 				}	
 			}
 			
-			//$query = $dbh->query ( $sql );
 			//$this->worker->logger ( 'SQL', $query->queryString );
 			
 			$dbh->commit();
 
 		} catch ( PDOException $e ) {
 			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
-		} catch ( PDOStatement $e ) {
-			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
+			$dbh->rollBack();
 		} catch ( Exception $e ) {
 			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
 			$dbh->rollBack();
@@ -129,20 +128,17 @@ class EmailWork extends Stackable {
 			
 			if($status){
 				$this->worker->logger ( 'Queue', sprintf ( " %s %s", $this->task->name, $this->contact->email ) );
-				
 			}
 
 		} catch ( Exception $e ) {
 			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
 		}
 	}
-	public function send($to, $msg) {
-		$From = "From: ".$from_name." <fromaddress@domain.com>"; 
-		$To = "To: ".$to_name." <toaddress@domain.com>"; 
-
+	public function send($name, $to, $subject, $msg) {
+		
 		$recipients = "toaddress@domain.com"; 
-		$headers["From"] = $From; 
-		$headers["To"] = $To; 
+		$headers["From"] 	= sprintf("%s <%s>", $name, $to); 
+		$headers["To"] 		= sprintf("%s <%s>", $name, $to); ; 
 		$headers["Subject"] = $subject; 
 		$headers["Reply-To"] = "reply@address.com"; 
 		$headers["Content-Type"] = "text/plain; charset=ISO-2022-JP"; 
@@ -164,30 +160,32 @@ class Task {
 	
 	const MAXCONN 	= 32;
 	
-	protected $result = array();
+	protected $dbh = array();
 	
 	public function __construct($config) {
 
 		$this->config = $config;
-	}
-	public function main(){
 		
-		$dbhost = $this->config['sender']['dbhost'];
-		$dbport = $this->config['sender']['dbport'];
-		$dbuser = $this->config['sender']['dbuser'];
-		$dbpass = $this->config['sender']['dbpass'];
-		$dbname = $this->config['sender']['dbname'];
+		$dbhost = $this->config['database']['host'];
+		$dbport = $this->config['database']['port'];
+		$dbuser = $this->config['database']['user'];
+		$dbpass = $this->config['database']['password'];
+		$dbname = $this->config['database']['dbname'];
 
-		$dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
+		$this->dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 			PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
 			PDO::MYSQL_ATTR_COMPRESS => true
 			/*PDO::ATTR_PERSISTENT => true*/
 		));
 		
-		$dbh->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+		$this->dbh->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+
+	}
+	
+	private function newTask(){
 		
 		$sql = "select * from task where status = :status";
-		$sth = $dbh->prepare ( $sql );
+		$sth = $this->dbh->prepare ( $sql );
 		$sth->bindValue ( ':status', 'New' );
 		$sth->execute ();
 		
@@ -200,11 +198,16 @@ class Task {
 			$pool->submit ( new QueueWork ( $task ));
 
 		}
-		$tasks = null;
-		$pool->shutdown ();	
 
+		$pool->shutdown();			
+
+	}
+	private function processingTask(){
+		
+		$pool = new Pool ( self::MAXCONN , \SenderWorker::class, array($this->config) );
+		
 		$sql = "select * from task where status = :status";
-		$sth = $dbh->prepare ( $sql );
+		$sth = $this->dbh->prepare ( $sql );
 		$sth->bindValue ( ':status', 'Processing' );
 		$sth->execute ();
 		
@@ -214,25 +217,25 @@ class Task {
 		
 		foreach($tasks as $task){
 			
-			$templateStatement = $dbh->prepare ( "select * from template where status = :status and id = :id" );
-			$templateStatement->bindValue ( ':id', $this->task->template_id );
+			$templateStatement = $this->dbh->prepare ( "select * from template where status = :status and id = :id" );
+			$templateStatement->bindValue ( ':id', $task->template_id );
 			$templateStatement->bindValue ( ':status', 'Enable' );
 			$templateStatement->execute ();
 			
 			$template = $templateStatement->fetch( PDO::FETCH_OBJ );
 			
-			$messageStatement = $dbh->prepare ( "select * from message where status = :status and id = :id" );
-			$messageStatement->bindValue ( ':id', $this->task->message_id );
+			$messageStatement = $this->dbh->prepare ( "select * from message where status = :status and id = :id" );
+			$messageStatement->bindValue ( ':id', $task->message_id );
 			$messageStatement->bindValue ( ':status', 'New' );
 			$messageStatement->execute ();
 			
 			$message = $messageStatement->fetch( PDO::FETCH_OBJ );
 			
-			if($this->task->group_id){
-				$contactStatement = $dbh->prepare ( "select mobile, email from contact where status = 'Subscription'" );
+			if(empty($task->group_id)){
+				$contactStatement = $this->dbh->prepare ( "select mobile, email from contact where status = 'Subscription'" );
 			}else{
-				$contactStatement = $dbh->prepare ( "select mobile, email from contact, group_has_contact where contact.status = 'Subscription' and group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;" );
-				$contactStatement->bindValue ( ':id', $this->task->group_id );
+				$contactStatement = $this->dbh->prepare ( "select mobile, email from contact, group_has_contact where contact.status = 'Subscription' and group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;" );
+				$contactStatement->bindValue ( ':id', $task->group_id );
 			}
 			$contactStatement->execute ();
 			
@@ -255,7 +258,16 @@ class Task {
 
 		}
 
-		$pool->shutdown ();
+		$pool->shutdown ();		
+		
+	}
+	private function completedTask(){
+		
+	}
+	public function main(){
+		
+		$this->newTask();
+		$this->processingTask();	
 		
 	}
 	
@@ -274,8 +286,8 @@ class Sender {
 
 	public function __construct() {
 		$this->pidfile = '/var/run/'.basename(__FILE__, '.php').'.pid';
-		$this->config = include_once(__DIR__."/config.php");
-//                print_r($this->config);die;
+		$this->config = parse_ini_file('sender.ini', true); //include_once(__DIR__."/config.php");
+
 	}
 	private function daemon(){
 		if (file_exists($this->pidfile)) {
