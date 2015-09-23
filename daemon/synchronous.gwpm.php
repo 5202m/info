@@ -6,7 +6,7 @@ class SynchronousWorker extends Worker {
 	// }
 
 	protected $config;
-	protected static $dbh_gwpm_export, $dbh_gwpm_import;
+	protected static $dbh_export, $dbh_import;
 	public function __construct($config) {
 		$this->config = $config;
 	}
@@ -18,18 +18,18 @@ class SynchronousWorker extends Worker {
 			$dbpass = $this->config['import']['dbpass'];
 			$dbname = $this->config['import']['dbname'];
 
-			self::$dbh_gwpm_import = new PDO("mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
+			self::$dbh_import = new PDO("mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 					PDO::MYSQL_ATTR_COMPRESS => true
 					/*PDO::ATTR_PERSISTENT => true*/
 			));
 
-			$dbhost1 = $this->config['gwpm']['export']['dbhost'];
-			$dbport1 = $this->config['gwpm']['export']['dbport'];
-			$dbuser1 = $this->config['gwpm']['export']['dbuser'];
-			$dbpass1 = $this->config['gwpm']['export']['dbpass'];
-			$dbname1 = $this->config['gwpm']['export']['dbname'];
-			self::$dbh_gwpm_export = new PDO("mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
+			$dbhost1 = $this->config['gwpm']['dbhost'];
+			$dbport1 = $this->config['gwpm']['dbport'];
+			$dbuser1 = $this->config['gwpm']['dbuser'];
+			$dbpass1 = $this->config['gwpm']['dbpass'];
+			$dbname1 = $this->config['gwpm']['dbname'];
+			self::$dbh_export = new PDO("mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 					PDO::MYSQL_ATTR_COMPRESS => true
 			));
@@ -43,9 +43,9 @@ class SynchronousWorker extends Worker {
 	}
 	protected function getInstance($io) {
 		if ($io == 't_hotpoint_export'){
-			return self::$dbh_gwpm_export;
+			return self::$dbh_export;
 		} else {
-			return self::$dbh_gwpm_import;
+			return self::$dbh_import;
 		}
 	}
 	public function logger($type, $message) {
@@ -101,7 +101,146 @@ class T_HotpointWork extends Stackable {
 
 				$position = $this->worker->getpoints($division_id, $category_id, $type, $position);
 
-				$sql = "SELECT FHOTPOINT_ID as id, TITLE as title, CONTENT as content, if(LANGUAGE='zh','cn',LANGUAGE) as language, REGTIME as ctime, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description FROM t_hotpoint WHERE LANGUAGE = '" . $this->lang . "' AND TYPE='" . $type . "' AND FHOTPOINT_ID > '" . $position . "' ORDER BY FHOTPOINT_ID asc";
+				$sql = "SELECT FHOTPOINT_ID as id, TITLE as title, CONTENT as content, if(LANGUAGE='zh','cn',LANGUAGE) as language, case when REGTIME='1900-01-01 00:00:00' then UPDATE_DATE else REGTIME end as ctime, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description FROM t_hotpoint WHERE LANGUAGE = '" . $this->lang . "' AND TYPE='" . $type . "' AND FHOTPOINT_ID > '" . $position . "' AND FLAG=0 ORDER BY FHOTPOINT_ID asc";
+				$query = $db_export->query($sql);
+				//$this->worker->logger ( 'SQL', $query->queryString);
+
+				while ($line = $query->fetch(PDO::FETCH_OBJ)) {
+
+					$sql = "insert into article (`division_id`, `division_category_id`,  `title`,  `content`, `author`,  `keyword`,  `description`,  `image`,  `language`,  `source`,  `share`,  `visibility`,  `status`,  `ctime`,  `mtime`) values(:division_id, :division_category_id, :title, :content, :author, :keyword, :description, :image,  :language, :source, :share, :visibility, :status, :ctime, :mtime)";
+					$sth = $db_import->prepare($sql);
+					$sth->bindValue(':division_id', $this->division_id);
+					$sth->bindValue(':division_category_id', $division_category_id);
+					$sth->bindValue(':title', $line->title);
+					$sth->bindValue(':content', $line->content);
+					$sth->bindValue(':author', null);
+					$sth->bindValue(':keyword', $line->keyword);
+					$sth->bindValue(':description', $line->description);
+					$sth->bindValue(':image', null);
+					$sth->bindValue(':language', $line->language);
+					$sth->bindValue(':source', 'GWPM');
+					$sth->bindValue(':share', 'N');
+					$sth->bindValue(':visibility', 'Visible');
+					$sth->bindValue(':status', 'Enabled');
+					$sth->bindValue(':ctime', $line->ctime);
+					$sth->bindValue(':mtime', null);
+					$sth->execute();
+
+					$this->worker->logger('t_hotpoint', sprintf("%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title));
+					if ($line->id) {
+						$position = $line->id;
+					}
+					$this->worker->savepoints($division_id, $category_id, $type, $position);
+				}
+			}
+		} catch ( PDOException $e ) {
+			$this->worker->logger('Exception t_hotpoint', $e->getMessage());
+		} catch ( Exception $e ) {
+			$this->worker->logger('Exception t_hotpoint', $e->getMessage());
+		}
+	}
+	public function export() {
+	}
+}
+
+class GoldNewsWork extends Stackable {
+	public $division_id;
+	public function __construct($division_id, $lang, $dbmaps) {
+		$this->dbmaps = $dbmaps;
+		switch ($lang){
+			case 'cn':
+				$this->lang = '2';
+				break;
+			case 'tw':
+				$this->lang = '3';
+				break;
+			case 'en':
+				$this->lang = '1';
+				break;
+		}
+		$this->division_id = $division_id;
+	}
+	public function run() {
+		//$this->worker->logger('real_news', sprintf("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId()));
+		try {
+			$db_import = $this->worker->getInstance('import');
+			$db_export = $this->worker->getInstance('t_hotpoint_export');
+			$db_import->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$db_export->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$position = 1;
+			foreach ($this->dbmaps as $division_category_id => $type) {
+				$division_id = $this->division_id;
+				$category_id = $division_category_id;
+
+				$position = $this->worker->getpoints($division_id, $category_id, $type, $position);
+
+				$sql = "SELECT GOLDNEWS_ID as id, name as title, content as content, case lang when '2' then 'cn' when '3' then 'tw' else 'en' end as language, case when newstime='1900-01-01 00:00:00' then jointime else newstime end as ctime, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description FROM goldnews WHERE lang = '" . $this->lang . "' AND VERSION_NO='" . $type . "' AND GOLDNEWS_ID > '" . $position . "' ORDER BY GOLDNEWS_ID asc";
+				$query = $db_export->query($sql);
+				//$this->worker->logger ( 'SQL', $query->queryString);
+
+				while ($line = $query->fetch(PDO::FETCH_OBJ)) {
+
+					$sql = "insert into article (`division_id`, `division_category_id`,  `title`,  `content`, `author`,  `keyword`,  `description`,  `image`,  `language`,  `source`,  `share`,  `visibility`,  `status`,  `ctime`,  `mtime`) values(:division_id, :division_category_id, :title, :content, :author, :keyword, :description, :image,  :language, :source, :share, :visibility, :status, :ctime, :mtime)";
+					$sth = $db_import->prepare($sql);
+					$sth->bindValue(':division_id', $this->division_id);
+					$sth->bindValue(':division_category_id', $division_category_id);
+					$sth->bindValue(':title', $line->title);
+					$sth->bindValue(':content', $line->content);
+					$sth->bindValue(':author', null);
+					$sth->bindValue(':keyword', $line->keyword);
+					$sth->bindValue(':description', $line->description);
+					$sth->bindValue(':image', null);
+					$sth->bindValue(':language', $line->language);
+					$sth->bindValue(':source', 'GWPM');
+					$sth->bindValue(':share', 'N');
+					$sth->bindValue(':visibility', 'Visible');
+					$sth->bindValue(':status', 'Enabled');
+					$sth->bindValue(':ctime', $line->ctime);
+					$sth->bindValue(':mtime', null);
+					$sth->execute();
+
+					$this->worker->logger('t_hotpoint', sprintf("%s=>%s %s, %s, %s, %s", $division_category_id, $type, $line->ctime, $line->id, $line->language, $line->title));
+					if ($line->id) {
+						$position = $line->id;
+					}
+					$this->worker->savepoints($division_id, $category_id, $type, $position);
+				}
+			}
+		} catch ( PDOException $e ) {
+			$position += 1; 
+			$this->worker->savepoints($division_id, $category_id, $type, $position);
+			$this->worker->logger('Exception t_hotpoint', $e->getMessage());
+		} catch ( Exception $e ) {
+			$this->worker->logger('Exception t_hotpoint', $e->getMessage());
+		}
+	}
+	public function export() {
+	}
+}
+
+
+class T_ReviewWork extends Stackable {
+	public $division_id;
+	public function __construct($division_id, $lang, $dbmaps) {
+		$this->dbmaps = $dbmaps;
+		$this->lang = $lang == 'cn'?'zh':$lang;
+		$this->division_id = $division_id;
+	}
+	public function run() {
+		//$this->worker->logger('real_news', sprintf("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId()));
+		try {
+			$db_import = $this->worker->getInstance('import');
+			$db_export = $this->worker->getInstance('t_hotpoint_export');
+			$db_import->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$db_export->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$position = 1;
+			foreach ($this->dbmaps as $division_category_id => $type) {
+				$division_id = $this->division_id;
+				$category_id = $division_category_id;
+
+				$position = $this->worker->getpoints($division_id, $category_id, $type, $position);
+
+				$sql = "SELECT FREVIEW_ID as id, TITLE as title, CONTENT as content, if(LANGUAGE='zh','cn',LANGUAGE) as language, case when REGTIME='1900-01-01 00:00:00' then UPDATE_DATE else REGTIME end as ctime, SEO_KEYWORDS as keyword, SEO_DESCRIPTION as description FROM t_review WHERE LANGUAGE = '" . $this->lang . "' AND TYPE in (" . $type . ") AND FREVIEW_ID > '" . $position . "' AND FLAG=0 ORDER BY FREVIEW_ID asc";
 				$query = $db_export->query($sql);
 				//$this->worker->logger ( 'SQL', $query->queryString);
 
@@ -180,6 +319,16 @@ class Task {
 			if($sync->table == 't_hotpoint'){
 				if(in_array($sync->lang, array('cn','tw'))){
 					$pool->submit(new T_HotpointWork($this->division_id, $sync->lang , array($sync->category_id => $sync->type)));
+				}
+			}
+			if($sync->table == 'goldnews'){
+				if(in_array($sync->lang, array('cn','tw'))){
+					$pool->submit(new GoldNewsWork($this->division_id, $sync->lang , array($sync->category_id => $sync->type)));
+				}
+			}
+			if($sync->table == 't_review'){
+				if(in_array($sync->lang, array('cn','tw'))){
+					$pool->submit(new T_ReviewWork($this->division_id, $sync->lang , array($sync->category_id => $sync->type)));
 				}
 			}
 		}
