@@ -44,6 +44,13 @@ return array(
         'dbuser' => 'inf',
         'dbpass' => 'inf',
         'dbname' => 'sender'
+	),
+    'gwpm' => array(
+    		'dbhost' => '113.28.105.91',//'192.168.35.236',
+    		'dbport' => '3306',
+    		'dbuser' => 'root',
+    		'dbpass' => '123456',
+    		'dbname' => 'goldenway_web',
     ),
 );
 ?>
