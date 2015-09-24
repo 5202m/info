@@ -28,12 +28,9 @@
                 
                 <div style="margin-top: 20px;">    
                         <?php 
-                    $album = $this->objToArray->ohYeah($folder);
-                    
-                    $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1" );
-                    $db = $connection->test;
-
-                    
+   
+                    $album = isset($folder) ? $this->objToArray->ohYeah($folder) : array();
+                    $db = $this->mongodb->db;
                     
                     foreach($page->items as $vs){
                         $grid = $db->getGridFS($vs->folder);
@@ -58,9 +55,9 @@
                    
                     
                     if($doc_arr['filename'] == ''){
-                        echo '/img/album/pic-none.png';
+                        echo $this->imagesUri.'/img/album/pic-none.png';
                     }else{
-                        echo '/image/raw/'.$vs->folder.'/'.$doc_arr['filename'];
+                        echo $this->imagesUri.'/image/raw/'.$vs->folder.'/'.$doc_arr['filename'];
                     }?>                                                                                                                               
                                                                                                                                                      
                     " /></a></div>

@@ -37,7 +37,7 @@
                                                               <button id="submit" type="submit" class="btn btn-primary">开始上传</button>
 							  </div>
                 </form>
-                <iframe style="display:none" name='hidden_frame' id="hidden_frame"></iframe>  
+                <iframe  style="display: none" name='hidden_frame' id="hidden_frame"></iframe>  
 						</div>
 
             
@@ -45,20 +45,37 @@
     </div><!--/span-->
 
 </div><!--/row-->
-<script language="javascript" type="text/javascript">
-
-function callback(message,success)  
-{  
-    if(success==false)  
-    {  
-         alert(message);
-    }  
-    else{  
-        alert(message);
-        window.location.href = '/album/folder';
-    }  
-}  
-
+<script>
+function showmodel(data){
+$(document).ready(function(){
+	var msg = data.msg;
+	if(!data.status){
+		msg = '上传图片成功';
+	}else{
+		switch(data.code){
+			case 1:
+				msg= '请选择上传图片';
+				break;
+			case 2:
+				msg= '上传图片扩展名是不允许的扩展名';
+				break;
+			case 3:
+				msg= '上传图片大小超过限制';
+				break;
+			case 4:
+				msg= '不能重复上传图片';
+				break;
+			case 5:
+				msg= '未知错误';
+				break;
+		default:
+			break;
+		}
+	}
+	$('#myModal>.modal-body>p').html(msg);
+	$('#myModal').modal('show');
+});
+};
 
 </script>
 

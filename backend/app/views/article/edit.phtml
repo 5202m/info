@@ -91,6 +91,9 @@
 							  <div class="controls">
 								<input class="input-file uniform_on" id="image" name="image" type="file" />
 								<input type="hidden" name="hdimage" value="<?php if($images):echo $images->url,';',$images->id;endif;?>" />
+							  	<?php if($images->url):?>
+							  	<img src='<?php echo '/backend/'.$images->url?>' width="100px">
+							  	<?php endif ;?>
 							  </div>
 							</div>  
 							<div class="control-group">
@@ -163,7 +166,7 @@
 							</div>
 							<div class="form-actions">
 							  <input type="hidden" name="id" value="<?php echo $article->id;?>" />
-							  <button id="submit" type="button" class="btn btn-primary">确定</button>
+							  <button id="submit" type="submit" class="btn btn-primary">确定</button>
 							  <input type="button" id="reset" class="btn" value="取消" />
 							</div>
 						  </fieldset>
@@ -261,7 +264,7 @@
 							$('body,html').animate({scrollTop:0},1000); 
 							return false;
 						}
-						$('#editForm').submit();
+						//$('#editForm').submit();
 					});
 					$('#reset').click(function(){
 						location.href='/article';
