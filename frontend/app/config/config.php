@@ -18,9 +18,7 @@ return new \Phalcon\Config(array(
 		'baseUri'        => '/mvc/single-factory-default/',
 	),
 	'redis' => array(
-		'host' => '192.168.2.1',
-		'port' => 6379,
-		'auth' => ''
+		'host' => '192.168.4.1',
 	),
 		
 	'models' => array(
