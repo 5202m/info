@@ -82,7 +82,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 .previous{ position:fixed; left:0}
 .next{ position:fixed;  right:0}
 
-.back-icon{background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0; z-index:99}
+.back-icon{display:none;background:url(../images/icon-bg.png); position:fixed; left:0; top:300px; border-radius:0 3px 3px 0; z-index:99}
 .back-icon a{ display:block; width:84px; text-align:center; padding:20px 0}
 .back-icon a img{ }
 
