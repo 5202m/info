@@ -41,10 +41,11 @@ class ImageController extends ControllerBase
     
     	//$filename = intval($filename);
     	$ver = intval($ver);
-    	
 		$this->view->disable();
 		$this->get('raw', $folder, $filename);
-		
+    }
+    public function thumbnailAction($folder, $filename, $ver = 0){
+    	$this->rawAction($folder, $filename, $ver);
     }
 }
 
