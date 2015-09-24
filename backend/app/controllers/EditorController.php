@@ -1,11 +1,18 @@
 <?php
 class EditorController extends ControllerBase {
 	
+	public function initialize() {
+        parent::initialize();
+        $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
+        $this->mongodb = $connection->selectDB('test');
+    }
+    
 	public function uploadAction($dir){
     	/*//返回json格式数据*/
     	$response = new Phalcon\Http\Response();
     	//$dir = $this->request->getPost('dir');
 		$savePath = $this->imagesPath;
+		$domain = $this->imagesUri;
     	if(php_uname('s')=='Windows NT'){//本地测试时使用
     		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/';
     	}
@@ -32,6 +39,8 @@ class EditorController extends ControllerBase {
 				mkdir($savePath, 0777, true);
 			}
 		}
+		
+		$grid = $this->mongodb->getGridFS($dirName);
 		//Check if the user has uploaded files
 		if ($this->request->hasFiles() == true) {
 			//Print the real file names and their sizes
@@ -53,10 +62,31 @@ class EditorController extends ControllerBase {
 				else{
 					if($file->isUploadedFile()){
 						$fileUrl = $savePath.$file->getName();
+						$imgUrl = $domain.$file->getName();
 						if($file->moveTo($fileUrl)){
-							//echo $fileUrl;exit;
-							$response->setJsonContent(array('error' => 0, 'url' => $fileUrl));
-    						return $response;
+							$result = $grid->find(array('md5'=>md5_file($fileUrl)));
+                            foreach ($result as $doc) {
+                                $doc_arr = $this->objToArray->ohYeah($doc);
+                                $doc_arr['md5'] = $doc_arr['file']['md5'];
+                            }
+                            if(!$doc_arr['md5']){
+                                $storedfile = $grid->storeFile($fileUrl, array('filename'=>$file->getName(),"date" => new MongoDate()));
+                                if($storedfile){
+									//echo $fileUrl;exit;
+									$response->setJsonContent(array('error' => 0, 'url' => $imgUrl));
+		    						return $response;
+    							}else{
+                                    $msg = $file->getError();
+                                    $response->setJsonContent(array('error' => 1, 'url' => $msg));
+                                    return $response;
+    							}
+                            }
+							else{
+                                //echo "<script>parent.callback('不能重复上传图片',false)</script>";  
+                                //return ;
+                                $response->setJsonContent(array('error' => 1, 'url' => '不能重复上传图片'));
+                                return $response;
+                            }
 						}
 						else{
 							$response->setJsonContent(array('error' => 1, 'message' => $file->getError()));

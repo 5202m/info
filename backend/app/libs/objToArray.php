@@ -17,11 +17,15 @@ class objToArray {
      */
     public function ohYeah ($obj) {
         $data = array();
-        foreach ($obj as  $key1=> $vals) {
-            foreach ($vals as $key2=>$val) {
-                $data[$key1][$key2]=$val;
-            }
-        }
+       	if($obj){
+	        foreach ($obj as  $key1=> $vals) {
+	        	if($vals){
+		            foreach ($vals as $key2=>$val) {
+		                $data[$key1][$key2]=$val;
+		            }
+	        	}
+	        }
+       	}
         return $data;
     }
     

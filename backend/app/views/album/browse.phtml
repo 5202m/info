@@ -78,7 +78,7 @@
   		private $pagenum; 		//总页码
   		private $url;    		//地址
   		private $bothnum; 		//两边保持数字分页的量
-                private $folder;
+        private $folder;
   
   	//构造方法初始化
   	public function __construct($_total, $_pagesize,$folder,$page) {
@@ -93,7 +93,7 @@
   	}
   
   	//拦截器
-  	private function __get($_key) {
+  	public function __get($_key) {
    		return $this->$_key;
   	}
   
@@ -180,6 +180,7 @@
   
   	//分页信息
   	public function showpage() {
+		$_page = null;
    		$_page .= $this->first();
 //   		$_page .= $this->pageList();
    		

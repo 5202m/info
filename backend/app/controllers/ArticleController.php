@@ -124,6 +124,7 @@ class ArticleController extends ControllerBase {
 				$images->url = $this->uploadImage($article->id, $oriPath);
 				$images->save();
 			}
+			
             $article->keyword = $this->request->getPost('keyword', 'trim');
             $article->description = $this->request->getPost('description', 'trim');
             $article->language = $this->request->getPost('language');
