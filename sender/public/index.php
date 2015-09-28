@@ -76,8 +76,8 @@ try {
         /**
 	 * 数据库加密key
 	 */
-	$di->set('dbkey', function() use ($config) {
-		return $config->dbkey->key;
+	$di->set('config', function() use ($config) {
+		return $config;
 	});
 	
 	/**
@@ -106,7 +106,8 @@ try {
         	"port" => $config->database->port,
             "username" => $config->database->username,
             "password" => $config->database->password,
-            "dbname" => $config->database->dbname
+            "dbname" => $config->database->dbname,
+            "dbkey" => $config->database->dbkey
         ));
 
         //Assign the eventsManager to the db adapter instance

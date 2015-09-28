@@ -8,6 +8,7 @@ return new \Phalcon\Config(array(
 		'username' => '{{username}}',
 		'password' => '{{password}}',
 		'dbname'   => '{{dbname}}',
+                'dbkey'   => '{{dbkey}}',
 
 	),
 	'application' => array(

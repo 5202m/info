@@ -8,6 +8,7 @@ return new \Phalcon\Config(array(
 		'username' => 'inf',
 		'password' => 'inf',
 		'dbname'     => 'sender',
+                'dbkey' => 'ha4AS1Vav2we3iCo4EN87AGA4aWaBe'
 
 	),
         'mongodb' => array(
@@ -40,9 +41,6 @@ return new \Phalcon\Config(array(
 		'metadata' => array(
 			'adapter' => 'Memory'
 		)
-	),
-        'dbkey' => array(
-            'key' => '20150918'
-        ),
+	)
 	
 ));

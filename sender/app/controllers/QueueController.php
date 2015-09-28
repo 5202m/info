@@ -8,7 +8,7 @@ class QueueController extends ControllerBase
         $this->view->partial('queue/list');
     }
     public function listAction($page = 1 , $pageSize = 10){
-            $search_key = 'template_list_search';
+         $search_key = 'template_list_search';
 
             if($this->request->isPost()){
                     $params = $this->request->getPost();
@@ -28,6 +28,8 @@ class QueueController extends ControllerBase
 
             $appendix = array('page'=>$page,'pageSize'=>$pageSize);
             $list = Queue::getList($this->modelsManager , $where , $appendix);
+            
+            
             $page = $list->getPaginate();
 
             $page->pageSize = $appendix['pageSize'];

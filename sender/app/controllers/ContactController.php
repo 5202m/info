@@ -2,6 +2,7 @@
 class ContactController extends ControllerBase
 {
     public function indexAction(){
+        
 //        $phql = "select *,AES_DECRYPT(mobile,'{$this->dbkey}') as new_mobile,AES_DECRYPT(email,'{$this->dbkey}') as new_email from  contact";
         $contact = Contact::find( );
 //        $contact = $this->modelsManager->executeQuery($phql);
@@ -27,7 +28,7 @@ class ContactController extends ControllerBase
     }
     public function uploadHandleAction($group_id){
         $new_data = array();
-        $dbkey = $this->dbkey;
+        $dbkey = $this->config->database->dbkey;
         $mb = 1.4; //Mb
         $maxFileSize = $mb * 1024 * 1024;
         if ($_FILES['file']) {
