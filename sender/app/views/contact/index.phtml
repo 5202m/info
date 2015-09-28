@@ -41,24 +41,12 @@
                         <tr>
                            
                             <td ><?php echo $vs['name']?></td>
-                            <td ><?php echo $vs['mobile']?></td>
-                            <td ><?php echo $vs['email']?></td>
+                            <td ><?php echo $vs['mobile_digest']?></td>
+                            <td ><?php echo $vs['email_digest']?></td>
                             <td><?php echo $vs['description']; ?></td>
                             <td ><?php echo $vs['status']?></td>
                             <td><?php echo $vs['ctime']; ?></td>
                             <td ><?php echo $vs['mtime']?></td>
-                            <td class="center">
-<!--                                <a title="查看分类" class="btn btn-success" href="/category/show/<?php echo $vs['id'];?>">
-                                    <i class="halflings-icon white zoom-in"></i>  
-                                </a>-->
-                                <a title="编辑分类" class="btn btn-info" href="/group/edit/<?php echo $vs['id'];?>">
-                                    <i class="halflings-icon white edit"></i>  
-                                </a>
-<!--                                <a title="添加分类" class="btn btn-success" href="/group/add/<?php echo $vs['id'];?>">
-                                    <i class="halflings-icon plus white zoom-in"></i>  
-                                </a>-->
-                               
-                            </td>
                         </tr>
 <?php } ?>
 
