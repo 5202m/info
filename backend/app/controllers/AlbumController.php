@@ -4,8 +4,6 @@ class AlbumController extends ControllerBase
 {
     public function initialize() {
         parent::initialize();
-        $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
-        $this->mongodb = $connection->selectDB('test');
     }
 
     public function indexAction()
@@ -14,11 +12,10 @@ class AlbumController extends ControllerBase
     }
     public function get($folder, $filename){
 		
-		//$filename ='test.jpg';
-		$grid = $this->mongodb->getGridFS($folder);
-		//echo $grid->storeFile($filename, array("date" => new MongoDate()));
-                
-                $image = $grid->findOne($filename);
+			//$filename ='test.jpg';
+			$grid = $this->mongodb->db->getGridFS($folder);
+			//echo $grid->storeFile($filename, array("date" => new MongoDate()));
+           $image = $grid->findOne($filename);
 		if ($image) {
 			$image_file = sprintf("%s/static/image/%s", $this->basedir, $filename);
 			$content = $image->getBytes();
@@ -26,7 +23,7 @@ class AlbumController extends ControllerBase
     			mkdir(dirname($image_file), 0755, TRUE);
     		}
 			file_put_contents($image_file , $content);
-//                        exit();
+
 	    	$this->response->setHeader('Cache-Control', 'max-age=60');
 			$this->response->setHeader('Content-type', mime_content_type($image_file));
 			$this->response->setContent($content);
@@ -50,7 +47,8 @@ class AlbumController extends ControllerBase
     }
     
     
-    public function folderAction($page_num){
+    public function folderAction($page_num = 1){
+    	
         $currentPage = (int)$page_num;
          $folder = Album::find();
         $paginator = new Phalcon\Paginator\Adapter\Model(
@@ -63,6 +61,7 @@ class AlbumController extends ControllerBase
         $page = $paginator->getPaginate();
        
         $this->view->setVar('page',$page);
+
     }
     public function addAction(){
         
@@ -102,7 +101,7 @@ class AlbumController extends ControllerBase
      */
     public function browseAction($folder,$skip){
 
-        $grid = $this->mongodb->getGridFS($folder);
+        $grid = $this->mongodb->db->getGridFS($folder);
         $skip_num = 3*($skip-1);
         if($skip == ''){
             $skip_num = 0;
@@ -116,90 +115,20 @@ class AlbumController extends ControllerBase
         $this->view->setVar('image',$image);
     }
     public function uploadAction(){
+    	
         $folder = Album::find();
         $this->view->setVar('folder',$folder);
     }
     public function uploadHandleAction(){
         $folder = $this->request->getPost('folder');
+       
         if($folder){
-            $savePath = $this->imagesPath.$folder.'/';
-            if(php_uname('s')=='Windows NT'){//本地测试时使用
-                    $savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/';
-            }
-            if(!file_exists($savePath)){
-                    mkdir($savePath, 0777, true);
-            }
-            //定义允许上传的文件扩展名
-            $extArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
-            //最大文件大小
-            $maxSize = 1000000;
-
-
-            $grid = $this->mongodb->getGridFS($folder);
-            if ($this->request->hasFiles() == true) {
-                foreach ($this->request->getUploadedFiles() as $file) {
-                    //获得文件扩展名
-                    $tempArr = explode(".", $file->getName());
-                    $fileExt = array_pop($tempArr);
-                    $fileExt = trim($fileExt);
-                    $fileExt = strtolower($fileExt);
-                    //检查扩展名
-                    if (in_array($fileExt, $extArr) === false) {
-                        echo "<script>parent.callback('上传图片扩展名是不允许的扩展名',false)</script>";  
-                        return ;
-                    }
-                    if($file->getSize()>$maxSize){
-                        echo "<script>parent.callback('上传图片大小超过限制',false)</script>";  
-                        return ;
-                    }else{
-                        if($file->isUploadedFile()){
-                            $fileUrl = $savePath.$file->getName();
-                            if($file->moveTo($fileUrl)){
-                                $result = $grid->find(array('md5'=>md5_file($fileUrl)));
-                                foreach ($result as $doc) {
-                                    $doc_arr = $this->objToArray->ohYeah($doc);
-                                    $doc_arr['md5'] = $doc_arr['file']['md5'];
-                                }
-                                if(!$doc_arr['md5']){
-                                    $storedfile = $grid->storeFile($fileUrl, array('filename'=>$file->getName(),"date" => new MongoDate()));
-                                    if($storedfile){
-                                        echo "<script>parent.callback('上传图片成功',true)</script>";  
-                                        return ;
-                                    }else{
-                                        $msg = $file->getError();
-                                        echo "<script>parent.callback('$msg',false)</script>";  
-                                        return ;
-                                    }
-                                    
-                                }else{
-                                    echo "<script>parent.callback('不能重复上传图片',false)</script>";  
-                                    return ;
-                                }
-                            }else{
-                                $msg = $file->getError();
-                                echo "<script>parent.callback('$msg',false)</script>";  
-                                return ;
-                            }
-                        }
-                        else{
-                                $msg = $file->getError();
-                                echo "<script>parent.callback('$msg',false)</script>";  
-                                return ;
-                        }
-                    }
-
-
-                }
-            }else{
-                    echo json_encode(array('status'=>false,'msg'=> $file->getError()));
-                    return $this->response->redirect('upload');
-            }
-        }
-        
-        
+            $rs = $this->mongodb->upload($this->request , $folder);
+            ?>
+            <script>window.parent.showmodel(<?php echo json_encode($rs)?>);</script>
+            <?php 
+            exit();
+    	}
     }
-    
- 
-    
 }
 
