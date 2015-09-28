@@ -1,19 +1,31 @@
 <?php
+
+class Logger {
+	
+	public function __construct(/*Logging $logger*/) {
+	}
+
+	public function logger($type, $message) {
+		$log = sprintf ( "%s\t%s\t%s\n", date ( 'Y-m-d H:i:s' ), $type, $message );
+		file_put_contents ( sprintf(__DIR__."/../log/sender.%s.log", date ( 'Y-m-d' )), $log, FILE_APPEND );
+	}
+	
+}
+
 class SenderWorker extends Worker {
 
-	//public function __construct(/*Logging $logger*/) {
-		//$this->logger = $logger;
-	//}
+	
 
 	protected $config;
 	protected static $dbh;
 	protected static $amqp;
+	
 	public function __construct($config) {
 		$this->config = $config;
-
+		$this->logger = new Logger();
 	}
 	public function run() {
-		$this->connect();
+
 	}
 	private function connect(){
 		try {
@@ -38,14 +50,14 @@ class SenderWorker extends Worker {
 	}
 	protected function getInstance() {
 
-		if(!self::$dbh) $this->connect();
+		if(!self::$dbh) $this->connect();		
+		$this->logger ( 'Debug', sprintf("Connect database %s,%s", $this->getThreadId (), '') );
 		return self::$dbh;
 
 	}
 	
 	public function logger($type, $message) {
-		$log = sprintf ( "%s\t%s\t%s\t%s\n", date ( 'Y-m-d H:i:s' ), $this->getThreadId (), $type, $message );
-		file_put_contents ( sprintf(__DIR__."/../log/sender.%s.log", date ( 'Y-m-d' )), $log, FILE_APPEND );
+		$this->logger->logger($type, $message);
 	}
 	
 	public function getAmqpInstance(){
@@ -94,7 +106,8 @@ class QueueWork extends Stackable {
 			//echo $sth->queryString;
 			if($status){
 				
-				$this->worker->logger ( sprintf("Queue %s", $this->task->name) , "last Insert Id ".$dbh->lastInsertId() );
+				//$this->worker->logger ( sprintf("Queue %s", $this->task->name) , "last Insert Id ".$dbh->lastInsertId() );
+				$this->worker->logger ( 'Queue' , sprintf("Task %s -> Queue", $this->task->name) );
 				
 				$sql = "update task set status = :status where status = 'New' and id = :id";
 				$sth = $dbh->prepare ( $sql );
@@ -102,8 +115,17 @@ class QueueWork extends Stackable {
 				$sth->bindValue ( ':status', 'Processing' );
 				$status = $sth->execute ();
 				if($status){
-					$this->worker->logger ( sprintf("Task %s", $this->task->name) , "last Insert Id ".$dbh->lastInsertId() );
+					
 					$this->status = true;
+					
+					$sql = "update message set status = :status where status = 'New' and id = :id";
+					$sth = $dbh->prepare ( $sql );
+					$sth->bindValue ( ':id', $this->task->message_id );
+					$sth->bindValue ( ':status', 'Sent' );
+					$status = $sth->execute ();
+					
+					$this->worker->logger ( 'Message', sprintf("%s is locked.", $this->task->message_id));
+					
 				}	
 			}
 			
@@ -146,10 +168,7 @@ class EmailWork extends Stackable {
 			$contacts = $this->getContact();
 			
 			foreach($contacts as $contact){
-				print_r($contact);
-				
-				
-				
+
 				$sql = "update queue set status = :status where status = 'New' and task_id = :task_id and contact_id = :contact_id";
 				$sth = $dbh->prepare ( $sql );
 				$sth->bindValue ( ':task_id', $this->task->id );
@@ -160,9 +179,7 @@ class EmailWork extends Stackable {
 				if($status){
 					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s", $this->task->name, $contact->email ) );
 					$this->send($contact->email, $this->message->title, $this->message->content);
-					
-					
-					
+
 					$sql = "update queue set status = :status where status = 'Processing' and task_id = :task_id and contact_id = :contact_id";
 					$sth = $dbh->prepare ( $sql );
 					$sth->bindValue ( ':task_id', $this->task->id );
@@ -174,19 +191,16 @@ class EmailWork extends Stackable {
 				}
 				
 			}
-/*			
+	/*
 			if(empty($task->group_id)){
-				$contactStatement = $this->dbh->prepare ( "select AES_DECRYPT(mobile, :key) as mobile, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription'" );
 			}else{
 				$contactStatement = $this->dbh->prepare ( "select AES_DECRYPT(mobile, :key) as mobile, AES_DECRYPT(email, :key) as email from contact, group_has_contact where contact.status = 'Subscription' and group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;" );
 				$contactStatement->bindValue ( ':id', $task->group_id );
 			}
 			$contactStatement->bindValue ( ':key', $this->config['database']['key'] );
 			$contactStatement->execute();
-			
 			$contacts = $contactStatement->fetchAll( PDO::FETCH_OBJ );
-	*/	
-			//print_r($contacts);
+	*/
 	
 
 		} catch ( Exception $e ) {
@@ -254,7 +268,7 @@ class EmailWork extends Stackable {
 	}
 }
 
-class Task {
+class Task extends Logger{
 	
 	const MAXCONN 	= 32;
 	
@@ -294,6 +308,7 @@ class Task {
 		foreach($tasks as $task){
 			
 			$pool->submit ( new QueueWork ( $task ));
+			$this->logger ( 'Task', sprintf("%s is starting.", $task->name) );
 
 		}
 
@@ -325,25 +340,32 @@ class Task {
 			
 			$messageStatement = $this->dbh->prepare ( "select * from message where status = :status and id = :id" );
 			$messageStatement->bindValue ( ':id', $task->message_id );
-			$messageStatement->bindValue ( ':status', 'New' );
+			$messageStatement->bindValue ( ':status', 'Sent' );
 			$messageStatement->execute ();
 			
 			$message = $messageStatement->fetch( PDO::FETCH_OBJ );
 			//print_r($task);
 			//print_r($template);
-			//print_r($message);
-			
-			$keyword = array("{{title}}","{{content}}","{{date}}"); 
-			$value = array($message->title, $message->content, $message->ctime); 			
-			$message->content = str_replace($keyword, $value, $template->content);
+			if(empty($template)){
+				$this->logger ( 'Template', sprintf("%s isn't found.", $task->template_id) );
+				return;
+			}else if(empty($message)){
+				$this->logger ( 'Message', sprintf("%s isn't found.", $task->message_id) );
+				return;
+			}else{
+				$keyword = array("{{title}}","{{content}}","{{date}}"); 
+				$value = array($message->title, $message->content, $message->ctime); 			
+				$message->content = str_replace($keyword, $value, $template->content);
 
-			if($task->type == 'Email'){
-				$pool->submit ( new EmailWork ( $task, $message ));
+				if($task->type == 'Email'){
+					$pool->submit ( new EmailWork ( $task, $message ));
+					$this->logger ( 'Email', sprintf("Queue %s is starting.", $task->name) );
+				}
+				if($task->type == 'SMS'){
+					$pool->submit ( new SMSWork ( $task, $message ));
+					$this->logger ( 'SMS', sprintf("Queue %s is starting.", $task->name) );
+				}			
 			}
-			if($task->type == 'SMS'){
-				$pool->submit ( new SMSWork ( $task, $message ));
-			}			
-			
 		}
 
 		$pool->shutdown ();		
@@ -372,8 +394,8 @@ class Task {
 			
 			$queueCompleted = $queue->fetch( PDO::FETCH_OBJ );
 			
-			print_r($queueCount);
-			print_r($queueCompleted);
+			//print_r($queueCount);
+			//print_r($queueCompleted);
 			
 			if($queueCount->count = $queueCompleted->count){
 				$sql = "update task set status = :status where status = 'Processing' and id = :id";
@@ -382,7 +404,7 @@ class Task {
 				$sth->bindValue ( ':status', 'Completed' );
 				$status = $sth->execute ();
 				if($status){
-					$this->worker->logger ( sprintf("Task %s", $task->name) , "Completed" );
+					$this->logger ( 'Task', sprintf("%s is Completed.", $task->name) );
 				}	
 			}
 		}
@@ -403,7 +425,7 @@ class Sender {
 	const pidfile 	= __CLASS__;
 	const uid		= 80;
 	const gid		= 80;
-	const sleep	= 60;
+	const sleep	= 5;
 
 	protected $pool 	= NULL;
 	protected $config	= array();
