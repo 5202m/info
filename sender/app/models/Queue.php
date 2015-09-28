@@ -3,7 +3,7 @@
 class Queue extends \Phalcon\Mvc\Model
 {
     public function initialize(){
-        $this->belongsTo("robots_id", "Contact", "id");
+        $this->belongsTo("contact_id", "Contact", "id");
     }
     static function getList($modelsManager , $where , $appendix = null ){
 		
@@ -13,8 +13,9 @@ class Queue extends \Phalcon\Mvc\Model
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
             
             $builder = $modelsManager->createBuilder()
-                   ->columns('*')
-                   ->from('Queue');
+                   ->columns('Queue.task_id as task_id,Queue.contact_id as contact_id,Queue.status as status,Queue.ctime as ctime,Queue.mtime as mtime,Contact.name as name')
+                   ->from('Queue')
+                    ->join('Contact');
             $strWhere = null;
             if($where){
                     foreach($where as $k=>$v){
