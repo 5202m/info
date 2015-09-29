@@ -46,6 +46,11 @@
                             <td ><?php echo $vs['status']?></td>
                             <td><?php echo $vs['ctime']; ?></td>
                             <td ><?php echo $vs['mtime']?></td>
+                            <td class="center">
+                                <a title="编辑联系人" class="btn btn-info" href="/contact/edit/<?php echo $vs['id']; ?>">
+                                    <i class="halflings-icon white edit"></i>  
+                                </a>
+                            </td>
                         </tr>
 <?php } ?>
 

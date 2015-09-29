@@ -5,6 +5,7 @@ class Message extends \Phalcon\Mvc\Model
 	public function initialize(){
 		//$this->hasOne('id', 'Category', 'division_category_id');
 		$this->skipAttributes(array('ctime', 'mtime'));
+                $this->hasMany("id", "Task", "message_id");
 	}
 	
 	/**

@@ -4,6 +4,7 @@ class Template extends \Phalcon\Mvc\Model
 	public function initialize()
 	{
 		$this->skipAttributes(array('ctime','mtime'));
+                $this->hasMany("id", "Task", "template_id");
 	}
 	static function insert($params = null){
 		

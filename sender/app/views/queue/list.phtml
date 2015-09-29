@@ -23,7 +23,7 @@
                                 <select name="task_id" id="task_id" style="width:auto;">
                                         <option value="">全部</option>
                                         <?php foreach($taskId as $v):?>
-                                        <option value="<?php echo $v->id;?>"<?php if(isset($where['task_id']) && $where['task_id']==$v->id):?> selected="selected"<?php endif;?>><?php echo $v->id;?></option>
+                                        <option value="<?php echo $v->id;?>"<?php if(isset($where['task_id']) && $where['task_id']==$v->id):?> selected="selected"<?php endif;?>><?php echo $v->name;?></option>
                                         <?php endforeach;?>
                                 </select>
                                 <input id="submit" type="submit" value="查询" class="btn btn-primary btn-search" />
