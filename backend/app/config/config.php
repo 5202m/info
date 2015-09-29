@@ -20,9 +20,7 @@ return new \Phalcon\Config(array(
         'fileinfo' =>array(
         				'maxSize'=>1000000,
         				'type'=>'image',//array('gif', 'jpg', 'jpeg', 'png', 'bmp')
-        				'savePath'=> php_uname('s')=='Windows NT' ? 
-        					(dirname($_SERVER["DOCUMENT_ROOT"]).'/images/') //测试环境的
-        					:'/www/hx9999.com/inf.hx9999.com/images/',//线上
+        				'savePath'=> '/www/hx9999.com/inf.hx9999.com/images/',
         		),
         		
         ),
