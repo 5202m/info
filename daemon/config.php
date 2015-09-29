@@ -46,10 +46,10 @@ return array(
         'dbname' => 'sender'
 	),
     'gwpm' => array(
-    		'dbhost' => '113.28.105.91',//'192.168.35.236',
+    		'dbhost' => '113.28.105.91',//UAT // webdb.pm.com 
     		'dbport' => '3306',
-    		'dbuser' => 'root',
-    		'dbpass' => '123456',
+    		'dbuser' => 'root', //UAT // goldweb
+    		'dbpass' => '123456',//UAT // gw987(){}
     		'dbname' => 'goldenway_web',
     ),
 );
