@@ -12,6 +12,7 @@ class DetailController extends ControllerBase
     
     public function htmlAction($template_id, $category_id, $article_id){
     
+    	
     	$template_id = intval($template_id);
     	$category_id = intval($category_id);
     	$article_id = intval($article_id);
@@ -25,7 +26,7 @@ class DetailController extends ControllerBase
     	$template_file = $this->basedir."/template/detail/".$template_id.".phtml";
     	$article_file = $this->basedir."/static/detail/html/$template_id/$category_id/$article_id.html";
     	 
-    	if(!is_file($template_file)){
+    	if(!is_file($template_file) || 1==1){
     		 
     		$template = Template::findFirst(array(
     				"id = :template_id: AND status = :status:",

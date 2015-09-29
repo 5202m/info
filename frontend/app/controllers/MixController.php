@@ -63,7 +63,7 @@ class MixController extends ControllerBase
 					'visibility' => 'Visible'
 				),
 				'columns'=>'id'
-				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $parent_id ), "lifetime" => 86400)
+				#, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $parent_id ), "lifetime" => 86400)
 		));
 		foreach($categorys as $category){
 			$this->division_categorys[] = $category->id;
@@ -92,7 +92,7 @@ class MixController extends ControllerBase
     	));
 		*/
 		
-		$articles = $this->cache->get($key);
+		#$articles = $this->cache->get($key);
 		if ($articles === null) {
 
 			$articles = Article::query()

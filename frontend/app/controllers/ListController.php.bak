@@ -12,7 +12,7 @@ class ListController extends ControllerBase
 
     }
     public function htmlAction($template_id,$category_id, $limit = 20, $page = 0){
-    
+    	
     	$template_id = intval($template_id);
     	$category_id = intval($category_id);
     	$limit 		 = intval($limit);
@@ -30,11 +30,13 @@ class ListController extends ControllerBase
     	
     	$this->view->disable();
     	
+    	
     	$template_file = $this->basedir."/template/list/".$template_id.".phtml";
     	$categroy_file = $this->basedir."/static/list/html/$template_id/$category_id.html";
     	
-    	if(!is_file($template_file)){
-    	
+    	if(!is_file($template_file) || 1==1){
+   
+    		
     		$template = Template::findFirst(array(
     				"id = :template_id: AND status = :status:",
     				"bind" => array(
@@ -66,6 +68,7 @@ class ListController extends ControllerBase
     			'status' => 'Enabled'
     	);
     	$key = sprintf(":list:html:%s:%s:%s:%s", $template_id,$category_id, $limit, $page );
+
     	//$articles = $this->cache->get($key);
     	//if ($articles === null) {
 	    	$articles = Article::find(array(
@@ -78,13 +81,19 @@ class ListController extends ControllerBase
 			    			'status' => 'Enabled'
 			    	),
 			    	//$parameters,
+<<<<<<< .mine
 	    			'columns'=>'id,division_category_id,title,content,author,ctime,mtime',
 	    			"order" => "ctime,id DESC",
+=======
+	    			//'columns'=>'id,division_category_id,title,author,ctime,mtime',
+	    			"order" => "ctime DESC",
+>>>>>>> .r439
 	    			'limit' => array('number'=>$limit, 'offset'=>$offset),
-	    			"cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
+	    			//"cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
 	    	));
     	//}
     	
+
     	if(count($articles) == 0){
     		$this->response->setStatusCode(404, 'Article List Not Found');
     		echo 'Article List Not Found';
