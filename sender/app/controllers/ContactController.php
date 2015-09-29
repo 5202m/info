@@ -28,7 +28,7 @@ class ContactController extends ControllerBase
     }
     public function uploadHandleAction($group_id){
         $new_data = array();
-        $dbkey = $this->config->database->dbkey;
+        $dbkey = $this->config->database->key;
         $mb = 1.4; //Mb
         $maxFileSize = $mb * 1024 * 1024;
         if ($_FILES['file']) {
