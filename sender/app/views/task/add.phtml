@@ -24,7 +24,7 @@
 							  </div>
                                                             
                                                           <div class="control-group">
-								<label class="control-label" for="selectError3">类型</label>
+								<label class="control-label" for="selectError3">发送类型</label>
 								<div class="controls">
                                                                     <select id="type" name="type">
                                                                         
@@ -36,24 +36,24 @@
 							  </div>
                                                             
                                                           <div class="control-group">
-								<label class="control-label" for="selectError3">分组ID</label>
+								<label class="control-label" for="selectError3">发送分组</label>
 								<div class="controls">
                                                                     <select id="group_id" name="group_id">
                                                                                 <option value="">全部</option>
                                                                         <?php foreach($group_ids as $val){?>
-                                                                                <option value="<?php echo $val->id;?>"><?php echo $val->id;?></option>
+                                                                                <option value="<?php echo $val->id;?>"><?php echo $val->name;?></option>
                                                                         <?php }?>
 								  </select>
 								</div>
 							  </div>
                                                             
                                                         <div class="control-group">
-								<label class="control-label" for="selectError3">模板ID</label>
+								<label class="control-label" for="selectError3">发送模板</label>
 								<div class="controls">
                                                                     <select id="template_id" name="template_id">
                                                                                 <option value="">全部</option>
                                                                         <?php foreach($init_template_ids as $val){?>
-                                                                                <option value="<?php echo $val->id;?>"><?php echo $val->id;?></option>
+                                                                                <option value="<?php echo $val->id;?>"><?php echo $val->name;?></option>
                                                                         <?php }?>
 								  </select>
                                                                     
@@ -62,12 +62,12 @@
 							  </div>
                                                             
                                                           <div class="control-group">
-								<label class="control-label" for="selectError3">内容ID</label>
+								<label class="control-label" for="selectError3">发送内容</label>
 								<div class="controls">
                                                                     <select id="message_id" name="message_id">
                                                                                 <option value="">全部</option>
                                                                         <?php foreach($init_message_ids as $val){?>
-                                                                                <option value="<?php echo $val->id;?>"><?php echo $val->id;?></option>
+                                                                                <option value="<?php echo $val->id;?>"><?php echo $val->title;?></option>
                                                                         <?php }?>
 								  </select>
                                                                     
