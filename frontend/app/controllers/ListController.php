@@ -203,12 +203,12 @@ class ListController extends ControllerBase
 		$json = null;
 		$json = $this->cache->get($key);
 		if(empty($json)){
-			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility: AND status = :status:";
+			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility: AND status = :status:";//AND language = :language: 
 			
 			$parameters = array(
 					'category_id' => $category_id,
 					'division_category_id' => $category_id,
-					'language' => 'cn',
+					//'language' => 'cn',
 					'visibility' => 'Visible',
 					'status' => 'Enabled'
 			);
@@ -266,12 +266,12 @@ class ListController extends ControllerBase
 		
 		$json = $this->cache->get($key);
 		if(empty($json)){
-			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility: AND status=:status:";
+			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility: AND status=:status:";//AND language = :language: 
 			
 			$parameters = array(
 					'category_id' => $category_id,
 					'division_category_id' => $category_id,
-					'language' => 'cn',
+					//'language' => 'cn',
 					'visibility' => 'Visible',
 					'status' => 'Enabled'
 			);
