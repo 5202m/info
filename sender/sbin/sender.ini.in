@@ -1,10 +1,10 @@
 [database]
 host={{db.host}}
-port=3306
+port={{db.port}}
 user={{db.user}}
 password={{db.password}}
-dbname=sender
-key=ha4AS1Vav2we3iCo4EN87AGA4aWaBe
+dbname={{db.dbname}}
+key={{db.key}}
 
 [amqp]
 host={{amqp.host}}
