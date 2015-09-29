@@ -254,7 +254,7 @@ class EmailWork extends Stackable {
 		$queue->declareQueue();
 		
 		$message = json_encode(array(
-			'Namespace'=>'namespace',
+			'Namespace'=>'group',
 			"Class"=>"Email",
 			"Method"=>"smtp",
 			"Param" => array(
