@@ -2,13 +2,13 @@
 
 return new \Phalcon\Config(array(
 	'database' => array(
-		'adapter'  => 'Mysql',
-		'host'     => '{{host}}',
-		'port'     => '{{port}}',
-		'username' => '{{username}}',
-		'password' => '{{password}}',
-		'dbname'   => '{{dbname}}',
-                'dbkey'   => '{{dbkey}}',
+		'adapter'  	=> 'Mysql',
+		'host'     	=> '{{host}}',
+		'port'     	=> '{{port}}',
+		'username' 	=> '{{username}}',
+		'password' 	=> '{{password}}',
+		'dbname'   	=> '{{dbname}}',
+        'key'		=> '{{key}}',
 
 	),
 	'application' => array(
@@ -17,8 +17,8 @@ return new \Phalcon\Config(array(
 		'viewsDir'       => __DIR__ . '/../../app/views/',
 		'pluginsDir'     => __DIR__ . '/../../app/plugins/',
 		'libraryDir'     => __DIR__ . '/../../app/library/',
-                'formsDir'       => __DIR__ . '/../../app/forms/',
-        	'imagesDir'		=> '/www/hx9999.com/inf.hx9999.com/images/',
+        'formsDir'       => __DIR__ . '/../../app/forms/',
+		'imagesDir'		=> '/www/hx9999.com/inf.hx9999.com/images/',
 		'imagesUri'		 => 'http://inf.hx9999.com/images/',
 		'baseUri'        => '',
 		'templateDir'=> include('template.php'),

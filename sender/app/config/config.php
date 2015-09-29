@@ -8,11 +8,11 @@ return new \Phalcon\Config(array(
 		'username' => 'inf',
 		'password' => 'inf',
 		'dbname'     => 'sender',
-                'dbkey' => 'ha4AS1Vav2we3iCo4EN87AGA4aWaBe'
+        'key' => 'ha4AS1Vav2we3iCo4EN87AGA4aWaBe'
 
 	),
-        'mongodb' => array(
-                'host'     => 'mongodb://neo:chen@192.168.6.1/test',
+    'mongodb' => array(
+        'host'     => 'mongodb://neo:chen@192.168.6.1/test',
 		'port'     => '',
 		'username' => '',
 		'password' => '',
