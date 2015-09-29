@@ -25,7 +25,7 @@ KindEditor.plugin('filemanager', function(K) {
 	self.plugin.filemanagerDialog = function(options) {
 		var width = K.undef(options.width, 650),
 			height = K.undef(options.height, 510),
-			dirName = K.undef(options.dirName, ''),
+			dirName = '',//K.undef(options.dirName, ''),//为能选择所有图片，改成空
 			viewType = K.undef(options.viewType, 'VIEW').toUpperCase(), // "LIST" or "VIEW"
 			clickFn = options.clickFn;
 		var html = [
@@ -87,7 +87,7 @@ KindEditor.plugin('filemanager', function(K) {
 		}
 		var elList = [];
 		function bindEvent(el, result, data, createFunc) {
-			var fileUrl = K.formatUrl(result.current_url + data.filename, 'absolute'),
+			var fileUrl = K.formatUrl(result.current_url + 'raw/image/' + data.filename, 'absolute'),
 				dirPath = encodeURIComponent(result.current_dir_path + data.filename + '/');
 			if (data.is_dir) {
 				el.click(function(e) {
@@ -178,7 +178,7 @@ KindEditor.plugin('filemanager', function(K) {
 							K(this).removeClass('ke-on');
 						});
 					div.append(photoDiv);
-					var fileUrl = result.current_url + data.filename,
+					var fileUrl = result.current_url + 'raw/image/' + data.filename,
 						iconUrl = data.is_dir ? imgPath + 'folder-64.gif' : (data.is_photo ? fileUrl : imgPath + 'file-64.gif');
 					var img = K('<img src="' + iconUrl + '" width="80" height="80" alt="' + data.filename + '" />');
 					if (!data.is_dir || data.has_file) {

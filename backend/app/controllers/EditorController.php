@@ -3,8 +3,8 @@ class EditorController extends ControllerBase {
 	
 	public function initialize() {
         parent::initialize();
-        $connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
-        $this->mongodb = $connection->selectDB('test');
+        /*$connection = new MongoClient( "mongodb://neo:chen@192.168.6.1/test" );
+        $this->mongodb = $connection->selectDB('test');*/
     }
     
 	public function uploadAction($dir){
@@ -33,14 +33,44 @@ class EditorController extends ControllerBase {
 		if (empty($extArr[$dirName])) {
 			$this->alert("目录名不正确。");
 		}
-		if($dirName!=''){
+		/*if($dirName!=''){
 			$savePath .= $dirName . "/".date("Ymd").'/';
 			if (!file_exists($savePath)) {
 				mkdir($savePath, 0777, true);
 			}
-		}
+		}*/
 		
-		$grid = $this->mongodb->getGridFS($dirName);
+		$result = $this->mongodb->upload($this->request, $dirName);
+		if($result['status'] === false){
+			$imgUrl = $domain.'/image/raw/'.$dirName.'/'.$result['data']['filename'];
+			$response->setJsonContent(array('error' => 0, 'url' => $imgUrl));
+		    return $response;
+		}
+		else{
+			$return['error'] = '1';
+			switch ($result['code']){
+				case '1':
+					$return['message'] = '请选择上传图片';
+					break;
+				case '2':
+					$return['message'] = '上传图片扩展名是不允许的扩展名';
+					break;
+				case '3':
+					$return['message'] = '上传图片大小超过限制';
+					break;
+				case '4':
+					$return['message'] = '不能重复上传图片';
+					break;
+				case '5':
+					$return['message'] = '未知错误';
+					break;
+			}
+			$response->setJsonContent($return);
+		    return $response;
+		}
+		die;
+		
+		/*$grid = $this->mongodb->getGridFS($dirName);
 		//Check if the user has uploaded files
 		if ($this->request->hasFiles() == true) {
 			//Print the real file names and their sizes
@@ -77,14 +107,14 @@ class EditorController extends ControllerBase {
 		    						return $response;
     							}else{
                                     $msg = $file->getError();
-                                    $response->setJsonContent(array('error' => 1, 'url' => $msg));
+                                    $response->setJsonContent(array('error' => 1, 'message' => $msg));
                                     return $response;
     							}
                             }
 							else{
                                 //echo "<script>parent.callback('不能重复上传图片',false)</script>";  
                                 //return ;
-                                $response->setJsonContent(array('error' => 1, 'url' => '不能重复上传图片'));
+                                $response->setJsonContent(array('error' => 1, 'message' => '不能重复上传图片'));
                                 return $response;
                             }
 						}
@@ -103,7 +133,7 @@ class EditorController extends ControllerBase {
 		else{
 			$response->setJsonContent(array('error' => 1, 'message' => '请选择文件。'));
     		return $response;
-		}
+		}*/
 	}
 	
 	public function fileManagerAction(){
@@ -133,7 +163,7 @@ class EditorController extends ControllerBase {
 				mkdir($rootPath, 0777, true);
 			}
 		}
-		
+		//exit('path='.$path);
 		//根据path参数，设置各路径和URL
 		if (empty($path)) {
 			$currentPath = realpath($rootPath) . '/';
@@ -172,11 +202,13 @@ class EditorController extends ControllerBase {
 				if ($filename{0} == '.') continue;
 				$file = $currentPath . $filename;
 				if (is_dir($file)) {
+					$fileCount = $this->mongodb->getCount($filename);
 					$fileList[$i]['is_dir'] = true; //是否文件夹
-					$fileList[$i]['has_file'] = (count(scandir($file)) > 2); //文件夹是否包含文件
+					$fileList[$i]['has_file'] = ($fileCount > 0); //文件夹是否包含文件
 					$fileList[$i]['filesize'] = 0; //文件大小
 					$fileList[$i]['is_photo'] = false; //是否图片
 					$fileList[$i]['filetype'] = ''; //文件类别，用扩展名判断
+					$fileList[$i]['has_file_count'] = $fileCount;
 				} else {
 					$fileList[$i]['is_dir'] = false;
 					$fileList[$i]['has_file'] = false;
