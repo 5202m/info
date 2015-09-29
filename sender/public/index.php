@@ -39,9 +39,6 @@ try {
         $di->set('dispatcher', function() use ($di) {
 
                 $eventsManager = new EventsManager;
-
-                
-
                 $dispatcher = new Dispatcher;
                 $dispatcher->setEventsManager($eventsManager);
 
@@ -106,8 +103,7 @@ try {
         	"port" => $config->database->port,
             "username" => $config->database->username,
             "password" => $config->database->password,
-            "dbname" => $config->database->dbname,
-            "dbkey" => $config->database->dbkey
+            "dbname" => $config->database->dbname
         ));
 
         //Assign the eventsManager to the db adapter instance
