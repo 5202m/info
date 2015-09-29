@@ -63,7 +63,7 @@ class MixController extends ControllerBase
 					'visibility' => 'Visible'
 				),
 				'columns'=>'id'
-				, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $parent_id ), "lifetime" => 86400)
+				#, "cache" => array("service"=> 'cache', "key" => sprintf(":mix:category:%s", $parent_id ), "lifetime" => 86400)
 		));
 		foreach($categorys as $category){
 			$this->division_categorys[] = $category->id;
@@ -92,7 +92,7 @@ class MixController extends ControllerBase
     	));
 		*/
 		
-		$articles = $this->cache->get($key);
+		#$articles = $this->cache->get($key);
 		if ($articles === null) {
 
 			$articles = Article::query()
@@ -275,9 +275,9 @@ class MixController extends ControllerBase
 
 		$response = new Phalcon\Http\Response();
 		$response->setHeader('Cache-Control', 'max-age=60');
-		$expireDate = new DateTime();
-		$expireDate->modify('+1 minutes');
-		$response->setExpires($expireDate);
+		//$expireDate = new DateTime();
+		//$expireDate->modify('+1 minutes');
+		//$response->setExpires($expireDate);
 		$response->setHeader('ETag', $eTag = crc32($json));
 		$response->setContentType('application/json', 'utf-8');
 		$response->setContent($json);
@@ -384,9 +384,9 @@ class MixController extends ControllerBase
 
 		$response = new Phalcon\Http\Response();
 		$response->setHeader('Cache-Control', 'max-age=60');
-		$expireDate = new DateTime();
-		$expireDate->modify('+1 minutes');
-		$response->setExpires($expireDate);
+		//$expireDate = new DateTime();
+		//$expireDate->modify('+1 minutes');
+		//$response->setExpires($expireDate);
 		$response->setHeader('ETag', $eTag = crc32($json));
 		$response->setContentType('application/json', 'utf-8');
 		$response->setContent($json);

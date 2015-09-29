@@ -1,5 +1,6 @@
 <?php
 error_reporting(E_ALL);
+
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Logger;
@@ -170,7 +171,7 @@ try {
         $obj = new arrayToObj();
         return $obj;
     });
-    
+
     
     $di->set('tree', function() {
         $l = DIRECTORY_SEPARATOR;
@@ -179,6 +180,12 @@ try {
         }
         $obj = new Tree();
         return $obj;
+    });
+    
+    $di->set('mongodb', function() use($config) {
+    	$l = DIRECTORY_SEPARATOR;
+    	include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}mongodb.php";
+    	return new \libs\mongodb($config->mongodb);
     });
     
     $di->set('templateDir', function() use ($config) {	

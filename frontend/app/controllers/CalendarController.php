@@ -27,8 +27,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
-        if($date > date("Y-m-d")){
-        	$date = date("Y-m-d");
+        $maxDate = date("Y-m-d", strtotime('+7 day'));
+        if($date > $maxDate){
+        	$date = $maxDate;
         }
         $datas = $this->generator($date);
         if($datas){       
@@ -51,8 +52,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
-        if($date > date("Y-m-d")){
-        	$date = date("Y-m-d");
+    	$maxDate = date("Y-m-d", strtotime('+7 day'));
+        if($date > $maxDate){
+        	$date = $maxDate;
         }
         $datas = $this->app_generator($date);
         if($datas){       
@@ -75,8 +77,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
-        if($date > date("Y-m-d")){
-        	$date = date("Y-m-d");
+    	$maxDate = date("Y-m-d", strtotime('+7 day'));
+        if($date > $maxDate){
+        	$date = $maxDate;
         }
         $datas = $this->webui_generator($date);
         if($datas){       
@@ -99,8 +102,9 @@ class CalendarController extends \Phalcon\Mvc\Controller {
         if($date != ''){
             $date = str_replace('.html', '', $date);
         }
-        if($date > date("Y-m-d")){
-        	$date = date("Y-m-d");
+    	$maxDate = date("Y-m-d", strtotime('+7 day'));
+        if($date > $maxDate){
+        	$date = $maxDate;
         }
         $datas = $this->tw_generator($date);
         if($datas){       

@@ -10,6 +10,22 @@ return new \Phalcon\Config(array(
 		'dbname'   => '{{dbname}}',
 
 	),
+        'mongodb' => array(
+        'host'     => 'mongodb://neo:chen@192.168.6.1/test',
+		'port'     => '',
+		'username' => '',
+		'password' => '',
+		'dbname'   => 'test',
+        		
+        'fileinfo' =>array(
+        				'maxSize'=>1000000,
+        				'type'=>'image',//array('gif', 'jpg', 'jpeg', 'png', 'bmp')
+        				'savePath'=> php_uname('s')=='Windows NT' ? 
+        					(dirname($_SERVER["DOCUMENT_ROOT"]).'/images/') //测试环境的
+        					:'/www/hx9999.com/inf.hx9999.com/images/',//线上
+        		),
+        		
+        ),
 	'application' => array(
 		'controllersDir' => __DIR__ . '/../../app/controllers/',
 		'modelsDir'      => __DIR__ . '/../../app/models/',

@@ -42,7 +42,7 @@ class ListController extends ControllerBase
     						'status' => 'Enabled'
     				)
     		));
-
+    		
     		if($template){
     			if(!is_dir(dirname($template_file))){
     				mkdir(dirname($template_file), 0755, TRUE);
@@ -55,29 +55,41 @@ class ListController extends ControllerBase
     		}
     	}
     	
-    	$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility:";
+    	$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility: AND status = :status:";
     	//language = :language: AND
-    
+        
     	$parameters = array(
     			'category_id' => $category_id,
     			'division_category_id' => $category_id,
     			/*'language' => 'cn',*/
-    			'visibility' => 'Visible'
+    			'visibility' => 'Visible',
+    			'status' => 'Enabled'
     	);
     	$key = sprintf(":list:html:%s:%s:%s:%s", $template_id,$category_id, $limit, $page );
-    	$articles = Article::find(array(
-    			$conditions,
-    			"bind" => $parameters,
-    			'columns'=>'id,division_category_id,title,author,ctime,mtime',
-    			"order" => "ctime DESC",
-    			'limit' => array('number'=>$limit, 'offset'=>$offset)
-    			, "cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
-    	));
-
+    	//$articles = $this->cache->get($key);
+    	//if ($articles === null) {
+	    	$articles = Article::find(array(
+	    			"(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility: AND status = :status:",
+	    			//$conditions,
+	    			"bind" => array(
+			    			'category_id' => $category_id,
+			    			'division_category_id' => $category_id,
+			    			'visibility' => 'Visible',
+			    			'status' => 'Enabled'
+			    	),
+			    	//$parameters,
+	    			'columns'=>'id,division_category_id,title,content,author,ctime,mtime',
+	    			"order" => "ctime,id DESC",
+	    			'limit' => array('number'=>$limit, 'offset'=>$offset),
+	    			"cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
+	    	));
+    	//}
+    	
     	if(count($articles) == 0){
     		$this->response->setStatusCode(404, 'Article List Not Found');
     		echo 'Article List Not Found';
     	}else{
+    		//echo 'test';die;
     		$pages = $this->paginator($category_id, $limit, $page);
     		
     		$view = new \Phalcon\Mvc\View();
@@ -92,8 +104,9 @@ class ListController extends ControllerBase
     		$view->start();
     		$view->render("list","$template_id");
     		$view->finish();
-    		 
-    		$content =  $view->getContent();
+    		/*echo '<pre>';
+    		print_r($view);die;*/
+    		$content =  $view->getContent();//print_r($content);die;
     		//     	if($content){
     		// 	    	if(!is_dir(dirname($categroy_file))){
     		// 	    		mkdir(dirname($categroy_file), 0755, TRUE);
@@ -106,7 +119,7 @@ class ListController extends ControllerBase
 			$this->response->setExpires($expireDate);
 			$this->response->setHeader('ETag', $eTag = crc32($content));
 			$this->response->setContent($content);
-    		//print($content);
+    		//print($content);die;
 			return $this->response;
     	}
 
@@ -125,11 +138,12 @@ class ListController extends ControllerBase
     	}
     	
     	$count = Article::count(array(
-    			"(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility:",
+    			"(category_id = :category_id: OR division_category_id = :division_category_id:) AND visibility = :visibility: AND status = :status:",
     			'bind' => array(
 	    			'category_id' => $category_id,
 	    			'division_category_id' => $category_id,
-	    			'visibility' => 'Visible'
+	    			'visibility' => 'Visible',
+	    			'status' => 'Enabled'
     				)
     			));
     	
@@ -152,12 +166,13 @@ class ListController extends ControllerBase
     	if($limit > 100){
     		$limit = 100;
     	}
-    	$conditions = "category_id = :category_id: AND language = :language: AND visibility = :visibility:";
+    	$conditions = "category_id = :category_id: AND language = :language: AND visibility = :visibility: AND status = :status:";
     
     	$parameters = array(
     			'category_id' => $category_id,
     			'language' => 'cn',
-    			'visibility' => 'Visible'
+    			'visibility' => 'Visible',
+    			'status' => 'Enabled'
     	);
     	$articles = Article::find(array(
     			$conditions,
@@ -188,13 +203,14 @@ class ListController extends ControllerBase
 		$json = null;
 		$json = $this->cache->get($key);
 		if(empty($json)){
-			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:";
+			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility: AND status = :status:";
 			
 			$parameters = array(
 					'category_id' => $category_id,
 					'division_category_id' => $category_id,
 					'language' => 'cn',
-					'visibility' => 'Visible'
+					'visibility' => 'Visible',
+					'status' => 'Enabled'
 			);
 			$articles = Article::find(array(
 					$conditions,
@@ -250,13 +266,14 @@ class ListController extends ControllerBase
 		
 		$json = $this->cache->get($key);
 		if(empty($json)){
-			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility:";
+			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility: AND status=:status:";
 			
 			$parameters = array(
 					'category_id' => $category_id,
 					'division_category_id' => $category_id,
 					'language' => 'cn',
-					'visibility' => 'Visible'
+					'visibility' => 'Visible',
+					'status' => 'Enabled'
 			);
 			$articles = Article::find(array(
 					$conditions,
