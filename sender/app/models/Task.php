@@ -7,6 +7,7 @@ class Task extends \Phalcon\Mvc\Model
         $this->belongsTo("group_id", "Group", "id");
         $this->belongsTo("template_id", "Template", "id");
         $this->belongsTo("message_id", "Message", "id");
+        $this->hasMany("id","Queue","task_id");
     }
 }
 

@@ -30,7 +30,7 @@ class Contact extends \Phalcon\Mvc\Model
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
             
             $builder = $modelsManager->createBuilder()
-                   ->columns('Contact.name as name,Contact.mobile_digest as mobile_digest,Contact.email_digest as email_digest,Contact.description as description,Contact.status as status,Contact.ctime as ctime,Contact.mtime as mtime')
+                   ->columns('Contact.id as id,Contact.name as name,Contact.mobile_digest as mobile_digest,Contact.email_digest as email_digest,Contact.description as description,Contact.status as status,Contact.ctime as ctime,Contact.mtime as mtime')
                    ->from('Contact')
                    ->leftjoin('GroupHasContact');
             $strWhere = null;

@@ -4,6 +4,7 @@ class Queue extends \Phalcon\Mvc\Model
 {
     public function initialize(){
         $this->belongsTo("contact_id", "Contact", "id");
+        $this->belongsTo("task_id", "Task", "id");
     }
     static function getList($modelsManager , $where , $appendix = null ){
 		
@@ -13,9 +14,10 @@ class Queue extends \Phalcon\Mvc\Model
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
             
             $builder = $modelsManager->createBuilder()
-                   ->columns('Queue.task_id as task_id,Queue.contact_id as contact_id,Queue.status as status,Queue.ctime as ctime,Queue.mtime as mtime,Contact.name as name')
+                   ->columns('Queue.task_id as task_id,Queue.contact_id as contact_id,Queue.status as status,Queue.ctime as ctime,Queue.mtime as mtime,Contact.name as name,Task.name as tname')
                    ->from('Queue')
-                    ->join('Contact');
+                    ->leftjoin('Contact')
+                    ->leftjoin('Task');
             $strWhere = null;
             if($where){
                     foreach($where as $k=>$v){

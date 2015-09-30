@@ -51,7 +51,7 @@
 								<label class="control-label" for="selectError3">发送模板</label>
 								<div class="controls">
                                                                     <select id="template_id" name="template_id">
-                                                                                <option value="">全部</option>
+                                                                                <option value="">请选择</option>
                                                                         <?php foreach($init_template_ids as $val){?>
                                                                                 <option value="<?php echo $val->id;?>"><?php echo $val->name;?></option>
                                                                         <?php }?>
@@ -65,7 +65,7 @@
 								<label class="control-label" for="selectError3">发送内容</label>
 								<div class="controls">
                                                                     <select id="message_id" name="message_id">
-                                                                                <option value="">全部</option>
+                                                                                <option value="">请选择</option>
                                                                         <?php foreach($init_message_ids as $val){?>
                                                                                 <option value="<?php echo $val->id;?>"><?php echo $val->title;?></option>
                                                                         <?php }?>
