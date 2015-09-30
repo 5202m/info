@@ -236,9 +236,9 @@ class EmailWork extends Stackable {
 		
 	}
 	public function send($to, $subject, $msg) {
-		
-		$exchangeName = $this->worker->config['amqp']['exchange'];
+
 		$queueName 	= $this->worker->config['amqp']['queue'];
+		$exchangeName = $this->worker->config['amqp']['exchange'];
 		$routeKey 	= $this->worker->config['amqp']['route'];
 		
 		$connection = $this->worker->getAmqpInstance();
