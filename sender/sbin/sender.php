@@ -50,8 +50,10 @@ class SenderWorker extends Worker {
 	}
 	protected function getInstance() {
 
-		if(!self::$dbh) $this->connect();		
-		$this->logger ( 'Debug', sprintf("Connect database %s,%s", $this->getThreadId (), '') );
+		if(!self::$dbh) {
+			$this->connect();
+			$this->logger ( 'Debug', sprintf("Connect database %s,%s", $this->getThreadId (), '') );
+		}
 		return self::$dbh;
 
 	}
