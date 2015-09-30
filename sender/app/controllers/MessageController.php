@@ -64,7 +64,7 @@ class MessageController extends ControllerBase {
             $article->content = $this->request->getPost('content', 'trim');
 
             $article->type = $this->request->getPost('type', 'trim');
-            $article->status = 'New';
+            $article->status = $this->request->getPost('status', 'trim');
             if ($article->save()) {
                 $this->view->successMessage = $this->tipsToRedirect->modalSuccessTips('修改成功', '/message');
             } else {

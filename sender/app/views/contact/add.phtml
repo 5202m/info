@@ -15,6 +15,21 @@
 					<div class="box-content">
                                             <form class="form-horizontal" method="post" id="category_post" action="/contact/addHandle">
 							<fieldset>
+                                                          <?php
+                                                                $type = Group::find();
+                                                          ?>
+                                                          <div class="control-group">
+								<label class="control-label" for="selectError3">分组</label>
+								<div class="controls">
+                                                                    <select id="type" name="type">
+                                                                        
+                                                                        <?php foreach($type as $val){?>
+                                                                        <option value='<?php echo $val->id;?>'><?php echo $val->name;?></option>
+                                                                        <?php }?>
+                                                                        
+								  </select>
+								</div>
+							  </div>
                                                             
                                                           <div class="control-group">
 								<label class="control-label" for="focusedInput">联系人姓名</label>
@@ -64,6 +79,7 @@ $(function(){
         var name = $('#name').val();
         var mobile = $('#mobile').val();
         var email = $('#email').val();
+        var type = $("#type").val();
         if(!name){
                 $('#myModal>.modal-body>p').html('联系人姓名不能为空');
                 $('#myModal').modal('show');
@@ -105,7 +121,7 @@ $(function(){
 //        var setoff = $("#setoff").val();
         var name = $("#name").val();
         var description = $("#description").val();
-        $.post('/contact/addHandle',{name:name,description:description,mobile:mobile,email:email},function(data){
+        $.post('/contact/addHandle',{name:name,description:description,mobile:mobile,email:email,type:type},function(data){
             $('#myModal>.modal-body>p').html(data.msg);
             $('#myModal').modal('show');
             if(!data.status){

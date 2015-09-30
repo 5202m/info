@@ -2,11 +2,45 @@
 class ContactController extends ControllerBase
 {
     public function indexAction(){
+        $search_key = 'template_list_search';
+        $this->session->remove($search_key);
+        $this->listAction(1,10);
+        $this->view->partial('contact/list');
         
 //        $phql = "select *,AES_DECRYPT(mobile,'{$this->dbkey}') as new_mobile,AES_DECRYPT(email,'{$this->dbkey}') as new_email from  contact";
         $contact = Contact::find( );
 //        $contact = $this->modelsManager->executeQuery($phql);
         $this->view->setVar('contact',$contact);
+    }
+    public function listAction($page = 1 , $pageSize = 10){
+        $search_key = 'template_list_search';
+
+            if($this->request->isPost()){
+                    $params = $this->request->getPost();
+                    $this->session->set($search_key, $params);
+            }
+            $where = array();
+
+            if($this->session->has($search_key)){
+                    $where = $this->session->get($search_key);
+                    $this->view->where  = $where;
+                    foreach($where as $k=>$v){
+                            if(empty($v)){
+                                    unset($where[$k]);
+                            }
+                    }
+            }
+
+            $appendix = array('page'=>$page,'pageSize'=>$pageSize);
+            $list = Contact::getList($this->modelsManager , $where , $appendix);
+            
+            
+            $page = $list->getPaginate();
+
+            $page->pageSize = $appendix['pageSize'];
+            $groupId = Group::find();
+            $this->view->page = $page;
+            $this->view->groupId = $groupId;
     }
     //导入联系人
     public function uploadAction($format){
@@ -146,8 +180,17 @@ class ContactController extends ControllerBase
             }
             $insertId = $contact->getWriteConnection()->lastInsertId($contact->getSource());
             if (isset($insertId)) {
-                echo json_encode(array('status'=>false,'msg'=> '添加联系人成功'));
-                exit;
+                $groupHasContact = new GroupHasContact();
+                $groupHasContact->group_id = $this->request->getPost('type');
+                $groupHasContact->contact_id = $insertId;
+                $groupHasContact->save();
+                if(isset($groupHasContact->id)){
+                   echo json_encode(array('status'=>false,'msg'=> '添加联系人成功'));
+                   exit;
+                }else{
+                    echo json_encode(array('status'=>false,'msg'=> '添加联系人失败'));
+                    exit;
+                }  
             }else{
                 echo json_encode(array('status'=>false,'msg'=> '添加联系人失败'));
                 exit;

@@ -46,12 +46,26 @@
 							  <div class="controls">
                                                                     <select id="type" name="type">
                                                                         
-                                                                                <option value="SMS">SMS</option>
-                                                                                <option value="Email" selected="selected">Email</option>
+                                                                                <option value="SMS" <?php if(isset($article->type) && $article->type=='SMS'):?> selected="selected"<?php endif;?>>SMS</option>
+                                                                                <option value="Email" <?php if(isset($article->type) && $article->type=='Email'):?> selected="selected"<?php endif;?>>Email</option>
                                                                         
 								  </select>
 								</div>
 							</div>
+                                                      
+                                                        <div class="control-group">
+							  <label class="control-label" for="typeahead">状态 </label>
+							  <div class="controls">
+                                                                    <select id="status" name="status">
+                                                                        
+                                                                                <option value="Sent" <?php if(isset($article->status) && $article->status=='Sent'):?> selected="selected"<?php endif;?>>Sent</option>
+                                                                                <option value="New" <?php if(isset($article->status) && $article->status=='New'):?> selected="selected"<?php endif;?>>New</option>
+                                                                                <option value="Drafts" <?php if(isset($article->status) && $article->status=='Drafts'):?> selected="selected"<?php endif;?>>Drafts</option>
+                                                                                <option value="Trash" <?php if(isset($article->status) && $article->status=='Trash'):?> selected="selected"<?php endif;?>>Trash</option>
+								  </select>
+								</div>
+							</div>
+                                                        
 							<div class="control-group hidden-phone">
 							  <label class="control-label" for="content">文章内容</label>
 							  <div class="controls">
