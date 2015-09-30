@@ -84,21 +84,23 @@ $(function(){
              $('#myModal').modal('show');
             return false;
         }
-//        if(!email.match(/^w+((-w+)|(.w+))*@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+)*.[A-Za-z0-9]+$/)){
-//            $('#myModal>.modal-body>p').html('联系人邮箱格式不正确');
-//             $('#myModal').modal('show');
-//            return false;
-//        }
+        var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        if(!reg.test($("#email").val())){
+            $('#myModal>.modal-body>p').html('联系人邮箱格式不正确');
+             $('#myModal').modal('show');
+            return false;
+        }
         if (!mobile) {
              $('#myModal>.modal-body>p').html('联系人手机号码不能为空');
              $('#myModal').modal('show');
             return false;
         }
-//        if(!mobile.match(/^(((13[0-9]{1})|159|153)+d{8})$/)){
-//            $('#myModal>.modal-body>p').html('联系人手机号码格式不正确');
-//             $('#myModal').modal('show');
-//            return false;
-//        }
+        var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+        if(!myreg.test($("#mobile").val())){
+            $('#myModal>.modal-body>p').html('联系人手机号码格式不正确');
+             $('#myModal').modal('show');
+            return false;
+        }
         
 //        var setoff = $("#setoff").val();
         var name = $("#name").val();
