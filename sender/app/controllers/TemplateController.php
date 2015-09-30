@@ -15,11 +15,11 @@ class TemplateController extends ControllerBase
 	{
 		$search_key = 'template_list_search';
 		$this->session->remove($search_key);
-		$this->listAction(1,10);
+		$this->listAction(1,25);
 		$this->view->partial('template/list');
 	}
 	
-	public function listAction($page = 1 , $pageSize = 10){
+	public function listAction($page = 1 , $pageSize = 25){
 		$search_key = 'template_list_search';
 		
 		if($this->request->isPost()){

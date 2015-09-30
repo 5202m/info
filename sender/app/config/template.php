@@ -20,8 +20,8 @@ return array(
 					 * content:编辑内容,优先级2
 					 * image:显示的图片
 					 */				
-					array('url'=>'','name'=>'SMS','content'=>'','path'=>__DIR__ . '/../../public/template/category.html','image'=>'/img/icon/u14.png'),
-					array('url'=>'','name'=>'Email','content'=>'','path'=>__DIR__ . '/../../public/template/list.html','image'=>'/img/icon/u12.png'),
+					array('url'=>'','name'=>'SMS','content'=>'','path'=>__DIR__ . '/../../public/template/sms.html','image'=>'/img/icon/u14.png'),
+					array('url'=>'','name'=>'Email','content'=>'','path'=>__DIR__ . '/../../public/template/email.html','image'=>'/img/icon/u12.png'),
 //					array('url'=>'','name'=>'内容','content'=>'','path'=>__DIR__ . '/../../public/template/detail.html','image'=>'/img/icon/u16.png'),
 					
 				),

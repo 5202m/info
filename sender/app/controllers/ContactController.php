@@ -4,7 +4,7 @@ class ContactController extends ControllerBase
     public function indexAction(){
         $search_key = 'template_list_search';
         $this->session->remove($search_key);
-        $this->listAction(1,10);
+        $this->listAction(1,25);
         $this->view->partial('contact/list');
         
 //        $phql = "select *,AES_DECRYPT(mobile,'{$this->dbkey}') as new_mobile,AES_DECRYPT(email,'{$this->dbkey}') as new_email from  contact";
@@ -12,7 +12,7 @@ class ContactController extends ControllerBase
 //        $contact = $this->modelsManager->executeQuery($phql);
         $this->view->setVar('contact',$contact);
     }
-    public function listAction($page = 1 , $pageSize = 10){
+    public function listAction($page = 1 , $pageSize = 25){
         $search_key = 'template_list_search';
 
             if($this->request->isPost()){

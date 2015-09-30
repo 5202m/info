@@ -26,7 +26,7 @@ class Contact extends \Phalcon\Mvc\Model
 		
 		
 
-            $num = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 10;
+            $num = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 25;
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
             
             $builder = $modelsManager->createBuilder()
