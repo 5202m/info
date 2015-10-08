@@ -14,8 +14,6 @@ class Logger {
 
 class SenderWorker extends Worker {
 
-	
-
 	protected $config;
 	protected static $dbh;
 	protected static $amqp;
@@ -52,10 +50,18 @@ class SenderWorker extends Worker {
 
 		if(!self::$dbh) {
 			$this->connect();
-			$this->logger ( 'Debug', sprintf("Connect database %s,%s", $this->getThreadId (), '') );
+			$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
+		}else{
+			$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
 		}
-		return self::$dbh;
-
+		
+		if(self::$dbh){
+			return self::$dbh;
+		}else{
+			$this->logger ( 'Database', sprintf("Connect database is error %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
+			$this->logger ( 'Error', sprintf("Worker is shutdown %s", $this->getThreadId ()) );
+			$this->shutdown();
+		}
 	}
 	
 	public function logger($type, $message) {
@@ -71,7 +77,10 @@ class SenderWorker extends Worker {
 				'login' => $this->config['amqp']['login'], 
 				'password' => $this->config['amqp']['password']
 			));
-		}		
+			$this->logger ( 'AMQP', sprintf("Connect amqp %s, %s", $this->config['amqp']['host'], $this->getThreadId ()) );
+		}else{
+			$this->logger ( 'AMQP', sprintf("Get instance amqp %s, %s", $this->config['amqp']['host'], $this->getThreadId ()) );
+		}	
 		return self::$amqp;
 	}
 
