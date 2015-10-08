@@ -94,23 +94,30 @@ class ContactController extends ControllerBase
                         $dataArray[] = $filedata;
                     }
                     fclose($handle);
-                    $model = new Contact();
+                    $contact_model = new Contact();
                     if (!empty($dataArray)) {
                         foreach ($dataArray as $key => $vs) {
                             $time = date('Y-m-d H:i:s', time());
-                            $checkLogin = $model->checkLogin($action='upload',$vs,$dbkey);
-                            if (!empty($checkLogin)) {
+                            $groups = $contact_model->findGroupByMobileOrEmail($dbkey, $vs,$action = 'upload');
+                            if(in_array($group_id,$groups)){
                                 continue;
                             }
-                            $phql = "INSERT INTO contact (name, mobile, email, mobile_digest, email_digest, status, ctime) VALUES ('{$vs[0]}', AES_ENCRYPT('{$vs[1]}','{$dbkey}'), AES_ENCRYPT('{$vs[2]}','{$dbkey}'), md5('{$vs[1]}'), md5('{$vs[2]}'), 'Subscription', '{$time}')";
-//                        echo $phql;die;
-                            $result = $this->modelsManager->executeQuery($phql);
-                            if ($result->success() == false) {
-                                foreach ($result->getMessages() as $message) {
-                                    echo $message->getMessage();
+                            $contact = Contact::findFirst(
+                                "AES_DECRYPT(mobile,'{$dbkey}') = '{$vs[1]}' or AES_DECRYPT(email,'{$dbkey}') = '{$vs[2]}' or mobile_digest = md5('{$vs[1]}') or email_digest = md5('{$vs[2]}')"
+                            );
+                            if(!empty($contact)){
+                                $insertId = $contact->id;
+                            }else{
+                                $phql = "INSERT INTO contact (name, mobile, email, mobile_digest, email_digest, status, ctime) VALUES ('{$vs[0]}', AES_ENCRYPT('{$vs[1]}','{$dbkey}'), AES_ENCRYPT('{$vs[2]}','{$dbkey}'), md5('{$vs[1]}'), md5('{$vs[2]}'), 'Subscription', '{$time}')";
+    //                        echo $phql;die;
+                                $result = $this->modelsManager->executeQuery($phql);
+                                if ($result->success() == false) {
+                                    foreach ($result->getMessages() as $message) {
+                                        echo $message->getMessage();
+                                    }
                                 }
+                                $insertId = $contact_model->getWriteConnection()->lastInsertId($contact_model->getSource());
                             }
-                            $insertId = $model->getWriteConnection()->lastInsertId($model->getSource());
                         }
                         if(isset($insertId)){
                             $groupHasContact = new GroupHasContact();
@@ -159,26 +166,37 @@ class ContactController extends ControllerBase
         $datas['email'] = $this->request->getPost('email');
         $datas['mobile'] = $this->request->getPost('mobile');
         $datas['description'] = $this->request->getPost('description') != '' ? $this->request->getPost('description') : null;
-        
+        $group_id = $this->request->getPost('type');
         if (!$form->isValid($_POST)) {
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
             }
             return $this->response->redirect('add');
         }
-        $checkLogin = $contact->checkLogin($action='add',$datas,$dbkey);
-        if (!empty($checkLogin)) {
-            echo json_encode(array('status'=>false,'msg'=> '添加的手机号或邮件重复'));
+        
+        $groups = $contact->findGroupByMobileOrEmail($dbkey, $datas,$action = 'add');
+//        $groups_arr = $this->objToArray->ohYeah($groups);
+//        print_r($groups);die;
+        
+        if(in_array($group_id,$groups)){
+            echo json_encode(array('status'=>false,'msg'=> '添加的手机号或邮件在本组重复'));
             exit;
         }else{
-            $phql = "INSERT INTO contact (name, mobile, email, mobile_digest, email_digest, description, status) VALUES ('{$datas['name']}', AES_ENCRYPT('{$datas['mobile']}','{$dbkey}'), AES_ENCRYPT('{$datas['email']}','{$dbkey}'), md5('{$datas['mobile']}'), md5('{$datas['email']}'), '{$datas['description']}', 'Subscription')";
-            $result = $this->modelsManager->executeQuery($phql);
-            if ($result->success() == false) {
-                foreach ($result->getMessages() as $message) {
-                    echo $message->getMessage();
+            $contact = Contact::findFirst(
+                "AES_DECRYPT(mobile,'{$dbkey}') = '{$datas['mobile']}' or AES_DECRYPT(email,'{$dbkey}') = '{$datas['email']}' or mobile_digest = md5('{$datas['mobile']}') or email_digest = md5('{$datas['email']}')"
+            );
+            if($contact->id){
+                $insertId = $contact->id;
+            }else{
+                $phql = "INSERT INTO contact (name, mobile, email, mobile_digest, email_digest, description, status) VALUES ('{$datas['name']}', AES_ENCRYPT('{$datas['mobile']}','{$dbkey}'), AES_ENCRYPT('{$datas['email']}','{$dbkey}'), md5('{$datas['mobile']}'), md5('{$datas['email']}'), '{$datas['description']}', 'Subscription')";
+                $result = $this->modelsManager->executeQuery($phql);
+                if ($result->success() == false) {
+                    foreach ($result->getMessages() as $message) {
+                        echo $message->getMessage();
+                    }
                 }
+                $insertId = $contact->getWriteConnection()->lastInsertId($contact->getSource());
             }
-            $insertId = $contact->getWriteConnection()->lastInsertId($contact->getSource());
             if (isset($insertId)) {
                 $groupHasContact = new GroupHasContact();
                 $groupHasContact->group_id = $this->request->getPost('type');

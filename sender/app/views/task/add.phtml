@@ -131,8 +131,8 @@ $(function(){
              $('#myModal').modal('show');
             return false;
         }
-        if(name.length > 10){
-            $('#myModal>.modal-body>p').html('分组名称长度不能超过10');
+        if(name.length > 50){
+            $('#myModal>.modal-body>p').html('分组名称长度不能超过50');
             $('#myModal').modal('show');
             return false;
         }
