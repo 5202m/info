@@ -32,6 +32,13 @@ class TaskController extends ControllerBase
             }
             return $this->response->redirect('add');
         }
+        $exits_task = Task::findFirst(
+           " name = '{$this->request->getPost('name')}'"
+        );
+        if(!empty($exits_task)){
+            echo json_encode(array('status'=>false,'msg'=> '任务名称不能重复'));
+            exit;
+        }
         $task = new Task();
         $task->name = $this->request->getPost('name');
         $task->type = $this->request->getPost('type');
