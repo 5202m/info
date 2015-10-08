@@ -4,6 +4,7 @@ class Contact extends \Phalcon\Mvc\Model
 {
     public function initialize(){
         Contact::skipAttributes(array('ctime'));
+        Contact::skipAttributes(array('mtime'));
         $this->hasMany("id", "Queue", "contact_id");
         $this->hasMany("id", "GroupHasContact", "contact_id");
     }
