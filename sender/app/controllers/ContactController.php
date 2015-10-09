@@ -232,7 +232,13 @@ class ContactController extends ControllerBase
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
         }
-         
+        $exist_contact = Contact::findFirst(
+                "(mobile_digest = md5('{$this->request->getPost('mobile')}') or email_digest = md5('{$this->request->getPost('email')}')) and id != '{$this->request->getPost('id')}'"
+            ); 
+        if(!empty($exist_contact)){
+            echo json_encode(array('status'=>false,'msg'=> '修改联系人手机号码或邮箱不能重复'));
+            exit;
+        }
         $contact = new Contact();
         $id = $this->request->getPost('id'); 
         $datas['name'] = $this->request->getPost('name');

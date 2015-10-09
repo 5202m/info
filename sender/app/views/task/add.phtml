@@ -88,6 +88,7 @@
 							  </div>-->
 
 							  <div class="form-actions">
+                                                              <button id="preview" type="button" class="btn btn-success">预览</button>
                                                               <button id="submit" type="button" class="btn btn-primary">添加</button>
                                                               <button class="btn" type="submit" id="setoff" name="setoff" value="setoff">取消</button>
 							  </div>
@@ -159,6 +160,22 @@ $(function(){
             }
         },'json');
     });
+    $("#preview").click(function(){
+        var message_id = $("#message_id").val();
+        var template_id = $("#template_id").val();
+        if(!template_id){
+                $('#myModal>.modal-body>p').html('请选择模板ID');
+                $('#myModal').modal('show');
+                return false;
+        }
+        if(!message_id){
+                $('#myModal>.modal-body>p').html('请选择内容ID');
+                $('#myModal').modal('show');
+                return false;
+        }
+        window.open('/preview/email/'+message_id+'/'+template_id);
+    });
+    
     $('#nojump').live('click',function(){
             if(window.template_jump){
                      clearInterval(window.template_jump);
