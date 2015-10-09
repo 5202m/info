@@ -103,9 +103,9 @@ class QueueWork extends Stackable {
 		try {
 
 			if(empty($this->task->group_id)){
-				$sql = "insert ignore into queue(task_id, contact_id) select ".$this->task->id.", id from contact";
+				$sql = "insert ignore into queue(task_id, contact_id) select ".$this->task->id.", id from contact where contact.status = 'Subscription'";
 			}else{
-				$sql = "insert ignore into queue(task_id, contact_id) select ".$this->task->id.", contact.id from contact, group_has_contact where group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;";
+				$sql = "insert ignore into queue(task_id, contact_id) select ".$this->task->id.", contact.id from contact, group_has_contact where group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id and contact.status = 'Subscription';";
 			}
 				
 			$sth = $dbh->prepare ( $sql );
@@ -239,8 +239,6 @@ class EmailWork extends Stackable {
 				return $sth->fetchAll( PDO::FETCH_OBJ );
 				
 			}
-			//print_r($queues);
-			
 		}
 		
 		return array();
