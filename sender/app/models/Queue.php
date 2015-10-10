@@ -17,7 +17,8 @@ class Queue extends \Phalcon\Mvc\Model
                    ->columns('Queue.task_id as task_id,Queue.contact_id as contact_id,Queue.status as status,Queue.ctime as ctime,Queue.mtime as mtime,Contact.name as name,Task.name as tname')
                    ->from('Queue')
                     ->leftjoin('Contact')
-                    ->leftjoin('Task');
+                    ->leftjoin('Task')
+                    ->orderBy('mtime desc');
             $strWhere = null;
             if($where){
                     foreach($where as $k=>$v){
