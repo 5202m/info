@@ -78,10 +78,12 @@ class ListController extends ControllerBase
 			    			'status' => 'Enabled'
 			    	),
 			    	//$parameters,
+
 	    			//'columns'=>'id,division_category_id,title,content,author,ctime,mtime,desc',
 	    			"order" => "ctime,id DESC",
 	    			'limit' => array('number'=>$limit, 'offset'=>$offset),
 	    			#"cache" => array("service"=> 'cache', "key" => $key, "lifetime" => 60)
+
 	    	));
     	//}
     	
@@ -203,11 +205,14 @@ class ListController extends ControllerBase
 		$json = null;
 		$json = $this->cache->get($key);
 		if(empty($json)){
+
 			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility: AND status = :status:";
+
 			
 			$parameters = array(
 					'category_id' => $category_id,
 					'division_category_id' => $category_id,
+
 					'language' => 'cn',
 					'visibility' => 'Visible',
 					'status' => 'Enabled'
@@ -266,8 +271,9 @@ class ListController extends ControllerBase
 		
 		$json = $this->cache->get($key);
 		if(empty($json)){
+
 			$conditions = "(category_id = :category_id: OR division_category_id = :division_category_id:) AND language = :language: AND visibility = :visibility: AND status=:status:";
-			
+		
 			$parameters = array(
 					'category_id' => $category_id,
 					'division_category_id' => $category_id,

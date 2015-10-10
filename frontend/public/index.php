@@ -1,8 +1,10 @@
 <?php
-
 error_reporting(E_ALL);
-
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Logger;
 try {
+    
 
 	/**
 	 * Read the configuration
@@ -18,14 +20,33 @@ try {
 		array(
 			$config->application->controllersDir,
 			$config->application->modelsDir,
-			$config->application->libraryDir
+            $config->application->formsDir,
+            $config->application->imagesDir,
 		)
 	)->register();
 
+	$loader->registerNamespaces(array(
+			'Phalcon' => __DIR__.'/../../Library/Phalcon/'
+	));
+	
+	$loader->register();		
+		
 	/**
 	 * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
 	 */
 	$di = new \Phalcon\DI\FactoryDefault();
+        
+        $di->set('dispatcher', function() use ($di) {
+
+                $eventsManager = new EventsManager;
+
+                
+
+                $dispatcher = new Dispatcher;
+                $dispatcher->setEventsManager($eventsManager);
+
+                return $dispatcher;
+        });
 
 	/**
 	 * The URL component is used to generate all kind of urls in the application
@@ -46,53 +67,70 @@ try {
 	});
 
 	/**
+	 * 直接返回保存图片的目录
+	 */
+	$di->set('imagesPath', function() use ($config) {
+		return $config->application->imagesDir;
+	});
+	
+	/**
+	 * 直接返回图片域名
+	 */
+	$di->set('imagesUri', function() use ($config) {
+		return $config->application->imagesUri;
+	});
+	
+	/**
 	 * Database connection is created based in the parameters defined in the configuration file
 	 */
+    
 	$di->set('db', function() use ($config) {
-		return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-			"host" => $config->database->host,
-			"port" => $config->database->port,
-			"username" => $config->database->username,
-			"password" => $config->database->password,
-			"dbname" => $config->database->dbname
-		));
+		$eventsManager = new EventsManager();
+        $logger = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+
+        //Listen all the database events
+        $eventsManager->attach('db', function($event, $connection) use ($logger) {
+        	if ($event->getType() == 'beforeQuery') {
+            	$logger->log($connection->getSQLStatement(), Logger::INFO);
+            }
+        });
+        $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+        	"host" => $config->database->host,
+        	"port" => $config->database->port,
+            "username" => $config->database->username,
+            "password" => $config->database->password,
+            "dbname" => $config->database->dbname
+        ));
+
+        //Assign the eventsManager to the db adapter instance
+        $connection->setEventsManager($eventsManager);
+
+        return $connection;
+//		return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+//			"host" => $config->database->host,
+//			"username" => $config->database->username,
+//			"password" => $config->database->password,
+//			"dbname" => $config->database->dbname
+//		));
 	});
 
-	//Set the models cache service
-	$di->set('cache', function() use ($config) {
-	
-		//Cache data for one day by default
-		$frontCache = new \Phalcon\Cache\Frontend\Data(array(
-				"lifetime" => 86400
+	/**
+	 * Start the session the first time some component request the session service
+	 */
+  	$di->set('session', function() {
+  		$session = new \Phalcon\Session\Adapter\Files();
+  		$session->start();
+  		return $session;
+  	});
+/*
+	$di->set('session', function() use ($config) {
+		$session = new Phalcon\Session\Adapter\Redis(array(
+				'path' => sprintf("tcp://%s:%s?weight=1",$config->redis->host, $config->redis->port)
 		));
-			
-		//Create the Cache setting redis connection options
-		$redis = new Phalcon\Cache\Backend\Redis($frontCache, array(
-				'host' => $config->redis->host,
-				'port' => $config->redis->port,
-// 				'auth' => $config->redis->auth,
-//				'persistent' => true,
-// 				'statsKey' => 'info',
-				'index' => 1
-				
-		));
-		
-		$frontCache = new \Phalcon\Cache\Frontend\Data(array(
-				"lifetime" => 86400
-		));
-		$file = new \Phalcon\Cache\Backend\File($frontCache, array(
-				"cacheDir" => "../app/cache/"
-		));
-		
-		$cache = new stdClass();
-		$cache->redis = $redis;
-		$cache->file = $file;
-		//$cache->mem = $mem;
-	
-		//return $cache;
-		return $redis;
+		$session->start();
+		return $session;
 	});
-	
+*/
 	/**
 	 * If the configuration specify the use of metadata adapter use it or use memory otherwise
 	 */
@@ -103,30 +141,80 @@ try {
 		} else {
 			return new \Phalcon\Mvc\Model\Metadata\Memory();
 		}
-	});
-
-	/**
-	 * Start the session the first time some component request the session service
-	 */
-	$di->set('session', function() {
-		$session = new \Phalcon\Session\Adapter\Files();
-		$session->start();
-		return $session;
-	});
+	});	
 	
-	$di->set('templates', function () {
-		return new Templates();
+	/**
+	 * If the configuration specify the use of metadata adapter use it or use memory otherwise
+	 */
+	$di->set('modelsManager', function() {
+		return new Phalcon\Mvc\Model\Manager();
 	});
+			
+	
+//objToArray
+    $di->set('objToArray', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('objToArray')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}objToArray.php";
+        }
+        $obj = new objToArray();
+        return $obj;
+    });
+    
+    //arrayToObj
+    $di->set('arrayToObj', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('arrayToObj')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}arrayToObj.php";
+        }
+        $obj = new arrayToObj();
+        return $obj;
+    });
+
+    
+    $di->set('tree', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('tree')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}tree.php";
+        }
+        $obj = new Tree();
+        return $obj;
+    });
+    
+    $di->set('mongodb', function() use($config) {
+    	$l = DIRECTORY_SEPARATOR;
+    	include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}mongodb.php";
+    	return new \libs\mongodb($config->mongodb);
+    });
+    
+    $di->set('templateDir', function() use ($config) {	
+    	return $config->application->templateDir;
+    });
+    
+    $di->set('tipsToRedirect', function() {
+        $l = DIRECTORY_SEPARATOR;
+        if (!class_exists('TipsToRedirect')) {
+            include dirname(dirname(__FILE__)) . "{$l}app{$l}libs{$l}TipsToRedirect.php";
+        }
+        $obj = new TipsToRedirect();
+        return $obj;
+    });
+    
+    	$di->set('session', function() {
+    		$session = new \Phalcon\Session\Adapter\Files();
+    		$session->start();
+    		return $session;
+    	});
+    
 	/**
 	 * Handle the request
 	 */
 	$application = new \Phalcon\Mvc\Application();
 	$application->setDI($di);
-	
 	echo $application->handle()->getContent();
 
 } catch (Phalcon\Exception $e) {
-	error_log($e->getMessage()) ;
+	echo $e->getMessage();
 } catch (PDOException $e){
-	error_log($e->getMessage()) ;
+	echo $e->getMessage();
 }
