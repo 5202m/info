@@ -189,6 +189,11 @@ class EmailWork extends Stackable {
 				
 				if($status){
 					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s", $this->task->name, $contact->email ) );
+					
+					$keyword = array("{{name}}"); 
+					$value = array($contact->name); 			
+					$this->message->content = str_replace($keyword, $value, $this->message->content);
+					
 					$this->send($contact->email, $this->message->title, $this->message->content);
 
 					$sql = "update queue set status = :status where status = 'Processing' and task_id = :task_id and contact_id = :contact_id";
@@ -232,7 +237,7 @@ class EmailWork extends Stackable {
 					$contact[] = $queue->contact_id;
 				}
 
-				$sth = $dbh->prepare ( "select id, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
+				$sth = $dbh->prepare ( "select id, name, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
 				$sth->bindValue ( ':key', $this->worker->config['database']['key'] );
 				$status = $sth->execute ();
 				//echo $sth->queryString;
