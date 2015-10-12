@@ -44,7 +44,7 @@ class SenderWorker extends Worker {
 			$this->logger ( 'Exception worker', $e->getMessage( ) );
 		} catch ( Exception $e ) {
 			$this->logger ( 'Exception worker', $e->getMessage( ) );
-		}		
+		}
 	}
 	protected function getInstance() {
 
@@ -188,13 +188,13 @@ class EmailWork extends Stackable {
 				$status = $sth->execute ();
 				
 				if($status){
-					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s", $this->task->name, $contact->email ) );
 					
-					$keyword = array("{{name}}"); 
-					$value = array($contact->name); 			
-					$this->message->content = str_replace($keyword, $value, $this->message->content);
+					$message = str_replace("{{name}}", $contact->name, $this->message->content);
+					$title = str_replace("{{name}}", $contact->name, $this->message->title);
 					
-					$this->send($contact->email, $this->message->title, $this->message->content);
+					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->email, $title ) );
+
+					$this->send($contact->email, $title, $message);
 
 					$sql = "update queue set status = :status where status = 'Processing' and task_id = :task_id and contact_id = :contact_id";
 					$sth = $dbh->prepare ( $sql );
