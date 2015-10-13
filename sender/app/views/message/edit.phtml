@@ -103,7 +103,8 @@
 								self.sync();
 								K('form[name=editForm]')[0].submit();
 							});
-						}
+						},
+                                                afterBlur: function(){this.sync();}
 					});
 				});
 				$(document).ready(function(){
@@ -139,6 +140,7 @@
 							return false;
 						}
 //						$('#editForm').submit();
+
 					});
 					$('#reset').click(function(){
 						location.href='/message';
@@ -147,6 +149,7 @@
 						echo $successMessage;
 					 endif;?>
 				})
+                                
 				function checkIsEdit(){
 					var flag = false;
 					$.post('/message/isEdit', 
