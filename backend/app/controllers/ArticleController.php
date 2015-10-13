@@ -116,13 +116,18 @@ class ArticleController extends ControllerBase {
 				$images->id = $imagesId;
 				$images->article_id = $article->id;
 				$images->url = $this->uploadImage($article->id, $oriPath);
-				$images->save();
+				if($images->url){
+					$images->save();
+				}
+				
 			}
 			else{
 				$images = new Images();
 				$images->article_id = $article->id;
 				$images->url = $this->uploadImage($article->id, $oriPath);
-				$images->save();
+				if($images->url){
+					$images->save();
+				}
 			}
 			
             $article->keyword = $this->request->getPost('keyword', 'trim');
@@ -311,42 +316,8 @@ class ArticleController extends ControllerBase {
 	 * @param string $oriPath 原图片路径
 	 */
 	private function uploadImage($articleId, $oriPath = ''){
-		$image = '';
-		$savePath = $this->imagesPath.$articleId.'/';//dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
-		$returnPage = 'images/'.$articleId.'/';
-    	if(php_uname('s')=='Windows NT'){
-    		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/'.$articleId.'/';
-    	}
-		if(!file_exists($savePath)){
-			mkdir($savePath, 0777, true);
-		}
-		//Check if the user has uploaded files
-		if ($this->request->hasFiles() == true) {
-			//Print the real file names and their sizes
-			foreach ($this->request->getUploadedFiles() as $file){
-				//echo $file->getName(), " ", $file->getSize(), "\n";
-				if($file->isUploadedFile()){
-					if($file->moveTo($savePath.$file->getName())){
-						$image = $returnPage.$file->getName();
-						if($oriPath!=''){
-							unlink($savePath.$oriPath);
-						}
-					}
-					else{
-						//echo 'false';
-					}
-				}
-				else{
-					//echo 'can not upload';
-				}
-			}
-		}
-		else{
-			if($oriPath){
-				$image = $oriPath;
-			}
-		}
-		return $image;
+		$rs = $this->mongodb->upload($this->request , 'farticle');
+		return $rs['status'] ? '' : 'farticle/'.$rs['data']['filename'];
 	}
 	
 	/**
