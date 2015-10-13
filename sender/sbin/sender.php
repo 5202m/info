@@ -44,7 +44,7 @@ class SenderWorker extends Worker {
 			$this->logger ( 'Exception worker', $e->getMessage( ) );
 		} catch ( Exception $e ) {
 			$this->logger ( 'Exception worker', $e->getMessage( ) );
-		}		
+		}
 	}
 	protected function getInstance() {
 
@@ -188,8 +188,13 @@ class EmailWork extends Stackable {
 				$status = $sth->execute ();
 				
 				if($status){
-					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s", $this->task->name, $contact->email ) );
-					$this->send($contact->email, $this->message->title, $this->message->content);
+					
+					$message = str_replace("{{name}}", $contact->name, $this->message->content);
+					$title = str_replace("{{name}}", $contact->name, $this->message->title);
+					
+					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->email, $title ) );
+
+					$this->send($contact->email, $title, $message);
 
 					$sql = "update queue set status = :status where status = 'Processing' and task_id = :task_id and contact_id = :contact_id";
 					$sth = $dbh->prepare ( $sql );
@@ -232,7 +237,7 @@ class EmailWork extends Stackable {
 					$contact[] = $queue->contact_id;
 				}
 
-				$sth = $dbh->prepare ( "select id, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
+				$sth = $dbh->prepare ( "select id, name, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
 				$sth->bindValue ( ':key', $this->worker->config['database']['key'] );
 				$status = $sth->execute ();
 				//echo $sth->queryString;
