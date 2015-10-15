@@ -84,6 +84,76 @@ class SenderWorker extends Worker {
 		return self::$amqp;
 	}
 
+    public function getContact($task_id, $field = 'email'){
+            $dbh = $this->getInstance ();
+            $sth = $dbh->prepare ( "select contact_id from queue where task_id = :task_id and status = :status limit 10" );
+            $sth->bindValue ( ':task_id', $task_id );
+            $sth->bindValue ( ':status', 'New' );
+            $status = $sth->execute ();
+            if($status){
+
+                    $queues = $sth->fetchAll( PDO::FETCH_OBJ );
+                    if(!empty($queues)){
+                            foreach($queues as $queue){
+                                    $contact[] = $queue->contact_id;
+                            }
+                            if($field == 'email'){
+                                $sql = "select id, name, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")";
+                            }else{
+                                $sql = "select id, name, AES_DECRYPT(mobile, :key) as mobile from contact where status = 'Subscription' and id in (". implode(',', $contact) .")";
+                            }
+                            $sth = $dbh->prepare ($sql);				
+                            $sth->bindValue ( ':key', $this->config['database']['key'] 
+);
+                            $status = $sth->execute ();
+                            //echo $sth->queryString;
+                            return $sth->fetchAll( PDO::FETCH_OBJ );
+
+                    }
+            }
+
+            return array();
+
+    }        
+    public function publish($message) {
+        $queueName 	= $this->config['amqp']['queue'];
+        $exchangeName = $this->config['amqp']['exchange'];
+        $routeKey 	= $this->config['amqp']['route'];
+
+        $connection = $this->getAmqpInstance();
+
+        $connection->connect() or die("Cannot connect to the broker!\n");
+
+        $channel = new AMQPChannel($connection);
+        $exchange = new AMQPExchange($channel);
+        $exchange->setName($exchangeName);
+        $queue = new AMQPQueue($channel);
+        $queue->setName($queueName);
+        $queue->setFlags(AMQP_DURABLE);
+        $queue->declareQueue();
+        $exchange->publish($message, $routeKey);
+        #var_dump("[x] Sent $message");
+        $connection->disconnect();        
+    }    
+    
+    public function setQueueStatus($task_id, $contact_id, $status){
+        $dbh = $this->getInstance ();
+        if($status == 'Processing'){
+            $sql = "update queue set status = :status where status = 'New' and task_id = :task_id and contact_id = :contact_id";
+        }
+        else{
+            $sql = "update queue set status = :status where status = 'Processing' and task_id = :task_id and contact_id = :contact_id";
+        }
+        
+        $sth = $dbh->prepare ( $sql );
+        $sth->bindValue ( ':task_id', $task_id );
+        $sth->bindValue ( ':contact_id', $contact_id );
+        $sth->bindValue ( ':status', $status);
+        $status = $sth->execute ();
+        return $status;
+        
+    }
+    
 }
 
 class QueueWork extends Stackable {
@@ -170,85 +240,53 @@ class EmailWork extends Stackable {
 		
 	}
 	public function run() {
-		//$this->worker->logger('Thread - news', "%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId() );
-		
-		$dbh = $this->worker->getInstance ();
+		//$this->worker->logger('Thread - news', "%s executing in Thread #%lu",__CLASS__, $this->worker->getThreadId() );
+		$this->worker->getInstance ();
 		//$dbh->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-		
 		try {
-			$contacts = $this->getContact();
-			
+			$contacts = $this->worker->getContact($this->task->id,'email');
 			foreach($contacts as $contact){
-
-				$sql = "update queue set status = :status where status = 'New' and task_id = :task_id and contact_id = :contact_id";
-				$sth = $dbh->prepare ( $sql );
-				$sth->bindValue ( ':task_id', $this->task->id );
-				$sth->bindValue ( ':contact_id', $contact->id );
-				$sth->bindValue ( ':status', 'Processing' );
-				$status = $sth->execute ();
-				
+                                $status = $this->worker->setQueueStatus($this->task->id,$contact->id,"Processing");
 				if($status){
-					
-					$message = str_replace("{{name}}", $contact->name, $this->message->content);
-					$title = str_replace("{{name}}", $contact->name, $this->message->title);
-					
+					$message = str_replace("{{name}}", $contact->name,$this->message->content);
+					$title = str_replace("{{name}}", $contact->name,$this->message->title);
 					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->email, $title ) );
-
+                                        
 					$this->send($contact->email, $title, $message);
-
-					$sql = "update queue set status = :status where status = 'Processing' and task_id = :task_id and contact_id = :contact_id";
-					$sth = $dbh->prepare ( $sql );
-					$sth->bindValue ( ':task_id', $this->task->id );
-					$sth->bindValue ( ':contact_id', $contact->id );
-					$sth->bindValue ( ':status', 'Completed' );
-					$status = $sth->execute ();
-					
+                                        $this->worker->setQueueStatus($this->task->id,$contact->id,"Completed");
 					$this->worker->logger ( 'Queue', sprintf ( "Completed %s %s", $this->task->name, $contact->email ) );
 				}
-				
 			}
-	/*
-			if(empty($task->group_id)){
-			}else{
-				$contactStatement = $this->dbh->prepare ( "select AES_DECRYPT(mobile, :key) as mobile, AES_DECRYPT(email, :key) as email from contact, group_has_contact where contact.status = 'Subscription' and group_has_contact.contact_id = contact.id and group_has_contact.group_id = :group_id;" );
-				$contactStatement->bindValue ( ':id', $task->group_id );
-			}
-			$contactStatement->bindValue ( ':key', $this->config['database']['key'] );
-			$contactStatement->execute();
-			$contacts = $contactStatement->fetchAll( PDO::FETCH_OBJ );
-	*/
-	
-
 		} catch ( Exception $e ) {
 			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
 		}
 	}
-	public function getContact(){
-		$dbh = $this->worker->getInstance ();
-		$sth = $dbh->prepare ( "select contact_id from queue where task_id = :task_id and status = :status limit 10" );
-		$sth->bindValue ( ':task_id', $this->task->id );
-		$sth->bindValue ( ':status', 'New' );
-		$status = $sth->execute ();
-		if($status){
-			
-			$queues = $sth->fetchAll( PDO::FETCH_OBJ );
-			if(!empty($queues)){
-				foreach($queues as $queue){
-					$contact[] = $queue->contact_id;
-				}
-
-				$sth = $dbh->prepare ( "select id, name, AES_DECRYPT(email, :key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
-				$sth->bindValue ( ':key', $this->worker->config['database']['key'] );
-				$status = $sth->execute ();
-				//echo $sth->queryString;
-				return $sth->fetchAll( PDO::FETCH_OBJ );
-				
-			}
-		}
-		
-		return array();
-		
-	}
+//	public function getContact(){
+//		$dbh = $this->worker->getInstance ();
+//		$sth = $dbh->prepare ( "select contact_id from queue where task_id = :task_id and status = :status limit 10" );
+//		$sth->bindValue ( ':task_id', $this->task->id );
+//		$sth->bindValue ( ':status', 'New' );
+//		$status = $sth->execute ();
+//		if($status){
+//			
+//			$queues = $sth->fetchAll( PDO::FETCH_OBJ );
+//			if(!empty($queues)){
+//				foreach($queues as $queue){
+//					$contact[] = $queue->contact_id;
+//				}
+//
+//				$sth = $dbh->prepare ( "select id, name, AES_DECRYPT(email,:key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
+//				$sth->bindValue ( ':key', $this->worker->config['database']['key'] );
+//				$status = $sth->execute ();
+//				//echo $sth->queryString;
+//				return $sth->fetchAll( PDO::FETCH_OBJ );
+//				
+//			}
+//		}
+//		
+//		return array();
+//		
+//	}
 	public function send($to, $subject, $msg) {
 
 		$queueName 	= $this->worker->config['amqp']['queue'];
@@ -268,9 +306,9 @@ class EmailWork extends Stackable {
 		$queue->declareQueue();
 		
 		$message = json_encode(array(
-			'Namespace'=>'group',
+			'Namespace'=>'sender',
 			"Class"=>"Email",
-			"Method"=>"smtp",
+			"Method"=>"group",
 			"Param" => array(
 				$to, $subject, $msg, null
 			)
@@ -280,6 +318,41 @@ class EmailWork extends Stackable {
 		#var_dump("[x] Sent $message");
 		$connection->disconnect();
 	}
+}
+
+class SmsWork extends Stackable {
+    private $task = null;
+
+    public function __construct($task, $message) {
+            $this->task = $task;
+            //$this->contact = $contact;
+            $this->message = $message;
+    }
+    public function run() {
+        try {
+                $contacts = $this->worker->getContact($this->task->id,"sms");
+                foreach($contacts as $contact){
+                        $status = $this->worker->setQueueStatus($this->task->id,$contact->id,"Processing");
+                        if($status){
+                                $msg = str_replace("{{name}}", $contact->name,$this->message->content);
+                                $title = str_replace("{{name}}", $contact->name,$this->message->title);
+                                $this->worker->logger ( 'Queue', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->mobile, $title ) );
+                                $message = json_encode(array(
+                                    'Namespace'=>'sender',
+                                    "Class"=>"Sms",
+                                    "Method"=>"Diexin",
+                                    "Param" => array($contact, $msg, null)
+                                ));
+                                $this->worker->publish($message);
+                                $this->worker->setQueueStatus($this->task->id,$contact->id,"Completed");
+                                $this->worker->logger ( 'Queue', sprintf ( "Completed %s %s", $this->task->name, $contact->mobile ) );
+                        }
+                }
+        } catch ( Exception $e ) {
+                $this->worker->logger ( 'Exception queue', $e->getMessage( ) );
+        }
+    }
+
 }
 
 class Task extends Logger{
