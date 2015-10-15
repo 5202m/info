@@ -109,9 +109,9 @@ $(function(){
         var type = $(this).children('option:selected').val();
         $.post('getIds',{type:type},function(data){
             for(var s in data.message_ids)
-                $("#message_id").append("<option value='"+data.message_ids[s].id+"'>"+data.message_ids[s].id+"</option>");
+                $("#message_id").append("<option value='"+data.message_ids[s].id+"'>"+data.message_ids[s].title+"</option>");
             for(var s in data.template_ids)
-                $("#template_id").append("<option value='"+data.template_ids[s].id+"'>"+data.template_ids[s].id+"</option>");
+                $("#template_id").append("<option value='"+data.template_ids[s].id+"'>"+data.template_ids[s].name+"</option>");
             if(!data.status){
             }
         },'json');
