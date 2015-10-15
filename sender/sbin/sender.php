@@ -341,7 +341,7 @@ class SmsWork extends Stackable {
                                     'Namespace'=>'sender',
                                     "Class"=>"Sms",
                                     "Method"=>"Diexin",
-                                    "Param" => array($contact, $msg, null)
+                                    "Param" => array($contact->mobile, $msg, null)
                                 ));
                                 $this->worker->publish($message);
                                 $this->worker->setQueueStatus($this->task->id,$contact->id,"Completed");
