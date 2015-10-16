@@ -112,7 +112,7 @@ a:active{noOutline:expression(this.onFocus=this.blur())}
 	.zxbox-tit li a{ font-size:36px;}
 	.left-zxbox .previous a,.left-zxbox .next a{ width:177px;font-size:42px; }
 
-		.back-icon{top:450px;}
+		.back-icon{top:450px;display:none;}
 	.back-icon a{ width:126px;padding:30px 0}
 	.back-icon a img{ width:34px; height:61px}
 }
