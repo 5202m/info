@@ -126,7 +126,7 @@ class InfoWork extends Stackable {
 					$sth->bindValue ( ':division_id', $this->division_id );
 					$sth->bindValue ( ':division_category_id', $division_category_id );
 					$sth->bindValue ( ':title', $line->title );
-					$sth->bindValue ( ':content', $line->content );
+					$sth->bindValue ( ':content', str_replace('<img src="/upload-images', '<img src="http://info.hx9999.com/upload-images', $line->content) );
 					$sth->bindValue ( ':author', null );
 					$sth->bindValue ( ':keyword', $line->keyword );
 					$sth->bindValue ( ':description', null );
@@ -196,7 +196,7 @@ class NewsWork extends Stackable {
 					$sth->bindValue ( ':division_id', $this->division_id );
 					$sth->bindValue ( ':division_category_id', $division_category_id );
 					$sth->bindValue ( ':title', $line->title );
-					$sth->bindValue ( ':content', $line->content );
+					$sth->bindValue ( ':content', str_replace('<img src="/upload-images', '<img src="http://info.hx9999.com/upload-images', $line->content) );
 					$sth->bindValue ( ':author', $line->author );
 					$sth->bindValue ( ':keyword', $line->keyword );
 					$sth->bindValue ( ':description', $line->description );
