@@ -57,6 +57,8 @@
                                 </span>
                                 <span id="ajaxarticle"></span>
                                 <?php echo \Phalcon\Tag::submitButton(array("清空",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
+                                <?php //echo \Phalcon\Tag::submitButton(array("清空所有",'class'=>'btn btn-small btn-primary','id'=>'submit-all')) ?>
+                                <input type="button" id="submit-all" value="清空所有" class="btn btn-small btn-primary" />
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -140,7 +142,22 @@
 					previewiframe(template_id,category_id,url,type,1);
 					
 					return false;
-				})
+				});
+
+				$('#submit-all').click(function(){
+					$.ajax({
+				        type: "POST",
+				        url: '/template/purgeAll',
+				        //data: {'ajax':1,'url':url},
+				        async:false,
+				        dataType:'json',
+				        success: function(data){
+				        	$('#myModal>.modal-body>p').html(data.msg);
+							$('#myModal').modal('show');
+				    	}
+				    });
+				});
+				
 				$('#template_id').live('change',function(){
 					$('#ajaxarticle').html('');
 					$("#submit").trigger("click");
@@ -167,7 +184,7 @@
 					        $("#template_id").val(template_id);
 				    	}
 				    });
-				})
+				});
 				//默认载入
 				var template_id = <?php echo $getData['template_id']?>;
 				var category_id = <?php echo $getData['category_id']?>;

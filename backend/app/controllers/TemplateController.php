@@ -479,5 +479,62 @@ class TemplateController extends ControllerBase
         return $res; 
 	}
 	
+	public function purgeAllAction(){
+		$templateFolder = '/www/hx9999.com/inf.hx9999.com/template/';
+		$static = '/www.hx9999.com/inf.hx9999.com/static/';
+		$this->unlinkDir($templateFolder.'mix');
+		$this->unlinkDir($templateFolder.'list');
+		$this->unlinkDir($templateFolder.'video');
+		$this->unlinkDir($templateFolder.'detail');
+		$this->unlinkDir($templateFolder.'category');
+		$this->unlinkDir($static.'mix');
+		$this->unlinkDir($static.'list');
+		$this->unlinkDir($static.'video');
+		$this->unlinkDir($static.'detail');
+		$this->unlinkDir($static.'category');
+		echo json_encode(array('status'=>true,'msg'=>'缓存已清除'));
+	}
+	
+	/**
+     * 删除文件夹
+     *
+     * @param string $aimDir
+     * @return boolean
+     */
+	function unlinkDir($aimDir) {
+        $aimDir = str_replace('', '/', $aimDir);
+        $aimDir = substr($aimDir, -1) == '/' ? $aimDir : $aimDir . '/';
+        if (!is_dir($aimDir)) {
+            return false;
+        }
+        $dirHandle = opendir($aimDir);
+        while (false !== ($file = readdir($dirHandle))) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+            if (!is_dir($aimDir . $file)) {
+                $this->unlinkFile($aimDir . $file);
+            } else {
+                $this->unlinkDir($aimDir . $file);
+            }
+        }
+        closedir($dirHandle);
+        return rmdir($aimDir);
+    }
+    
+	/**
+     * 删除文件
+     *
+     * @param string $aimUrl
+     * @return boolean
+     */
+    function unlinkFile($aimUrl) {
+        if (file_exists($aimUrl)) {
+            unlink($aimUrl);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 ?>
