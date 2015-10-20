@@ -435,10 +435,10 @@ class Task extends Logger{
 			//print_r($template);
 			if(empty($template)){
 				$this->logger ( 'Template', sprintf("%s isn't found.", $task->template_id) );
-				return;
+				continue;
 			}else if(empty($message)){
 				$this->logger ( 'Message', sprintf("%s isn't found.", $task->message_id) );
-				return;
+				continue;
 			}else{
 				$keyword = array("{{title}}","{{content}}","{{date}}"); 
 				$value = array($message->title, $message->content, $message->ctime); 			
