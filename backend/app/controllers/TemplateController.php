@@ -479,20 +479,44 @@ class TemplateController extends ControllerBase
         return $res; 
 	}
 	
-	public function purgeAllAction(){
+	public function clearcacheAction(){
 		$templateFolder = '/www/hx9999.com/inf.hx9999.com/template/';
-		$static = '/www.hx9999.com/inf.hx9999.com/static/';
-		$this->unlinkDir($templateFolder.'mix');
-		$this->unlinkDir($templateFolder.'list');
-		$this->unlinkDir($templateFolder.'video');
-		$this->unlinkDir($templateFolder.'detail');
-		$this->unlinkDir($templateFolder.'category');
-		$this->unlinkDir($static.'mix');
-		$this->unlinkDir($static.'list');
-		$this->unlinkDir($static.'video');
-		$this->unlinkDir($static.'detail');
-		$this->unlinkDir($static.'category');
+		$static = '/www/hx9999.com/inf.hx9999.com/static/';
+		$this->deldir($templateFolder.'mix');
+		$this->deldir($templateFolder.'list');
+		$this->deldir($templateFolder.'video');
+		$this->deldir($templateFolder.'detail');
+		$this->deldir($templateFolder.'category');
+		$this->deldir($static.'category');
+		$this->deldir($static.'detail');
+		$this->deldir($static.'mix');
+		$this->deldir($static.'list');
+		$this->deldir($static.'video');
 		echo json_encode(array('status'=>true,'msg'=>'缓存已清除'));
+		exit;
+	}
+	
+	function deldir($dir) {
+	  //先删除目录下的文件：
+	  $dh=opendir($dir);
+	  while ($file=readdir($dh)) {
+	    if($file!="." && $file!="..") {
+	      $fullpath=$dir."/".$file;
+	      if(!is_dir($fullpath)) {
+	          unlink($fullpath);
+	      } else {
+	          deldir($fullpath);
+	      }
+	    }
+	  }
+	 
+	  closedir($dh);
+	  //删除当前文件夹：
+	  if(rmdir($dir)) {
+	    return true;
+	  } else {
+	    return false;
+	  }
 	}
 	
 	/**

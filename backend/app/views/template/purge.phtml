@@ -58,7 +58,7 @@
                                 <span id="ajaxarticle"></span>
                                 <?php echo \Phalcon\Tag::submitButton(array("清空",'class'=>'btn btn-small btn-primary','id'=>'submit')) ?>
                                 <?php //echo \Phalcon\Tag::submitButton(array("清空所有",'class'=>'btn btn-small btn-primary','id'=>'submit-all')) ?>
-                                <input type="button" id="submit-all" value="清空所有" class="btn btn-small btn-primary" />
+                                <!--input type="button" id="submit-all" value="清空所有" class="btn btn-small btn-primary" /-->
 								</div>
 							</div>
 							<?php echo \Phalcon\Tag::endForm()?>
@@ -147,7 +147,7 @@
 				$('#submit-all').click(function(){
 					$.ajax({
 				        type: "POST",
-				        url: '/template/purgeAll',
+				        url: '/template/clearcache',
 				        //data: {'ajax':1,'url':url},
 				        async:false,
 				        dataType:'json',
