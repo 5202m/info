@@ -46,9 +46,9 @@ class SynchronousWorker extends Worker {
 			) );
 
 		} catch ( PDOException $e ) {
-                        $this->logger ( 'Exception info', $e->getMessage( ) );
+                        $this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
                 } catch ( Exception $e ) {
-                        $this->logger ( 'Exception info', $e->getMessage( ) );
+                        $this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
                 }
 
 	}
@@ -149,11 +149,13 @@ class InfoWork extends Stackable {
 				}
 			}
 		} catch ( PDOException $e ) {
-			$this->worker->logger ( 'Exception info', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
+			$synchronous = new Synchronous();
+			$synchronous->main('restart');
 		} catch ( PDOStatement $e ) {
-			$this->worker->logger ( 'Exception real_news', $e->getMessage( ) );			
+			$this->worker->logger ( 'Exception real_news', $e->getMessage( ).__LINE__ );			
 		} catch ( Exception $e ) {
-			$this->worker->logger ( 'Exception info', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
 		}
 	}
 	public function export() {
@@ -222,11 +224,13 @@ class NewsWork extends Stackable {
 				}
 			}
 		} catch ( PDOException $e ) {
-			$this->worker->logger ( 'Exception news', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
+			$synchronous = new Synchronous();
+			$synchronous->main('restart');
 		} catch ( PDOStatement $e ) {
-			$this->worker->logger ( 'Exception news', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
 		} catch ( Exception $e ) {
-			$this->worker->logger ( 'Exception news', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
 		}
 	}
 	public function import() {
