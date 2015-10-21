@@ -151,7 +151,7 @@ class InfoWork extends Stackable {
 		} catch ( PDOException $e ) {
 			$this->worker->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
 			$synchronous = new Synchronous();
-			$synchronous->main('restart');
+			$synchronous->main(array('','restart'));
 		} catch ( PDOStatement $e ) {
 			$this->worker->logger ( 'Exception real_news', $e->getMessage( ).__LINE__ );			
 		} catch ( Exception $e ) {
@@ -226,7 +226,7 @@ class NewsWork extends Stackable {
 		} catch ( PDOException $e ) {
 			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
 			$synchronous = new Synchronous();
-			$synchronous->main('restart');
+			$synchronous->main(array('','restart'));
 		} catch ( PDOStatement $e ) {
 			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
 		} catch ( Exception $e ) {
