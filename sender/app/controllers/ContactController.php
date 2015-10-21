@@ -61,6 +61,7 @@ class ContactController extends ControllerBase
         }
     }
     public function uploadHandleAction($group_id){
+        ini_set("max_execution_time", "120");
         $new_data = array();
         $dbkey = $this->config->database->key;
         $mb = 1.4; //Mb
@@ -91,9 +92,11 @@ class ContactController extends ControllerBase
                             $row++;
                             continue;
                         }
+                        $filedata[0] = mb_convert_encoding($filedata[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
                         $dataArray[] = $filedata;
                     }
                     fclose($handle);
+                    
                     $contact_model = new Contact();
                     if (!empty($dataArray)) {
                         foreach ($dataArray as $key => $vs) {
