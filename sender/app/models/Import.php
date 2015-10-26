@@ -4,7 +4,7 @@ class Import extends \Phalcon\Mvc\Model
 {
     public function initialize(){
        $this->belongsTo("group_id", "Group", "id");
-       Import::skipAttributes(array('status','succeed','ignore','failed'));
+       Import::skipAttributes(array('status','succeed','ignore','failed','ctime','mtime'));
     }
     static function getList($modelsManager , $where , $appendix = null ){
 		
@@ -14,7 +14,7 @@ class Import extends \Phalcon\Mvc\Model
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
             
             $builder = $modelsManager->createBuilder()
-                   ->columns('Import.file as file,Import.status as status,Import.succeed as succeed,Import.ignore as ignore,Import.failed as failed,name')
+                   ->columns('Import.file as file,Import.status as status,Import.succeed as succeed,Import.ignore as ignore,Import.failed as failed,Import.ctime as ctime,Import.mtime as mtime ,name')
                    ->from('Import')
                    ->leftjoin('Group');
             $strWhere = null;
