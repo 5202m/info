@@ -47,6 +47,8 @@ class SynchronousWorker extends Worker {
 
 		} catch ( PDOException $e ) {
                         $this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
+                        $synchronous = new Synchronous();
+						$synchronous->main(array('','restart'));
                 } catch ( Exception $e ) {
                         $this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
                 }
