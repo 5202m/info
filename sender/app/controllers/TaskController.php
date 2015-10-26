@@ -10,12 +10,12 @@ class TaskController extends ControllerBase
         $group_ids = Group::find();
         $init_message_ids = Message::find("type = 'Email' and status = 'New'");
         $init_template_ids = Template::find("type = 'Email' and status = 'Enabled'");
-        
-        
+
+
         $this->view->setVar('group_ids', $group_ids);
         $this->view->setVar('init_message_ids', $init_message_ids);
         $this->view->setVar('init_template_ids', $init_template_ids);
-        
+
     }
     public function addHandleAction(){
         $setoff = $this->request->getPost('setoff');
@@ -63,7 +63,7 @@ class TaskController extends ControllerBase
                 if ($item->delete() == false) {
                     $status = true;
                 } else {
-                    
+
                 }
             }
             if ($status == false) {
@@ -78,10 +78,10 @@ class TaskController extends ControllerBase
         if (!$this->request->isPost()) {
             return $this->response->redirect("add");
         }
-        $type = $this->request->getPost('type'); 
+        $type = $this->request->getPost('type');
         $message_ids = Message::find("type = '{$type}'");
         $template_ids = Template::find("type = '{$type}'");
-        
+
         echo json_encode(array(
             'status'=>"true",
             'message_ids'=>$this->objToArray->ohYeah($message_ids),
@@ -89,14 +89,14 @@ class TaskController extends ControllerBase
         )) ;
         exit;
     }
-    
+
     public function getDatasAction(){
         if (!$this->request->isPost()) {
             return $this->response->redirect("add");
         }
-        $message_ids = $this->request->getPost('message_ids'); 
-        $template_ids = $this->request->getPost('template_ids'); 
-        
+        $message_ids = $this->request->getPost('message_ids');
+        $template_ids = $this->request->getPost('template_ids');
+
         $this->view->setVar('change_message_ids', $message_ids);
         $this->view->setVar('change_template_ids', $template_ids);
         exit;
@@ -113,7 +113,7 @@ class TaskController extends ControllerBase
         $this->view->page = $page;
         if($format == 'example'){
             $file = '../images/contact.list.import.csv';
-            header('Content-Description: File Transfer');   
+            header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($file));
             header('Content-Transfer-Encoding: binary');
@@ -131,8 +131,13 @@ class TaskController extends ControllerBase
         if ($this->request->hasFiles() == true) {
             // Print the real file names and sizes
             foreach ($this->request->getUploadedFiles() as $file) {
+                if($file->getType() != 'application/vnd.ms-excel'){
+                    echo "文件格式不正确";
+                    die();
+                }
                 //Move the file into the application
-                $image_path = sprintf("%s/tmp/sender/%s", $this->basedir, $file->getName());
+                $basedir = '/www/hx9999.com/edm.hx9999.com';
+                $image_path = sprintf("%s/tmp/sender/%s", $basedir, $file->getName());
                 if(!is_dir(dirname($image_path))){
                     mkdir(dirname($image_path), 0755, TRUE);
     		}
@@ -151,7 +156,7 @@ class TaskController extends ControllerBase
                     }else{
                        echo "Sorry,导入失败";
                        die();
-                    } 
+                    }
                 } else {
                     echo "Sorry,导入失败";
                     die();
