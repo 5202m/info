@@ -30,12 +30,48 @@ final class Signal{
 	public static function reset(){
 		self::$signo = 0;
 	}
-}
+}			
 
 final class Counter{
-	public static $succeed 	= 1;
-	public static $ignore	= 1;
-	public static $failed 	= 1;
+	public static $succeed 	= 0;
+	public static $ignore	= 0;
+	public static $failed 	= 0;
+	public static $completed 	= 0;
+	public static function succeed($mutex){
+		if($mutex) {
+			
+			if(Mutex::lock($mutex))	{
+				self::$succeed++;
+				Mutex::unlock($mutex);
+			}else{
+				printf("Mutex lock is failed.");
+			}
+		}else{
+			printf("Mutex lock is inviled.");
+		}
+	}
+	
+	public static function ignore($mutex){
+		if($mutex) {
+			if(Mutex::lock($mutex))	{
+				self::$ignore++;
+				Mutex::unlock($mutex);
+				//printf("Mutex staus is locked.\n");
+			}else{
+				printf("Mutex lock is failed.");
+			}
+		}else{
+			printf("Mutex lock is inviled.");
+		}
+		echo self::$ignore.PHP_EOL;
+	}
+	
+	public static function reset($mutex){
+		self::$succeed = 0;
+		self::$ignore = 0;
+		self::$failed = 0;
+		Mutex::destroy($mutex);
+	}
 }
 
 /*
@@ -67,9 +103,11 @@ class ImportWorker extends Worker {
 	protected static $dbh;
 	protected static $amqp;
 	
-	public function __construct($config) {
+	public function __construct($config, $mutex) {
 		$this->config = $config;
 		$this->logger = new Logger(__CLASS__);
+		
+		$this->mutex = $mutex;
 	}
 	public function run() {
 
@@ -123,46 +161,52 @@ class Import extends Stackable {
 
 	private $status = false;
 	private $task = null;
+	protected $complete;
 	
-	public function __construct($task, $row, $mutex) {
+	public function __construct($task, $row) {
 		$row[0] = mb_convert_encoding($row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
 
 		$this->task = $task;
 		$this->row = $row;
-		$this->mutex = $mutex;
+
 	}
+	
+	public function isComplete() { 
+		return $this->complete; 
+    }
+	
 	public function run() {
-		
-		//$dbh = $this->worker->getInstance();		
+
+		//$dbh = $this->worker->getInstance();	
 		//$dbh->beginTransaction();
 		try {
 
 			if(!filter_var($this->row[2], FILTER_VALIDATE_EMAIL)){
-				//$this->updateFailed();
-				Counter::$failed++;
+				$this->updateFailed($this->task);
 				$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$this->row)) );
+				$this->complete = true;
 				return;
 			}
 		
 			$contact = $this->selectContact();
 
 			if($contact){
-				//$this->updateIgnore();
-				Counter::$ignore++;
+				$this->updateIgnore($this->task);
+				//Counter::$ignore++;
+				//Counter::ignore($this->worker->mutex);
+				
 				$this->worker->logger ( 'Contact', sprintf("Ignore %s", implode(',',$this->row) ));
 				$contact_id = $contact->id;
 			}else{
 				$contact_id = $this->insertContact();
 				if($contact_id){
-					//$this->updateSucceed();
-					if($this->mutex) $locked=Mutex::lock($this->mutex);
-					Counter::$succeed++;
-					if($this->mutex) Mutex::unlock($this->mutex);
-					
+					$this->updateSucceed($this->task);
+					//Counter::succeed($this->mutex);
+
 					$this->worker->logger ( 'Contact', sprintf("Succeed %s", implode(',',$this->row) ));
 				}else{
 					$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$this->row)) );
-					Counter::$failed++;
+					$this->updateFailed($this->task);
 				}
 			}
 			
@@ -183,7 +227,8 @@ class Import extends Stackable {
 			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
 			//$dbh->rollBack();
 		}
-
+		
+		$this->complete = true;
 	}
 	
 	private function selectContact(){
@@ -250,12 +295,55 @@ class Import extends Stackable {
 		}else{
 			return(null);
 		}
+	}
+
+	private function updateSucceed($task){
+		
+		$dbh = $this->worker->getInstance();
+		$dbh->beginTransaction();
+		$sql = "update import set succeed = succeed+1 where status = :status and id = :id";
+		$sth = $dbh->prepare ( $sql );
+		//$sth->bindValue ( ':succeed', Counter::$succeed );
+		$sth->bindValue ( ':id', $task->id );
+		$sth->bindValue ( ':status', 'Processing' );
+		$status = $sth->execute ();
+		$dbh->commit();
+		return $status;
+	}
+
+	private function updateIgnore($task){
+		
+		$dbh = $this->worker->getInstance();
+		$dbh->beginTransaction();
+		$sql = "update import set `ignore` = `ignore`+1 where status = :status and id = :id";
+		$sth = $dbh->prepare ( $sql );
+		//$sth->bindValue ( ':ignore', Counter::$ignore );
+		$sth->bindValue ( ':id', $task->id );
+		$sth->bindValue ( ':status', 'Processing' );
+		$status = $sth->execute ();
+		$dbh->commit();
+		return $status;
 	}	
+	
+	private function updateFailed($task){
+		
+		$dbh = $this->worker->getInstance();
+		$dbh->beginTransaction();
+		$sql = "update import set failed = failed+1 where status = :status and id = :id";
+		$sth = $dbh->prepare ( $sql );
+		//$sth->bindValue ( ':failed', Counter::$failed );
+		$sth->bindValue ( ':id', $task->id );
+		$sth->bindValue ( ':status', 'Processing' );
+		$status = $sth->execute ();
+		$dbh->commit();
+		return $status;
+	}	
+	
 }
 
 final class ImportTask extends Logger{
 	
-	const MAXCONN 	= 32;
+	const MAXCONN 	= 5;
 	
 	protected $dbh = null;
 	
@@ -292,7 +380,7 @@ final class ImportTask extends Logger{
 	}
 	
     private function newTask(){
-        $dbh = $this->getInstance();       
+        $dbh = $this->getInstance();
         $sql = "update import set status = :status where status = 'New'";
         $sth = $dbh->prepare ( $sql );
         $sth->bindValue ( ':status', 'Processing');
@@ -310,8 +398,12 @@ final class ImportTask extends Logger{
 		
 		$tasks = $sth->fetchAll ( PDO::FETCH_OBJ );
 		
-		$pool = new Pool ( self::MAXCONN , \ImportWorker::class, array($this->config) );
-		$mutex = Mutex::create(true);
+		$mutex = Mutex::create();
+		$pool = new Pool ( self::MAXCONN , \ImportWorker::class, array($this->config, $mutex) );
+		
+		$pool->collect(function($work){
+				return $work->isComplete();
+			});
 		
 		foreach($tasks as $task){
 			$this->logger ( __CLASS__, sprintf("Task %s %s", $task->file, 'Processing') );
@@ -322,29 +414,54 @@ final class ImportTask extends Logger{
 				Signal::reset();
 				break;
 			}
-
+			
 			if(file_exists ($task->file)){
 
 				$handle = fopen($task->file, 'r');
-				while (($row = fgetcsv($handle, 1024, ',')) !== false) {
-					
-					$pool->submit ( new Import ( $task, $row, $mutex ));
+				$i = 0;
+				while (($row = fgetcsv($handle, 100000, ',')) !== false) {
+					$work[$i] =  new Import ( $task, $row );
+					$pool->submit ( $work[$i] );
+					$i++;
+					//$pool->submit ( new Import ( $task, $row ));
 
 				}
+		
 				fclose($handle);
-				
+				/*
 				$this->updateSucceed($task);
 				$this->updateIgnore($task);
 				$this->updateFailed($task);
+				*/
 				
+				$waiting = true;
+				while($waiting){
+					
+					for($i=0;$i<count($work);$i++){
+						
+						if($work[$i]->isComplete()){
+							Counter::$completed++;
+						}
+						//printf("work %s:%s \n", count($work), Counter::$completed);
+						if(Counter::$completed == count($work)){
+							$waiting = false;
+							break;
+						}
+					}
+					sleep(1);
+				}
+
 				$this->completedTask($task);
 			}else{
 				$this->failedTask($task);
 			}
+			//printf("Ignore: %s\n", Counter::$ignore ) ;
 		}
-		//Mutex::unlock($mutex);
-		//Mutex::destroy($mutex);
+		
 		$pool->shutdown ();
+
+		//Mutex::unlock($mutex);
+		Mutex::destroy($mutex);
 		
 	}
 	private function completedTask($task){
@@ -367,44 +484,6 @@ final class ImportTask extends Logger{
 		$this->logger ( __CLASS__, sprintf("Task %s %s", $task->file, 'Failed') );
         return $status;
 	}
-
-	
-	private function updateSucceed($task){
-		
-		$dbh = $this->getInstance();
-		$sql = "update import set succeed = :succeed where status = :status and id = :id";
-		$sth = $dbh->prepare ( $sql );
-		$sth->bindValue ( ':succeed', Counter::$succeed );
-		$sth->bindValue ( ':id', $task->id );
-		$sth->bindValue ( ':status', 'Processing' );
-		$status = $sth->execute ();
-		//echo "update:".$status.PHP_EOL;
-		return $status;
-	}
-
-	private function updateIgnore($task){
-		
-		$dbh = $this->getInstance();
-		$sql = "update import set `ignore` = :ignore where status = :status and id = :id";
-		$sth = $dbh->prepare ( $sql );
-		$sth->bindValue ( ':ignore', Counter::$ignore );
-		$sth->bindValue ( ':id', $task->id );
-		$sth->bindValue ( ':status', 'Processing' );
-		$status = $sth->execute ();
-		return $status;
-	}	
-	
-	private function updateFailed($task){
-		
-		$dbh = $this->getInstance();
-		$sql = "update import set failed = :failed where status = :status and id = :id";
-		$sth = $dbh->prepare ( $sql );
-		$sth->bindValue ( ':failed', Counter::$failed );
-		$sth->bindValue ( ':id', $task->id );
-		$sth->bindValue ( ':status', 'Processing' );
-		$status = $sth->execute ();
-		return $status;
-	}		
 	
 	public function run(){
 		
