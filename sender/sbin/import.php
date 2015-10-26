@@ -164,8 +164,7 @@ class Import extends Stackable {
 	protected $complete;
 	
 	public function __construct($task, $row) {
-		$row[0] = mb_convert_encoding($row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
-
+		
 		$this->task = $task;
 		$this->row = $row;
 
@@ -180,12 +179,18 @@ class Import extends Stackable {
 		//$dbh = $this->worker->getInstance();	
 		//$dbh->beginTransaction();
 		try {
-
-			if(!filter_var($this->row[2], FILTER_VALIDATE_EMAIL)){
-				$this->updateFailed($this->task);
-				$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$this->row)) );
-				$this->complete = true;
-				return;
+			
+			if($this->row[0]){
+				$this->row[0] = mb_convert_encoding($this->row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
+			}
+			
+			if($this->row[2]){
+				if(!filter_var($this->row[2], FILTER_VALIDATE_EMAIL)){
+					$this->updateFailed($this->task);
+					$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$this->row)) );
+					$this->complete = true;
+					return;
+				}
 			}
 		
 			$contact = $this->selectContact();
