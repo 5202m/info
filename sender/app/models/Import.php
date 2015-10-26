@@ -14,7 +14,7 @@ class Import extends \Phalcon\Mvc\Model
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
             
             $builder = $modelsManager->createBuilder()
-                   ->columns('Import.file as file,Import.status as status,name')
+                   ->columns('Import.file as file,Import.status as status,Import.succeed as succeed,Import.ignore as ignore,Import.failed as failed,name')
                    ->from('Import')
                    ->leftjoin('Group');
             $strWhere = null;

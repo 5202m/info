@@ -9,10 +9,9 @@
                         <th>分组</th>
                         <th>文件路径</th>
                         <th>状态</th>
-<!--                        <th>备注描述</th>
-                        <th>订阅状态</th>
-                        <th>创建时间</th>
-                        <th>修改时间</th>-->
+                        <th>成功条数</th>
+                        <th>忽略条数</th>
+                        <th>失败条数</th>
                     </tr>
                 </thead>   
                 <tbody>
@@ -23,10 +22,9 @@
                             <td ><?php echo $vs->name?></td>
                             <td ><?php echo $vs->file?></td>
                             <td ><?php echo $vs->status?></td>
-<!--                            <td></td>
-                            <td ></td>
-                            <td></td>
-                            <td ></td>-->
+                            <td><?php echo $vs->succeed?></td>
+                            <td><?php echo $vs->ignore?></td>
+                            <td><?php echo $vs->failed?></td>
                         </tr>
 <?php } ?>
 
