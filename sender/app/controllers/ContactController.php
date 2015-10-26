@@ -60,6 +60,7 @@ class ContactController extends ControllerBase
             exit;
         }
     }
+    
     public function uploadHandleAction($group_id){
         ini_set("max_execution_time", "120");
         $new_data = array();
@@ -92,6 +93,7 @@ class ContactController extends ControllerBase
                             $row++;
                             continue;
                         }
+                        $encode = mb_detect_encoding($filedata[0], array("ASCII",'UTF-8','GB2312',"GBK",'BIG5')); 
                         $filedata[0] = mb_convert_encoding($filedata[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
                         $dataArray[] = $filedata;
                     }

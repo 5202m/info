@@ -89,6 +89,8 @@ class MessageController extends ControllerBase {
 						break;
 					}
 				}
+                                
+                                
 			}
 			if($params['id']>0 && $have_modify==false){
 				echo json_encode(array('status'=>true,'msg'=>'你还没修改'));

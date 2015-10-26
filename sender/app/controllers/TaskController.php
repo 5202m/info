@@ -101,5 +101,63 @@ class TaskController extends ControllerBase
         $this->view->setVar('change_template_ids', $template_ids);
         exit;
     }
+    //导入联系人
+    public function uploadAction($format,$page = 1 , $pageSize = 25){
+        $appendix = array('page'=>$page,'pageSize'=>$pageSize);
+        $where = array();
+        $list = Import::getList($this->modelsManager , $where , $appendix);
+
+        $page = $list->getPaginate();
+
+        $page->pageSize = $appendix['pageSize'];
+        $this->view->page = $page;
+        if($format == 1){
+            $file = '../images/contact.list.import.csv';
+            header('Content-Description: File Transfer');   
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
+    }
+    public function uploadDealAction($group_id){
+        if ($this->request->hasFiles() == true) {
+            // Print the real file names and sizes
+            foreach ($this->request->getUploadedFiles() as $file) {
+                //Move the file into the application
+                $image_path = sprintf("%s/tmp/sender/%s", $this->basedir, $file->getName());
+                if(!is_dir(dirname($image_path))){
+                    mkdir(dirname($image_path), 0755, TRUE);
+    		}
+                if(php_uname('s')=='Windows NT'){//本地测试时使用
+                    $image_path = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/'.$file->getName();
+                }
+                $file->moveTo($image_path);
+                if (file_exists($image_path)) {
+                    $import = new Import();
+                    $import->group_id = $group_id;
+                    $import->file = $image_path;
+                    $import->save();
+                    if(isset($import->id)){
+                       echo "导入成功";
+                       die();
+                    }else{
+                       echo "Sorry,导入失败";
+                       die();
+                    } 
+                } else {
+                    echo "Sorry,导入失败";
+                    die();
+                }
+            }
+        }
+    }
 }
 
