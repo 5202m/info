@@ -102,7 +102,7 @@ class TaskController extends ControllerBase
         exit;
     }
     //导入联系人
-    public function uploadAction($format,$page = 1 , $pageSize = 25){
+    public function uploadAction($format = null,$page = 1 , $pageSize = 25){
         $appendix = array('page'=>$page,'pageSize'=>$pageSize);
         $where = array();
         $list = Import::getList($this->modelsManager , $where , $appendix);
@@ -111,7 +111,7 @@ class TaskController extends ControllerBase
 
         $page->pageSize = $appendix['pageSize'];
         $this->view->page = $page;
-        if($format == 1){
+        if($format == 'example'){
             $file = '../images/contact.list.import.csv';
             header('Content-Description: File Transfer');   
             header('Content-Type: application/octet-stream');
