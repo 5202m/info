@@ -154,10 +154,6 @@ class Import extends Stackable {
 		//$dbh->beginTransaction();
 		try {
 
-			if($this->row[0]){
-				$this->row[0] = mb_convert_encoding($this->row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
-			}
-
 			if($this->row[2]){
 				if(!filter_var($this->row[2], FILTER_VALIDATE_EMAIL)){
 					$this->updateFailed($this->task);
@@ -177,7 +173,7 @@ class Import extends Stackable {
 				$this->worker->logger ( 'Contact', sprintf("Ignore %s", implode(',',$this->row) ));
 				$contact_id = $contact->id;
 			}else{
-				$contact_id = $this->insertContact();
+				$contact_id = $this->insertContact($this->row);
 				if($contact_id){
 					$this->updateSucceed($this->task);
 					//Counter::succeed($this->mutex);
@@ -211,7 +207,7 @@ class Import extends Stackable {
 	}
 
 	private function selectContact(){
-
+	
 		$dbh = $this->worker->getInstance();
 		$sql = "select * from contact where email_digest = :email_digest or mobile_digest = :mobile_digest";
 		$sth = $dbh->prepare ( $sql );
@@ -224,18 +220,22 @@ class Import extends Stackable {
 		}
 		return($contact);
 	}
-	private function insertContact(){
+	private function insertContact($row){
 
+		if($row[0]){
+			$row[0] = mb_convert_encoding($row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
+		}
+	
 		$dbh = $this->worker->getInstance();
 		$key = $this->worker->config['database']['key'];
 		$sql = "INSERT INTO contact (name, mobile, email, mobile_digest, email_digest, status) VALUES (:name, AES_ENCRYPT(:mobile, '$key'), AES_ENCRYPT(:email, '$key'), :mobile_digest, :email_digest, :status);";
 		$sth = $dbh->prepare ( $sql );
 
-		$sth->bindValue ( ':name'	, $this->row[0] );
-		$sth->bindValue ( ':mobile'	, $this->row[1] );
-		$sth->bindValue ( ':email'	, $this->row[2] );
-		$sth->bindValue ( ':mobile_digest', md5($this->row[1]) );
-		$sth->bindValue ( ':email_digest', 	md5($this->row[2]) );
+		$sth->bindValue ( ':name'	, $row[0] );
+		$sth->bindValue ( ':mobile'	, $row[1] );
+		$sth->bindValue ( ':email'	, $row[2] );
+		$sth->bindValue ( ':mobile_digest', md5($row[1]) );
+		$sth->bindValue ( ':email_digest', 	md5($row[2]) );
 		$sth->bindValue ( ':status', 'Subscription' );
 		$status = $sth->execute();
 		if($status){
