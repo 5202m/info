@@ -96,8 +96,8 @@ class ImportWorker extends Worker {
 
 			self::$dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true
-					/*PDO::ATTR_PERSISTENT => true*/
+					PDO::MYSQL_ATTR_COMPRESS => true,
+					PDO::ATTR_PERSISTENT => true
 			) );
 			self::$dbh->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 
@@ -111,7 +111,7 @@ class ImportWorker extends Worker {
 
 		if(!self::$dbh) {
 			$this->connect();
-			//$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
+			$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
 		}else{
 			//$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
 		}
@@ -135,6 +135,7 @@ class Import extends Stackable {
 
 	private $status = false;
 	private $task = null;
+	private $row = null;
 	protected $complete;
 
 	public function __construct($task, $row) {
@@ -153,44 +154,49 @@ class Import extends Stackable {
 		//$dbh = $this->worker->getInstance();
 		//$dbh->beginTransaction();
 		try {
-
-			if($this->row[2]){
-				if(!filter_var($this->row[2], FILTER_VALIDATE_EMAIL)){
+			$row = $this->row;
+			
+			if($row[0]){
+				$row[0] = mb_convert_encoding($row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
+			}
+		
+			if($row[2]){
+				if(!filter_var($row[2], FILTER_VALIDATE_EMAIL)){
 					$this->updateFailed($this->task);
-					$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$this->row)) );
+					$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$row)) );
 					$this->complete = true;
 					return;
 				}
 			}
 
-			$contact = $this->selectContact();
+			$contact = $this->selectContact($row);
 
 			if($contact){
 				$this->updateIgnore($this->task);
 				//Counter::$ignore++;
 				//Counter::ignore($this->worker->mutex);
 
-				$this->worker->logger ( 'Contact', sprintf("Ignore %s", implode(',',$this->row) ));
+				$this->worker->logger ( 'Contact', sprintf("Ignore %s", implode(',',$row) ));
 				$contact_id = $contact->id;
 			}else{
-				$contact_id = $this->insertContact($this->row);
+				$contact_id = $this->insertContact($row);
 				if($contact_id){
 					$this->updateSucceed($this->task);
 					//Counter::succeed($this->mutex);
 
-					$this->worker->logger ( 'Contact', sprintf("Succeed %s", implode(',',$this->row) ));
+					$this->worker->logger ( 'Contact', sprintf("Succeed %s", implode(',',$row) ));
 				}else{
-					$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$this->row)) );
+					$this->worker->logger ( 'Contact', sprintf("Failed %s", implode(',',$row)) );
 					$this->updateFailed($this->task);
 				}
 			}
 
 			$group_has_contact = $this->selectGroupHasContact($contact_id);
 			if(count($group_has_contact) > 0){
-				$this->worker->logger ( 'Group', sprintf("Ignore %s", implode(',',$this->row) ));
+				$this->worker->logger ( 'Group', sprintf("Ignore %s", implode(',',$row) ));
 			}else{
 				$this->insertGroupHasContact($contact_id);
-				$this->worker->logger ( 'Group', sprintf("Succeed %s", implode(',',$this->row) ));
+				$this->worker->logger ( 'Group', sprintf("Succeed %s", implode(',',$row) ));
 			}
 
 			//$dbh->commit();
@@ -206,13 +212,13 @@ class Import extends Stackable {
 		$this->complete = true;
 	}
 
-	private function selectContact(){
+	private function selectContact($row){
 	
 		$dbh = $this->worker->getInstance();
 		$sql = "select * from contact where email_digest = :email_digest or mobile_digest = :mobile_digest";
 		$sth = $dbh->prepare ( $sql );
-		$sth->bindValue ( ':mobile_digest', md5($this->row[1]) );
-		$sth->bindValue ( ':email_digest', 	md5($this->row[2]) );
+		$sth->bindValue ( ':mobile_digest', md5($row[1]) );
+		$sth->bindValue ( ':email_digest', 	md5($row[2]) );
 		$status = $sth->execute ();
 		$contact = null;
 		if($status){
@@ -222,20 +228,21 @@ class Import extends Stackable {
 	}
 	private function insertContact($row){
 
+		/*
 		if($row[0]){
 			$row[0] = mb_convert_encoding($row[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
 		}
-	
+		*/
 		$dbh = $this->worker->getInstance();
 		$key = $this->worker->config['database']['key'];
 		$sql = "INSERT INTO contact (name, mobile, email, mobile_digest, email_digest, status) VALUES (:name, AES_ENCRYPT(:mobile, '$key'), AES_ENCRYPT(:email, '$key'), :mobile_digest, :email_digest, :status);";
 		$sth = $dbh->prepare ( $sql );
 
 		$sth->bindValue ( ':name'	, $row[0] );
-		$sth->bindValue ( ':mobile'	, $row[1] );
-		$sth->bindValue ( ':email'	, $row[2] );
-		$sth->bindValue ( ':mobile_digest', md5($row[1]) );
-		$sth->bindValue ( ':email_digest', 	md5($row[2]) );
+		$sth->bindValue ( ':mobile'	, $row[1]?$row[1]:null );
+		$sth->bindValue ( ':email'	, $row[2]?$row[2]:null );
+		$sth->bindValue ( ':mobile_digest', $row[1]?md5($row[1]):null );
+		$sth->bindValue ( ':email_digest', 	$row[2]?md5($row[2]):null );
 		$sth->bindValue ( ':status', 'Subscription' );
 		$status = $sth->execute();
 		if($status){
@@ -324,7 +331,7 @@ final class ImportTask extends Logger{
 
 	const MAXCONN 	= 32;
 
-	protected $dbh = null;
+	protected $config = null;
 
 	public function __construct($config) {
 
@@ -334,28 +341,34 @@ final class ImportTask extends Logger{
 	}
 
 	protected function getInstance() {
+		$dbh = null;
 
-		if(!$this->dbh) {
-
-			$dbhost = $this->config['database']['host'];
-			$dbport = $this->config['database']['port'];
-			$dbuser = $this->config['database']['user'];
-			$dbpass = $this->config['database']['password'];
-			$dbname = $this->config['database']['dbname'];
-
-			$this->dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
+		$dbhost = $this->config['database']['host'];
+		$dbport = $this->config['database']['port'];
+		$dbuser = $this->config['database']['user'];
+		$dbpass = $this->config['database']['password'];
+		$dbname = $this->config['database']['dbname'];
+		try{
+			$dbh = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
 				PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
-				PDO::MYSQL_ATTR_COMPRESS => true
-				/*PDO::ATTR_PERSISTENT => true*/
+				PDO::MYSQL_ATTR_COMPRESS => true,
+				PDO::ATTR_PERSISTENT => true
 			));
 
-			$this->dbh->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-
+			$dbh->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$dbh->setAttribute(PDO::ATTR_TIMEOUT, 3600);
 			//$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['database']['dbname'], '') );
-		}else{
-			//$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['database']['dbname'], '') );
 		}
-		return($this->dbh);
+		catch ( PDOException $e ) {
+			$this->logger ( 'PDOException', $e->getMessage( ) );
+			$dbh = null;
+		} catch ( Exception $e ) {
+			$this->logger ( 'Exception', $e->getMessage( ) );
+		}
+
+//		$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['database']['dbname'], '') );
+
+		return($dbh);
 	}
 
     private function newTask(){
@@ -370,13 +383,17 @@ final class ImportTask extends Logger{
 
 	private function processingTask(){
 
-		$sql = "select * from import where status = :status";
-		$sth = $this->dbh->prepare ( $sql );
+		$dbh = $this->getInstance();
+	
+		$sql = "select * from import where status = :status limit 1";
+		$sth = $dbh->prepare ( $sql );
 		$sth->bindValue ( ':status', 'Processing' );
 		$sth->execute ();
 
-		$tasks = $sth->fetchAll ( PDO::FETCH_OBJ );
-
+		//$tasks = $sth->fetchAll ( PDO::FETCH_OBJ );
+		$task = $sth->fetch( PDO::FETCH_OBJ );
+		if(empty($task)) return;
+		
 		$mutex = Mutex::create();
 		$pool = new Pool ( self::MAXCONN , \ImportWorker::class, array($this->config, $mutex) );
 
@@ -384,58 +401,61 @@ final class ImportTask extends Logger{
 				return $work->isComplete();
 			});
 
-		foreach($tasks as $task){
-			$this->logger ( __CLASS__, sprintf("Task %s %s", $task->file, 'Processing') );
+		//foreach($tasks as $task){
+		$this->logger ( __CLASS__, sprintf("Task %s %s", $task->file, 'Processing') );
 
-			pcntl_signal_dispatch();
+		pcntl_signal_dispatch();
 
-			if(Signal::get() == SIGHUP){
-				Signal::reset();
-				break;
-			}
-
-			Counter::reset();
-
-			if(file_exists ($task->file)){
-
-				$handle = fopen($task->file, 'r');
-				Counter::$total = 0;
-				while (($row = fgetcsv($handle, 100000, ',')) !== false) {
-					$works[Counter::$total] =  new Import ( $task, $row );
-					$pool->submit ( $works[Counter::$total] );
-					Counter::$total++;
-					//$pool->submit ( new Import ( $task, $row ));
-
-				}
-
-				fclose($handle);
-
-				while(true){
-
-					foreach($works as $key=>$work){
-
-						if($work->isComplete()){
-							Counter::$completed++;
-							unset($works[$key]);
-						}
-
-					}
-
-					$this->logger ( __CLASS__, sprintf("thread total: %s, completed: %s, file=%s", Counter::$total, Counter::$completed, $task->file) );
-
-					if(Counter::$completed == Counter::$total){
-						break;
-					}else{
-						sleep(1);
-					}
-
-				}
-
-				$this->completedTask($task);
-			}else{
-				$this->failedTask($task);
-			}
+		if(Signal::get() == SIGHUP){
+			Signal::reset();
+			break;
 		}
+
+		Counter::reset();
+
+		if(file_exists ($task->file)){
+
+			$handle = fopen($task->file, 'r');
+			Counter::$total = 0;
+			while (($row = fgetcsv($handle, 100000, ',')) !== false) {
+				if(empty($row[0]) && empty($row[1]) && empty($row[2])){
+					continue;
+				}
+				$works[Counter::$total] =  new Import ( $task, $row );
+				$pool->submit ( $works[Counter::$total] );
+				Counter::$total++;
+				//$pool->submit ( new Import ( $task, $row ));
+
+			}
+
+			fclose($handle);
+
+			while(true){
+
+				foreach($works as $key=>$work){
+
+					if($work->isComplete()){
+						Counter::$completed++;
+						unset($works[$key]);
+					}
+
+				}
+
+				$this->logger ( __CLASS__, sprintf("thread total: %s, completed: %s, file=%s", Counter::$total, Counter::$completed, $task->file) );
+
+				if(Counter::$completed == Counter::$total){
+					break;
+				}else{
+					sleep(1);
+				}
+
+			}
+
+			$this->completedTask($task);
+		}else{
+			$this->failedTask($task);
+		}
+		//}
 
 		$pool->shutdown ();
 
