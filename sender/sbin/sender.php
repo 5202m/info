@@ -52,7 +52,7 @@ class SenderWorker extends Worker {
 			$this->connect();
 			$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
 		}else{
-			$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
+			// $this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['database']['dbname'], $this->getThreadId ()) );
 		}
 		
 		if(self::$dbh){
@@ -79,14 +79,14 @@ class SenderWorker extends Worker {
 			));
 			$this->logger ( 'AMQP', sprintf("Connect amqp %s, %s", $this->config['amqp']['host'], $this->getThreadId ()) );
 		}else{
-			$this->logger ( 'AMQP', sprintf("Get instance amqp %s, %s", $this->config['amqp']['host'], $this->getThreadId ()) );
+			// $this->logger ( 'AMQP', sprintf("Get instance amqp %s, %s", $this->config['amqp']['host'], $this->getThreadId ()) );
 		}	
 		return self::$amqp;
 	}
 
     public function getContact($task_id, $field = 'email'){
             $dbh = $this->getInstance ();
-            $sth = $dbh->prepare ( "select contact_id from queue where task_id = :task_id and status = :status limit 10" );
+            $sth = $dbh->prepare ( "select contact_id from queue where task_id = :task_id and status = :status limit 100" );
             $sth->bindValue ( ':task_id', $task_id );
             $sth->bindValue ( ':status', 'New' );
             $status = $sth->execute ();
@@ -190,8 +190,9 @@ class QueueWork extends Stackable {
 				//$this->worker->logger ( sprintf("Queue %s", $this->task->name) , "last Insert Id ".$dbh->lastInsertId() );
 				$this->worker->logger ( 'Queue' , sprintf("Task %s -> Queue", $this->task->name) );
 				
-				$sql = "update task set status = :status where status = 'New' and id = :id";
+				$sql = "update task set total = (select count(*) from queue where task_id = :task_id), status = :status where status = 'New' and id = :id";
 				$sth = $dbh->prepare ( $sql );
+				$sth->bindValue ( ':task_id', $this->task->id );
 				$sth->bindValue ( ':id', $this->task->id );
 				$sth->bindValue ( ':status', 'Processing' );
 				$status = $sth->execute ();
@@ -207,7 +208,8 @@ class QueueWork extends Stackable {
 					
 					$this->worker->logger ( 'Message', sprintf("%s is locked.", $this->task->message_id));
 					
-				}	
+				}
+
 			}
 			
 			//$this->worker->logger ( 'SQL', $query->queryString );
@@ -250,43 +252,18 @@ class EmailWork extends Stackable {
 				if($status){
 					$message = str_replace("{{name}}", $contact->name,$this->message->content);
 					$title = str_replace("{{name}}", $contact->name,$this->message->title);
-					$this->worker->logger ( 'Queue', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->email, $title ) );
+					$this->worker->logger ( 'Queue Email', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->email, $title ) );
                                         
 					$this->send($contact->email, $title, $message);
                                         $this->worker->setQueueStatus($this->task->id,$contact->id,"Completed");
-					$this->worker->logger ( 'Queue', sprintf ( "Completed %s %s", $this->task->name, $contact->email ) );
+					$this->worker->logger ( 'Queue Email', sprintf ( "Completed %s %s", $this->task->name, $contact->email ) );
 				}
 			}
 		} catch ( Exception $e ) {
-			$this->worker->logger ( 'Exception queue', $e->getMessage( ) );
+			$this->worker->logger ( 'Exception Email ', $e->getMessage( ) );
 		}
 	}
-//	public function getContact(){
-//		$dbh = $this->worker->getInstance ();
-//		$sth = $dbh->prepare ( "select contact_id from queue where task_id = :task_id and status = :status limit 10" );
-//		$sth->bindValue ( ':task_id', $this->task->id );
-//		$sth->bindValue ( ':status', 'New' );
-//		$status = $sth->execute ();
-//		if($status){
-//			
-//			$queues = $sth->fetchAll( PDO::FETCH_OBJ );
-//			if(!empty($queues)){
-//				foreach($queues as $queue){
-//					$contact[] = $queue->contact_id;
-//				}
-//
-//				$sth = $dbh->prepare ( "select id, name, AES_DECRYPT(email,:key) as email from contact where status = 'Subscription' and id in (". implode(',', $contact) .")" );				
-//				$sth->bindValue ( ':key', $this->worker->config['database']['key'] );
-//				$status = $sth->execute ();
-//				//echo $sth->queryString;
-//				return $sth->fetchAll( PDO::FETCH_OBJ );
-//				
-//			}
-//		}
-//		
-//		return array();
-//		
-//	}
+
 	public function send($to, $subject, $msg) {
 
 		$queueName 	= $this->worker->config['amqp']['queue'];
@@ -336,7 +313,7 @@ class SmsWork extends Stackable {
                         if($status){
                                 $msg = str_replace("{{name}}", $contact->name,$this->message->content);
                                 $title = str_replace("{{name}}", $contact->name,$this->message->title);
-                                $this->worker->logger ( 'Queue', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->mobile, $title ) );
+                                $this->worker->logger ( 'Queue SMS', sprintf ( "Processing %s %s<%s>, %s", $this->task->name, $contact->name, $contact->mobile, $title ) );
                                 $message = json_encode(array(
                                     'Namespace'=>'sender',
                                     "Class"=>"Sms",
@@ -345,11 +322,11 @@ class SmsWork extends Stackable {
                                 ));
                                 $this->worker->publish($message);
                                 $this->worker->setQueueStatus($this->task->id,$contact->id,"Completed");
-                                $this->worker->logger ( 'Queue', sprintf ( "Completed %s %s", $this->task->name, $contact->mobile ) );
+                                $this->worker->logger ( 'Queue SMS', sprintf ( "Completed %s %s", $this->task->name, $contact->mobile ) );
                         }
                 }
         } catch ( Exception $e ) {
-                $this->worker->logger ( 'Exception queue', $e->getMessage( ) );
+                $this->worker->logger ( 'Exception SMS', $e->getMessage( ) );
         }
     }
 
@@ -468,12 +445,13 @@ class Task extends Logger{
 		
 		foreach($tasks as $task){
 			
+			/*
 			$queue = $this->dbh->prepare ( "select count(*) as count from queue where task_id = :task_id" );
 			$queue->bindValue ( ':task_id', $task->id );
 			$queue->execute ();
-		
 			$queueCount = $queue->fetch( PDO::FETCH_OBJ );
-		
+			*/
+			
 			$queue = $this->dbh->prepare ( "select count(*) as count from queue where task_id = :task_id and status = :status" );
 			$queue->bindValue ( ':task_id', $task->id );
 			$queue->bindValue ( ':status', 'Completed' );
@@ -484,7 +462,7 @@ class Task extends Logger{
 			//print_r($queueCount);
 			//print_r($queueCompleted);
 			
-			if($queueCount->count = $queueCompleted->count){
+			if($task->total = $queueCompleted->count){
 				$sql = "update task set status = :status where status = 'Processing' and id = :id";
 				$sth = $this->dbh->prepare ( $sql );
 				$sth->bindValue ( ':id', $task->id );
