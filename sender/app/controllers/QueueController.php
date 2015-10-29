@@ -28,12 +28,14 @@ class QueueController extends ControllerBase
 
             $appendix = array('page'=>$page,'pageSize'=>$pageSize);
             $list = Queue::getList($this->modelsManager , $where , $appendix);
-            
-            
+
+
             $page = $list->getPaginate();
 
             $page->pageSize = $appendix['pageSize'];
-            $taskId = Task::find();
+            $taskId = Task::find(array(
+                "order" => "id desc"
+            ));
             $this->view->page = $page;
             $this->view->taskId = $taskId;
     }

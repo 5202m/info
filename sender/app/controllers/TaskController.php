@@ -2,7 +2,9 @@
 class TaskController extends ControllerBase
 {
     public function indexAction(){
-        $datas = Task::find();
+        $datas = Task::find(array(
+            "order" => "id desc"
+        ));
         $this->view->setVar('datas', $datas);
     }
     //添加任务
