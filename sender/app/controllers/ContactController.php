@@ -8,9 +8,9 @@ class ContactController extends ControllerBase
         $this->view->partial('contact/list');
 
 //        $phql = "select *,AES_DECRYPT(mobile,'{$this->dbkey}') as new_mobile,AES_DECRYPT(email,'{$this->dbkey}') as new_email from  contact";
-        $contact = Contact::find( );
+        //$contact = Contact::find( );
 //        $contact = $this->modelsManager->executeQuery($phql);
-        $this->view->setVar('contact',$contact);
+        //$this->view->setVar('contact',$contact);
     }
     public function listAction($page = 1 , $pageSize = 25){
         $search_key = 'template_list_search';
@@ -30,9 +30,9 @@ class ContactController extends ControllerBase
                             }
                     }
             }
-            if(isset($where['group_id'])){
-                $group_id = $where['group_id'];
-            }
+
+            $group_id = isset($where['group_id']) ? $where['group_id'] : '';
+
             $appendix = array('page'=>$page,'pageSize'=>$pageSize);
             $contact = new Contact();
             $list = $contact->getList($this->modelsManager , $where , $appendix);
