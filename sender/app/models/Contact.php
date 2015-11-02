@@ -50,28 +50,56 @@ class Contact extends \Phalcon\Mvc\Model
                    ->limit($limit, $offset)
                    ->getQuery()
                    ->execute();
-            $data['pages'] = $this->paginator($modelsManager,$strWhere,$limit, $page);
+            //$data['pages'] = $this->paginator($modelsManager,$strWhere,$limit, $page);
             return $data;
     }
-    public function paginator($modelsManager,$strWhere,$limit, $page = 1){
+//    public function paginator($modelsManager,$strWhere,$limit, $page = 1){
+//    	$limit 		= intval($limit);
+//    	$page 	= intval($page);
+//        $count = $modelsManager->createBuilder()
+//                   ->columns('count(*) as count')
+//                   ->from('Contact')
+//                   ->leftjoin('GroupHasContact')
+//                   ->where($strWhere)
+//                   ->getQuery()
+//                   ->execute();
+//        foreach($count as $counts){
+//            $total 	= ceil($counts->count / $limit)-1;
+//            $all = $counts->count;
+//        }
+//
+//    	$before = $page<=$total && $page > 1?$page-1:0;
+//    	$next 	= $page>=$total?$total:$page+1;
+//    	$paginator = array(
+//                        'all'           => $all,
+//    			'count' 	=> $count,
+//    			'first' 	=> 0,
+//    			'last' 		=> $total,
+//    			'before' 	=> $before,
+//    			'current' 	=> $page,
+//    			'next' 		=> $next,
+//    			'total' 	=> $total,
+//                        'pageSize'      => $limit
+//    	);
+//    	return ($paginator);
+//    }
+
+ public function paginator($group_id,$limit, $page = 1){
     	$limit 		= intval($limit);
     	$page 	= intval($page);
-        $count = $modelsManager->createBuilder()
-                   ->columns('count(*) as count')
-                   ->from('Contact')
-                   ->leftjoin('GroupHasContact')
-                   ->where($strWhere)
-                   ->getQuery()
-                   ->execute();
-        foreach($count as $counts){
-            $total 	= ceil($counts->count / $limit)-1;
-            $all = $counts->count;
+        if($group_id != ''){
+           $count = GroupHasContact::count(array(
+    			"group_id = :group_id:",
+    			'bind' => array('group_id' => $group_id)
+    			));
+        }else{
+            $count = Contact::count();
         }
 
+        $total 	= ceil($count / $limit)-1;
     	$before = $page<=$total && $page > 1?$page-1:0;
     	$next 	= $page>=$total?$total:$page+1;
     	$paginator = array(
-                        'all'           => $all,
     			'count' 	=> $count,
     			'first' 	=> 0,
     			'last' 		=> $total,

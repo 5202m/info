@@ -30,14 +30,17 @@ class ContactController extends ControllerBase
                             }
                     }
             }
-
+            if(isset($where['group_id'])){
+                $group_id = $where['group_id'];
+            }
             $appendix = array('page'=>$page,'pageSize'=>$pageSize);
             $contact = new Contact();
             $list = $contact->getList($this->modelsManager , $where , $appendix);
             $list = $this->objToArray->ohYeah($list);
+            $data['pages'] = $contact->paginator($group_id,$pageSize, $page);
             $groupId = Group::find();
             $this->view->builder = $list['builder'];
-            $this->view->pages = $list['pages'];
+            $this->view->pages = $data['pages'];
             $this->view->groupId = $groupId;
     }
     //导入联系人
