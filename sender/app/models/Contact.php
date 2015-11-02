@@ -21,47 +21,68 @@ class Contact extends \Phalcon\Mvc\Model
             );
         }
         if($contact){
-            $grouphascontacts = $contact->GroupHasContact; 
+            $grouphascontacts = $contact->GroupHasContact;
         }
         if(isset($grouphascontacts)){
            foreach($grouphascontacts as $grouphascontact){
                 $group[] = $grouphascontact->group_id;
-            } 
+            }
         }
-        
+
         return $group;
     }
-    static function getList($modelsManager , $where , $appendix = null ){
-		
-		
-
-            $num = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 25;
+    public function getList($modelsManager , $where , $appendix = null ){
+            $limit = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 25;
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
-            
-            $builder = $modelsManager->createBuilder()
-                   ->columns('Contact.id as id,Contact.name as name,Contact.mobile_digest as mobile_digest,Contact.email_digest as email_digest,Contact.description as description,Contact.status as status,Contact.ctime as ctime,Contact.mtime as mtime')
-                   ->from('Contact')
-                   ->leftjoin('GroupHasContact');
+            $offset 	 = $limit * $page;
             $strWhere = null;
             if($where){
                     foreach($where as $k=>$v){
-                        $strWhere[]  =  "{$k} = '{$v}'";    
+                        $strWhere[]  =  "{$k} = '{$v}'";
                     }
                     $strWhere = implode(' AND ', $strWhere);
             }
-            $builder =$builder->where($strWhere);
-
-            $data =  new Phalcon\Paginator\Adapter\QueryBuilder(
-                            array(
-                                            "builder" => $builder,
-                                            "limit"=> $num,
-                                            "page" => $page
-                            )
-            );
+             $data['builder'] = $modelsManager->createBuilder()
+                   ->columns('Contact.id as id,Contact.name as name,Contact.mobile_digest as mobile_digest,Contact.email_digest as email_digest,Contact.description as description,Contact.status as status,Contact.ctime as ctime,Contact.mtime as mtime')
+                   ->from('Contact')
+                   ->leftjoin('GroupHasContact')
+                   ->where($strWhere)
+                   ->limit($limit, $offset)
+                   ->getQuery()
+                   ->execute();
+            $data['pages'] = $this->paginator($modelsManager,$strWhere,$limit, $page);
             return $data;
-
-
     }
-    
+    public function paginator($modelsManager,$strWhere,$limit, $page = 1){
+    	$limit 		= intval($limit);
+    	$page 	= intval($page);
+        $count = $modelsManager->createBuilder()
+                   ->columns('count(*) as count')
+                   ->from('Contact')
+                   ->leftjoin('GroupHasContact')
+                   ->where($strWhere)
+                   ->getQuery()
+                   ->execute();
+        foreach($count as $counts){
+            $total 	= ceil($counts->count / $limit)-1;
+            $all = $counts->count;
+        }
+
+    	$before = $page<=$total && $page > 1?$page-1:0;
+    	$next 	= $page>=$total?$total:$page+1;
+    	$paginator = array(
+                        'all'           => $all,
+    			'count' 	=> $count,
+    			'first' 	=> 0,
+    			'last' 		=> $total,
+    			'before' 	=> $before,
+    			'current' 	=> $page,
+    			'next' 		=> $next,
+    			'total' 	=> $total,
+                        'pageSize'      => $limit
+    	);
+    	return ($paginator);
+    }
+
 }
 

@@ -6,7 +6,7 @@ class ContactController extends ControllerBase
         $this->session->remove($search_key);
         $this->listAction(1,25);
         $this->view->partial('contact/list');
-        
+
 //        $phql = "select *,AES_DECRYPT(mobile,'{$this->dbkey}') as new_mobile,AES_DECRYPT(email,'{$this->dbkey}') as new_email from  contact";
         $contact = Contact::find( );
 //        $contact = $this->modelsManager->executeQuery($phql);
@@ -32,21 +32,19 @@ class ContactController extends ControllerBase
             }
 
             $appendix = array('page'=>$page,'pageSize'=>$pageSize);
-            $list = Contact::getList($this->modelsManager , $where , $appendix);
-            
-            
-            $page = $list->getPaginate();
-
-            $page->pageSize = $appendix['pageSize'];
+            $contact = new Contact();
+            $list = $contact->getList($this->modelsManager , $where , $appendix);
+            $list = $this->objToArray->ohYeah($list);
             $groupId = Group::find();
-            $this->view->page = $page;
+            $this->view->builder = $list['builder'];
+            $this->view->pages = $list['pages'];
             $this->view->groupId = $groupId;
     }
     //导入联系人
     public function uploadAction($format){
         if($format == 1){
             $file = '../images/contact.list.import.csv';
-            header('Content-Description: File Transfer');   
+            header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($file));
             header('Content-Transfer-Encoding: binary');
@@ -60,7 +58,7 @@ class ContactController extends ControllerBase
             exit;
         }
     }
-    
+
     public function uploadHandleAction($group_id){
         ini_set("max_execution_time", "120");
         $new_data = array();
@@ -93,12 +91,12 @@ class ContactController extends ControllerBase
                             $row++;
                             continue;
                         }
-                        $encode = mb_detect_encoding($filedata[0], array("ASCII",'UTF-8','GB2312',"GBK",'BIG5')); 
+                        $encode = mb_detect_encoding($filedata[0], array("ASCII",'UTF-8','GB2312',"GBK",'BIG5'));
                         $filedata[0] = mb_convert_encoding($filedata[0], 'UTF-8',"GB2312,GBK,GB18030,BIG5");
                         $dataArray[] = $filedata;
                     }
                     fclose($handle);
-                    
+
                     $contact_model = new Contact();
                     if (!empty($dataArray)) {
                         foreach ($dataArray as $key => $vs) {
@@ -131,7 +129,7 @@ class ContactController extends ControllerBase
                             $groupHasContact->save();
                             if(isset($groupHasContact->id)){
                                 echo "成功导入";
-                                die(); 
+                                die();
                             }
                         }else{
                             echo "Sorry,导入失败,请检查手机号码或邮箱是否重复";
@@ -151,10 +149,10 @@ class ContactController extends ControllerBase
         $this->view->disable();
     }
     public function addAction(){
-        
+
     }
     public function addHandleAction(){
-        
+
         $dbkey = $this->config->database->key;
         $setoff = $this->request->getPost('setoff');
         if($setoff == "setoff"){
@@ -163,7 +161,7 @@ class ContactController extends ControllerBase
         if (!$this->request->isPost()) {
             return $this->response->redirect("index");
         }
-        
+
         $form = new ContactForm();
         $contact = new Contact();
         $datas = array();
@@ -178,11 +176,11 @@ class ContactController extends ControllerBase
             }
             return $this->response->redirect('add');
         }
-        
+
         $groups = $contact->findGroupByMobileOrEmail($dbkey, $datas,$action = 'add');
 //        $groups_arr = $this->objToArray->ohYeah($groups);
 //        print_r($groups);die;
-        
+
         if(in_array($group_id,$groups)){
             echo json_encode(array('status'=>false,'msg'=> '添加的手机号或邮件在本组重复'));
             exit;
@@ -213,7 +211,7 @@ class ContactController extends ControllerBase
                 }else{
                     echo json_encode(array('status'=>false,'msg'=> '添加联系人失败'));
                     exit;
-                }  
+                }
             }else{
                 echo json_encode(array('status'=>false,'msg'=> '添加联系人失败'));
                 exit;
@@ -239,13 +237,13 @@ class ContactController extends ControllerBase
         }
         $exist_contact = Contact::findFirst(
                 "(mobile_digest = md5('{$this->request->getPost('mobile')}') or email_digest = md5('{$this->request->getPost('email')}')) and id != '{$this->request->getPost('id')}'"
-            ); 
+            );
         if(!empty($exist_contact)){
             echo json_encode(array('status'=>false,'msg'=> '修改联系人手机号码或邮箱不能重复'));
             exit;
         }
         $contact = new Contact();
-        $id = $this->request->getPost('id'); 
+        $id = $this->request->getPost('id');
         $datas['name'] = $this->request->getPost('name');
         $datas['email'] = $this->request->getPost('email');
         $datas['mobile'] = $this->request->getPost('mobile');
@@ -253,7 +251,7 @@ class ContactController extends ControllerBase
         $datas['description'] = $this->request->getPost('description') != '' ? $this->request->getPost('description') : null;
         $datas['mobile_digest'] = md5($datas['mobile']);
         $datas['email_digest'] = md5($datas['email']);
-        
+
         $phql = "SELECT id,name,AES_DECRYPT(mobile,'{$dbkey}') as mobile,AES_DECRYPT(email,'{$dbkey}') as email,status,description FROM Contact where id = '{$id}'";
         $contact_data = $this->modelsManager->executeQuery($phql);
         $contact_arr = $this->objToArray->ohYeah($contact_data);
@@ -266,15 +264,15 @@ class ContactController extends ControllerBase
             return $this->response->redirect("index");
         }
         $form = new ContactForm();
-        
+
          if (!$form->isValid($_POST)) {
-             
+
             foreach ($form->getMessages() as $message) {
                 $this->flash->error($message);
             }
             return $this->response->redirect('edit');
         }
-        
+
         $phql = "UPDATE Contact SET name = '{$datas['name']}' , mobile = AES_ENCRYPT('{$datas['mobile']}','{$dbkey}') ,email = AES_ENCRYPT('{$datas['email']}','{$dbkey}'),"
         . "mobile_digest = '{$datas['mobile_digest']}',email_digest = '{$datas['email_digest']}',status = '{$datas['status']}',description = '{$datas['description']}' WHERE id = '{$id}'";
 
@@ -287,10 +285,10 @@ class ContactController extends ControllerBase
             echo json_encode(array('status'=>false,'msg'=> '修改联系人成功'));
             exit;
         }
-        
-        
-        
-        
+
+
+
+
         exit;
     }
 }
