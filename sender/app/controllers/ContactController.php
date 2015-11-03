@@ -7,10 +7,7 @@ class ContactController extends ControllerBase
         $this->listAction(1,25);
         $this->view->partial('contact/list');
 
-//        $phql = "select *,AES_DECRYPT(mobile,'{$this->dbkey}') as new_mobile,AES_DECRYPT(email,'{$this->dbkey}') as new_email from  contact";
-        //$contact = Contact::find( );
-//        $contact = $this->modelsManager->executeQuery($phql);
-        //$this->view->setVar('contact',$contact);
+
     }
     public function listAction($page = 1 , $pageSize = 25){
         $search_key = 'template_list_search';

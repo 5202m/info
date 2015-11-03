@@ -34,7 +34,8 @@ class Contact extends \Phalcon\Mvc\Model
     public function getList($modelsManager , $where , $appendix = null ){
             $limit = isset($appendix['pageSize'])  ? $appendix['pageSize'] : 25;
             $page = isset($appendix['page']) ? $appendix['page'] : 1;
-            $offset 	 = $limit * $page;
+
+            $offset 	 = $limit * ($page-1);
             $strWhere = null;
             if($where){
                     foreach($where as $k=>$v){
@@ -106,7 +107,7 @@ class Contact extends \Phalcon\Mvc\Model
     			'before' 	=> $before,
     			'current' 	=> $page,
     			'next' 		=> $next,
-    			'total' 	=> $total,
+    			'total' 	=> $total==0 || $total==-1?1:$total,
                         'pageSize'      => $limit
     	);
     	return ($paginator);
