@@ -94,16 +94,16 @@ class Contact extends \Phalcon\Mvc\Model
     			'bind' => array('group_id' => $group_id)
     			));
         }else{
-            $count = Contact::count();
+            $count = GroupHasContact::count();
         }
 
-        $total 	= ceil($count / $limit)-1;
-    	$before = $page<=$total && $page > 1?$page-1:0;
-    	$next 	= $page>=$total?$total:$page+1;
+        $total 	= ceil($count / $limit);
+    	$before = $page<=$total && $page > 1?$page-1:1;
+    	$next 	= $page>=$total?($total==0 || $total==-1?1:$total):$page+1;
     	$paginator = array(
     			'count' 	=> $count,
     			'first' 	=> 0,
-    			'last' 		=> $total,
+    			'last' 		=> $total==0 || $total==-1?1:$total,
     			'before' 	=> $before,
     			'current' 	=> $page,
     			'next' 		=> $next,
