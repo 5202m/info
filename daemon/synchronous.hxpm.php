@@ -12,57 +12,112 @@ class SynchronousWorker extends Worker {
 //                print_r($this->config);die;
 	}
 	public function run() {
+		
+	}
+	
+	private function connect($io){
 		try {
-			$dbhost = $this->config['hxpm']['import']['dbhost'];
-			$dbport = $this->config['hxpm']['import']['dbport'];
-			$dbuser = $this->config['hxpm']['import']['dbuser'];
-			$dbpass = $this->config['hxpm']['import']['dbpass'];
-			$dbname = $this->config['hxpm']['import']['dbname'];
-
-			self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
-					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true
-					/*PDO::ATTR_PERSISTENT => true*/
-			) );
-
-			$dbhost1 = $this->config['hxpm']['info_export']['dbhost'];
-			$dbport1 = $this->config['hxpm']['info_export']['dbport'];
-			$dbuser1 = $this->config['hxpm']['info_export']['dbuser'];
-			$dbpass1 = $this->config['hxpm']['info_export']['dbpass'];
-			$dbname1 = $this->config['hxpm']['info_export']['dbname'];
-			self::$dbh_info_export = new PDO ( "mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
-					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true
-			) );
-                        
-                        $dbhost2 = $this->config['hxpm']['news_export']['dbhost'];
-			$dbport2 = $this->config['hxpm']['news_export']['dbport'];
-			$dbuser2 = $this->config['hxpm']['news_export']['dbuser'];
-			$dbpass2 = $this->config['hxpm']['news_export']['dbpass'];
-			$dbname2 = $this->config['hxpm']['news_export']['dbname'];
-			self::$dbh_news_export = new PDO ( "mysql:host=$dbhost2;port=$dbport2;dbname=$dbname2", $dbuser2, $dbpass2, array (
-					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true
-			) );
+			if($io == 'news_export'){
+	            $dbhost2 = $this->config['hxpm']['news_export']['dbhost'];
+				$dbport2 = $this->config['hxpm']['news_export']['dbport'];
+				$dbuser2 = $this->config['hxpm']['news_export']['dbuser'];
+				$dbpass2 = $this->config['hxpm']['news_export']['dbpass'];
+				$dbname2 = $this->config['hxpm']['news_export']['dbname'];
+				self::$dbh_news_export = new PDO ( "mysql:host=$dbhost2;port=$dbport2;dbname=$dbname2", $dbuser2, $dbpass2, array (
+						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+						PDO::MYSQL_ATTR_COMPRESS => true
+				) );
+			}
+			elseif($io=='info_export'){
+				$dbhost1 = $this->config['hxpm']['info_export']['dbhost'];
+				$dbport1 = $this->config['hxpm']['info_export']['dbport'];
+				$dbuser1 = $this->config['hxpm']['info_export']['dbuser'];
+				$dbpass1 = $this->config['hxpm']['info_export']['dbpass'];
+				$dbname1 = $this->config['hxpm']['info_export']['dbname'];
+				self::$dbh_info_export = new PDO ( "mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
+						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+						PDO::MYSQL_ATTR_COMPRESS => true
+				) );
+			}
+			else{
+				$dbhost = $this->config['hxpm']['import']['dbhost'];
+				$dbport = $this->config['hxpm']['import']['dbport'];
+				$dbuser = $this->config['hxpm']['import']['dbuser'];
+				$dbpass = $this->config['hxpm']['import']['dbpass'];
+				$dbname = $this->config['hxpm']['import']['dbname'];
+	
+				self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
+						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+						PDO::MYSQL_ATTR_COMPRESS => true
+						/*PDO::ATTR_PERSISTENT => true*/
+				) );
+			}
 
 		} catch ( PDOException $e ) {
-                        $this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
-                        $synchronous = new Synchronous();
-						$synchronous->main(array('','restart'));
-                } catch ( Exception $e ) {
-                        $this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
-                }
-
-	}
-	protected function getInstance($io) {
-		if ($io == 'info_export'){
-			return self::$dbh_info_export;
-                } elseif($io == 'news_export'){
-                        return self::$dbh_news_export;
-                }else {
-			return self::$dbh_import;
+			$this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
+			//$synchronous = new Synchronous();
+			//$synchronous->main(array('','restart'));
+		} catch ( Exception $e ) {
+			$this->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
 		}
 	}
+	
+	
+	
+	protected function getInstance($io) {
+		if ($io == 'info_export'){
+			if(!self::$dbh_info_export){
+				$this->connect($io);
+				$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['hxpm']['info_export']['dbname'], $this->getThreadId ()) );
+			}else{
+				$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['hxpm']['info_export']['dbname'], $this->getThreadId ()) );
+			}
+		
+			if(self::$dbh_info_export){
+				return self::$dbh_info_export;
+			}else{
+				$this->logger ( 'Database', sprintf("Connect database is error %s, %s", $this->config['hxpm']['info_export']['dbname'], $this->getThreadId ()) );
+				$this->logger ( 'Error', sprintf("Worker is shutdown %s", $this->getThreadId ()) );
+				$this->shutdown();
+			}
+			//return self::$dbh_info_export;
+		} elseif($io == 'news_export'){
+			if(!self::$dbh_news_export){
+				$this->connect($io);
+				$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['hxpm']['news_export']['dbname'], $this->getThreadId ()) );
+			}else{
+				$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['hxpm']['news_export']['dbname'], $this->getThreadId ()) );
+			}
+		
+			if(self::$dbh_news_export){
+				return self::$dbh_news_export;
+			}else{
+				$this->logger ( 'Database', sprintf("Connect database is error %s, %s", $this->config['hxpm']['news_export']['dbname'], $this->getThreadId ()) );
+				$this->logger ( 'Error', sprintf("Worker is shutdown %s", $this->getThreadId ()) );
+				$this->shutdown();
+			}
+			//return self::$dbh_news_export;
+		}else {
+			if(!self::$dbh_import){
+				$this->connect($io);
+				$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['hxpm']['import']['dbname'], $this->getThreadId ()) );
+			}else{
+				$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['hxpm']['import']['dbname'], $this->getThreadId ()) );
+			}
+		
+			if(self::$dbh_import){
+				return self::$dbh_import;
+			}else{
+				$this->logger ( 'Database', sprintf("Connect database is error %s, %s", $this->config['hxpm']['import']['dbname'], $this->getThreadId ()) );
+				$this->logger ( 'Error', sprintf("Worker is shutdown %s", $this->getThreadId ()) );
+				$this->shutdown();
+			}
+			//return self::$dbh_import;
+		}
+	}
+	
+	//protected function getInstance
+	
 	public function logger($type, $message) {
 		$log = sprintf ( "%s\t%s\t%s\t%s\n", date ( 'Y-m-d H:i:s' ), $this->getThreadId (), $type, $message );
 		file_put_contents ( sprintf(__DIR__."/../log/hxpm.%s.log", date ( 'Y-m-d' )), $log, FILE_APPEND );
@@ -152,8 +207,8 @@ class InfoWork extends Stackable {
 			}
 		} catch ( PDOException $e ) {
 			$this->worker->logger ( 'Exception info', $e->getMessage( ).__LINE__ );
-			$synchronous = new Synchronous();
-			$synchronous->main(array('','restart'));
+			//$synchronous = new Synchronous();
+			//$synchronous->main(array('','restart'));
 		} catch ( PDOStatement $e ) {
 			$this->worker->logger ( 'Exception real_news', $e->getMessage( ).__LINE__ );			
 		} catch ( Exception $e ) {
@@ -227,8 +282,8 @@ class NewsWork extends Stackable {
 			}
 		} catch ( PDOException $e ) {
 			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
-			$synchronous = new Synchronous();
-			$synchronous->main(array('','restart'));
+			//$synchronous = new Synchronous();
+			//$synchronous->main(array('','restart'));
 		} catch ( PDOStatement $e ) {
 			$this->worker->logger ( 'Exception news', $e->getMessage( ).__LINE__ );
 		} catch ( Exception $e ) {
