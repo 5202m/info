@@ -27,6 +27,7 @@ class SynchronousWorker extends Worker {
 						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 						PDO::MYSQL_ATTR_COMPRESS => true
 				) );
+				self::$dbh_news_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			}
 			elseif($io=='info_export'){
 				$dbhost1 = $this->config['hxpm']['info_export']['dbhost'];
@@ -38,6 +39,7 @@ class SynchronousWorker extends Worker {
 						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 						PDO::MYSQL_ATTR_COMPRESS => true
 				) );
+				self::$dbh_info_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			}
 			else{
 				$dbhost = $this->config['hxpm']['import']['dbhost'];
@@ -51,6 +53,7 @@ class SynchronousWorker extends Worker {
 						PDO::MYSQL_ATTR_COMPRESS => true
 						/*PDO::ATTR_PERSISTENT => true*/
 				) );
+				self::$dbh_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			}
 
 		} catch ( PDOException $e ) {
@@ -162,8 +165,8 @@ class InfoWork extends Stackable {
 		try {
 			$db_export = $this->worker->getInstance ( 'info_export' );
 			$db_import = $this->worker->getInstance ( 'import' );
-			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
@@ -231,8 +234,8 @@ class NewsWork extends Stackable {
 		try {
 			$db_import = $this->worker->getInstance ( 'import' );
 			$db_export = $this->worker->getInstance ( 'news_export' );
-			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
