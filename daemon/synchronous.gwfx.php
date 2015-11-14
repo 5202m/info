@@ -11,41 +11,79 @@ class SynchronousWorker extends Worker {
 		$this->config = $config;
 	}
 	public function run() {
+		
+
+	}
+	
+	private function connect($io){
 		try {
-			$dbhost = $this->config['import']['dbhost'];
-			$dbport = $this->config['import']['dbport'];
-			$dbuser = $this->config['import']['dbuser'];
-			$dbpass = $this->config['import']['dbpass'];
-			$dbname = $this->config['import']['dbname'];
-
-			self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
-					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true
-					/*PDO::ATTR_PERSISTENT => true*/
-			) );
-
-			$dbhost1 = $this->config['export']['dbhost'];
-			$dbport1 = $this->config['export']['dbport'];
-			$dbuser1 = $this->config['export']['dbuser'];
-			$dbpass1 = $this->config['export']['dbpass'];
-			$dbname1 = $this->config['export']['dbname'];
-			self::$dbh_export = new PDO ( "mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
-					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
-					PDO::MYSQL_ATTR_COMPRESS => true
-			) );
+			if ($io == 'export' ){
+				$dbhost1 = $this->config['export']['dbhost'];
+				$dbport1 = $this->config['export']['dbport'];
+				$dbuser1 = $this->config['export']['dbuser'];
+				$dbpass1 = $this->config['export']['dbpass'];
+				$dbname1 = $this->config['export']['dbname'];
+				self::$dbh_export = new PDO ( "mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
+						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+						PDO::MYSQL_ATTR_COMPRESS => true
+				) );
+				self::$dbh_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			}
+			else{
+				$dbhost = $this->config['import']['dbhost'];
+				$dbport = $this->config['import']['dbport'];
+				$dbuser = $this->config['import']['dbuser'];
+				$dbpass = $this->config['import']['dbpass'];
+				$dbname = $this->config['import']['dbname'];
+	
+				self::$dbh_import = new PDO ( "mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass, array (
+						PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+						PDO::MYSQL_ATTR_COMPRESS => true
+						/*PDO::ATTR_PERSISTENT => true*/
+				) );
+				self::$dbh_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			}
 
 		} catch ( PDOException $e ) {
                         $this->logger ( 'Exception real_news', $e->getMessage( ) );
                 } catch ( Exception $e ) {
                         $this->logger ( 'Exception real_news', $e->getMessage( ) );
                 }
-
 	}
+	
 	protected function getInstance($io) {
 		if ($io == 'export' ){
-			return self::$dbh_export;
+			if(!self::$dbh_export){
+				$this->connect($io);
+				$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['export']['dbname'], $this->getThreadId ()) );
+			}else{
+				$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['export']['dbname'], $this->getThreadId ()) );
+			}
+		
+			if(self::$dbh_export){
+				return self::$dbh_export;
+			}else{
+				$this->logger ( 'Database', sprintf("Connect database is error %s, %s", $this->config['export']['dbname'], $this->getThreadId ()) );
+				$this->logger ( 'Error', sprintf("Worker is shutdown %s", $this->getThreadId ()) );
+				$this->shutdown();
+			}
+			//return self::$dbh_export;
 		} else {
-			return self::$dbh_import;
+			if(!self::$dbh_import){
+				$this->connect($io);
+				$this->logger ( 'Database', sprintf("Connect database %s, %s", $this->config['import']['dbname'], $this->getThreadId ()) );
+			}else{
+				$this->logger ( 'Database', sprintf("Get instance database %s, %s", $this->config['import']['dbname'], $this->getThreadId ()) );
+			}
+		
+			if(self::$dbh_import){
+				return self::$dbh_import;
+			}else{
+				$this->logger ( 'Database', sprintf("Connect database is error %s, %s", $this->config['import']['dbname'], $this->getThreadId ()) );
+				$this->logger ( 'Error', sprintf("Worker is shutdown %s", $this->getThreadId ()) );
+				$this->shutdown();
+			}
+			//return self::$dbh_import;
 		}
 	}
 	public function logger($type, $message) {
@@ -92,8 +130,8 @@ class RealNewsWork extends Stackable {
 		try {
 			$db_export = $this->worker->getInstance ( 'export' );
 			$db_import = $this->worker->getInstance ( 'import' );
-			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
@@ -155,8 +193,8 @@ class NewsWork extends Stackable {
 		try {
 			$db_import = $this->worker->getInstance ( 'import' );
 			$db_export = $this->worker->getInstance ( 'export' );
-			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
@@ -238,8 +276,8 @@ class VideoWork extends Stackable {
 		try {
 			$db_import = $this->worker->getInstance ( 'import' );
 			$db_export = $this->worker->getInstance ( 'export' );
-			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			//$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
