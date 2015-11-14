@@ -91,7 +91,7 @@
 							  <div class="controls">
 								<input class="input-file uniform_on" id="image" name="image" type="file" />
 								<input type="hidden" name="hdimage" value="<?php if($images):echo $images->url,';',$images->id;endif;?>" />
-							  	<?php if($images->url):?>
+							  	<?php if(isset($images->url) && $images->url):?>
 							  	
 							  	<img src='<?php echo strpos($images->url,'http') === 0 ?  $images->url : ('/image/thumbnail/'.$images->url)?>' width="100px">
 							  	<?php endif ;?>
@@ -256,7 +256,7 @@
 							$('#content_msg').parent().parent().removeClass('error');
 							$('#content_msg').text('');
 						}
-						if(checkIsEdit()){
+						if(checkIsEdit()==true){
 							$("#myModal>.modal-body>p").html('你还没修改');
 							$("#myModal").modal("show");
 							return false;

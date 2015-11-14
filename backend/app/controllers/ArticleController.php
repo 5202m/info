@@ -316,8 +316,53 @@ class ArticleController extends ControllerBase {
 	 * @param string $oriPath 原图片路径
 	 */
 	private function uploadImage($articleId, $oriPath = ''){
-		$rs = $this->mongodb->upload($this->request , 'farticle');
-		return $rs['status'] ? '' : 'farticle/'.$rs['data']['filename'];
+		try{
+			/*if($this->mongodb){
+				$rs = $this->mongodb->upload($this->request , 'farticle');
+				return $rs['status'] ? '' : 'farticle/'.$rs['data']['filename'];
+			}
+			else{*/
+				$image = '';
+				$savePath = $this->imagesPath.$articleId.'/';//dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
+				$returnPage = 'images/'.$articleId.'/';
+		    	if(php_uname('s')=='Windows NT'){
+		    		$savePath = dirname($_SERVER["DOCUMENT_ROOT"]).'/images/'.$articleId.'/';
+		    	}
+				if(!file_exists($savePath)){
+					mkdir($savePath, 0777, true);
+				}
+				//Check if the user has uploaded files
+				if ($this->request->hasFiles() == true) {
+					//Print the real file names and their sizes
+					foreach ($this->request->getUploadedFiles() as $file){
+						//echo $file->getName(), " ", $file->getSize(), "\n";
+						if($file->isUploadedFile()){
+							if($file->moveTo($savePath.$file->getName())){
+								$image = $returnPage.$file->getName();
+								if($oriPath!=''){
+									unlink($savePath.$oriPath);
+								}
+							}
+							else{
+								//echo 'false';
+							}
+						}
+						else{
+							//echo 'can not upload';
+						}
+					}
+				}
+				else{
+					if($oriPath){
+						$image = $oriPath;
+					}
+				}
+				return $image;
+			//}
+		}
+		catch(Exception $e){
+			return '';
+		}
 	}
 	
 	/**
