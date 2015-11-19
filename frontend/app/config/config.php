@@ -26,6 +26,14 @@ return new \Phalcon\Config(array(
         		),
         		
         ),
+        
+      'gwapi' =>array(
+	       'base_url'      => 'https://gwapi.24k.hk/GwAPI',
+	       'oauthKey'      =>'ade06a7ff83a0ce5',  //平台类型名称
+	       'platTypeKey'   =>'hengxin',  //平台类型名称
+	       'platAccount'   =>'hx',  //加密盐
+	       'lang'          =>'zh', 
+       ),
 
 	'application' => array(
 		'controllersDir' => __DIR__ . '/../../app/controllers/',

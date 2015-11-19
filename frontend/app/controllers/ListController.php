@@ -331,6 +331,10 @@ class ListController extends ControllerBase
    
     	$this->cache->flush ();
     }
+    
+    public function listAction(){
+    	
+    }
 }
 
 

@@ -187,6 +187,12 @@ try {
     	return new \libs\mongodb($config->mongodb);
     });
     
+    /*$di->set('gwapi', function() use($config){
+    	$l = DIRECTORY_SEPARATOR;
+    	include_once dirname(dirname(__FILE__)) . '{$l}app{$l}libs{$l}gwapi.class.php';
+    	return new \libs\Gwapi($config->gwapi);
+    });*/
+    
     $di->set('templateDir', function() use ($config) {	
     	return $config->application->templateDir;
     });
