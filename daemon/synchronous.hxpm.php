@@ -191,10 +191,10 @@ class InfoWork extends Stackable {
 	public function run() {
 		//$this->worker->logger('real_news', sprintf("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId()));
 		try {
-			$db_export = $this->worker->getInstance ( 'info_export' );
-			$db_import = $this->worker->getInstance ( 'import' );
-			$db_import->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-			$db_export->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+			$db_export = $this->worker->getInstance('info_export');
+			$db_export->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$db_import = $this->worker->getInstance('import');
+			$db_import->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$position = 1;
 			foreach ( $this->dbmaps as $division_category_id => $type ) {
 				$division_id = $this->division_id;
