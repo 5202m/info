@@ -79,7 +79,7 @@ class SynchronousWorker extends Worker {
 	
 	
 	
-	protected function getInstance($io) {
+	public function getInstance($io) {
 		if ($io == 'info_export'){
 			if(!self::$dbh_info_export){
 				$this->connect($io);
