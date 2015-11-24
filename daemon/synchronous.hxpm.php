@@ -182,16 +182,27 @@ class SynchronousWorker extends Worker {
 }
 
 class InfoWork extends Stackable {
-	public $division_id;
-	public function __construct($division_id, $lang, $dbmaps) {
+	public $division_id, $config;
+	public function __construct($division_id, $lang, $dbmaps, $config) {
 		$this->dbmaps = $dbmaps;
 		$this->lang = $lang == 'cn'?$lang : 'zh';
 		$this->division_id = $division_id;
+		$this->config = $config;
 	}
 	public function run() {
 		//$this->worker->logger('real_news', sprintf("%s executing in Thread #%lu", __CLASS__, $this->worker->getThreadId()));
 		try {
-			$db_export = $this->worker->getInstance('info_export');
+			/*$db_export = $this->worker->getInstance('info_export');
+			$db_export->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);*/
+			$dbhost1 = $this->config['hxpm']['info_export']['dbhost'];
+			$dbport1 = $this->config['hxpm']['info_export']['dbport'];
+			$dbuser1 = $this->config['hxpm']['info_export']['dbuser'];
+			$dbpass1 = $this->config['hxpm']['info_export']['dbpass'];
+			$dbname1 = $this->config['hxpm']['info_export']['dbname'];
+			$db_export = new PDO ( "mysql:host=$dbhost1;port=$dbport1;dbname=$dbname1", $dbuser1, $dbpass1, array (
+					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+					PDO::MYSQL_ATTR_COMPRESS => true
+			));
 			$db_export->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$db_import = $this->worker->getInstance('import');
 			$db_import->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -493,13 +504,13 @@ class Task {
 
 			if($sync->table == 'info'){
 //				if(in_array($sync->lang, array('cn'))){
-					$pool->submit ( new InfoWork ( $this->division_id, 'cn' , array( $sync->category_id => $sync->type)));
+					$pool->submit(new InfoWork($this->division_id, 'cn' , array($sync->category_id => $sync->type), $this->config));
 //				}
 			}
 
 			if($sync->table == 'news'){
 				//if(in_array($sync->lang, array('cn'))){
-					$pool->submit ( new NewsWork ( $this->division_id, 'cn' , array( $sync->category_id => "$sync->type")));
+					$pool->submit(new NewsWork($this->division_id, 'cn' , array($sync->category_id => "$sync->type")));
 				//}
 			}
 			
