@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('PRC'); //设置中国时区 
+ini_set('date.timezone','Asia/Shanghai'); // 'Asia/Shanghai' 为上海时区 
 class SynchronousWorker extends Worker {
 
 	// public function __construct(Logging $logger) {
@@ -14,7 +16,7 @@ class SynchronousWorker extends Worker {
 		
 
 	}
-	private function conect($io){
+	private function connect($io){
 		try {
 			if($io=='t_hotpoint_export'){
 				$dbhost1 = $this->config['gwpm']['dbhost'];
