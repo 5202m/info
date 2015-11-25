@@ -5,7 +5,8 @@ class TestController extends ControllerBase
 
     public function indexAction()
     {
-    	$divisionCategory = Category::find(
+    	
+    	/*$divisionCategory = Category::find(
             "division_id = 3"
         );
         $cates_arr = $this->objToArray->ohYeah($divisionCategory);
@@ -16,7 +17,7 @@ class TestController extends ControllerBase
         exit;
 	echo "hello";
 	var_dump(array(1, 2, 3, 4));
-	var_export(new stdclass());	
+	var_export(new stdclass());	*/
     }
 
 }

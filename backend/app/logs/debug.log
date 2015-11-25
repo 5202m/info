@@ -7140,3 +7140,9 @@
 [Sat, 14 Nov 15 07:46:17 +0100][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`language`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = :0 LIMIT 1
 [Sat, 14 Nov 15 07:46:17 +0100][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`language`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = :0 LIMIT 1
 [Sat, 14 Nov 15 07:46:17 +0100][INFO] SELECT `category`.`id`, `category`.`division_id`, `category`.`name`, `category`.`description`, `category`.`language`, `category`.`visibility`, `category`.`status`, `category`.`parent_id`, `category`.`path`, `category`.`ctime`, `category`.`mtime` FROM `category` WHERE `category`.`id` = :0 LIMIT 1
+[Wed, 25 Nov 15 02:13:46 +0100][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'division' AND `TABLE_SCHEMA` = DATABASE()
+[Wed, 25 Nov 15 02:13:46 +0100][INFO] DESCRIBE `division`
+[Wed, 25 Nov 15 02:13:46 +0100][INFO] SELECT `division`.`id`, `division`.`name`, `division`.`description`, `division`.`username`, `division`.`password`, `division`.`url` FROM `division` WHERE `division`.`username` = :username AND `division`.`password` = :password LIMIT 1
+[Wed, 25 Nov 15 02:13:53 +0100][INFO] SELECT IF(COUNT(*)>0, 1 , 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = 'album' AND `TABLE_SCHEMA` = DATABASE()
+[Wed, 25 Nov 15 02:13:53 +0100][INFO] DESCRIBE `album`
+[Wed, 25 Nov 15 02:13:53 +0100][INFO] SELECT `album`.`id`, `album`.`name`, `album`.`folder`, `album`.`description`, `album`.`ctime`, `album`.`mtime` FROM `album`

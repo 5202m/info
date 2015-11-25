@@ -169,6 +169,7 @@ class ArticleController extends ControllerBase {
 	 * 判断是否有编辑文章内容
 	 */
 	public function isEditAction(){
+		$jsonArr = array();
 		if($this->request->isPost()){
 			$params = $this->request->getPost();
 			$have_modify = false;
@@ -177,6 +178,7 @@ class ArticleController extends ControllerBase {
 				foreach($params as $k=>$v){
 					if(isset($orgInfo->$k) && $orgInfo->$k !== $v){
 						$have_modify = true;
+						$jsonArr['status'] = false;
 						break;
 					}
 				}
@@ -184,9 +186,11 @@ class ArticleController extends ControllerBase {
 			if($params['id']>0 && $have_modify==false){
 				echo json_encode(array('status'=>true,'msg'=>'你还没修改'));
 				$this->view->disable();
+				//$jsonArr['status'] = true;
 				return ;
 			}
 		}
+		echo json_encode($jsonArr);
 		exit;
 	}
 	/**
@@ -317,12 +321,12 @@ class ArticleController extends ControllerBase {
 	 */
 	private function uploadImage($articleId, $oriPath = ''){
 		try{
-			/*if($this->mongodb){
+			/*if($this->mongodb){*/
 				$rs = $this->mongodb->upload($this->request , 'farticle');
 				return $rs['status'] ? '' : 'farticle/'.$rs['data']['filename'];
-			}
+			/*}
 			else{*/
-				$image = '';
+				/*$image = '';
 				$savePath = $this->imagesPath.$articleId.'/';//dirname(dirname(dirname(dirname(__FILE__)))).'/images/'.$articleId.'/';
 				$returnPage = 'images/'.$articleId.'/';
 		    	if(php_uname('s')=='Windows NT'){
@@ -357,7 +361,7 @@ class ArticleController extends ControllerBase {
 						$image = $oriPath;
 					}
 				}
-				return $image;
+				return $image;*/
 			//}
 		}
 		catch(Exception $e){
