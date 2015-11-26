@@ -5,7 +5,7 @@ class TestController extends ControllerBase
 
     public function indexAction()
     {
-    	
+    	echo phpinfo();die;
     	/*$divisionCategory = Category::find(
             "division_id = 3"
         );
