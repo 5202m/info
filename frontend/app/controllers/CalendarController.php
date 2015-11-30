@@ -3,6 +3,9 @@ use Phalcon\Mvc\View;
 class CalendarController extends \Phalcon\Mvc\Controller {
     
     public function indexAction($date = ''){
+    	if($date==''){
+    		$date = date('Y-m-d');
+    	}
         $this->view->disableLevel(array(
             View::LEVEL_MAIN_LAYOUT => false
         ));
